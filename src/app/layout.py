@@ -14,13 +14,9 @@ PLOT_CONFIG = {
 }
 
 layout = html.Div([
-    # URL tracker
-    html.Link(rel='stylesheet', href='/static/styles.css'),
-    dcc.Location(id='url', refresh=False),
-
     # Header
     html.Div([
-        html.H1("ExpensORpy")
+        html.H1("ExpensORpy", id="title")
     ], style=style_header),
 
     # Sidebar
@@ -33,4 +29,9 @@ layout = html.Div([
 
     # Body
     html.Div(id="page-content", style=style_body),
+
+    # Others
+    html.Link(rel='stylesheet', href='/static/styles.css'),
+    dcc.Location(id='url', refresh=False),
+    html.Div(id='df', style={'display': 'none'})
 ])

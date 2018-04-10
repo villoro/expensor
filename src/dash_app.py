@@ -2,6 +2,7 @@
     Dash app
 """
 import os
+import pandas as pd
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -16,22 +17,40 @@ from app.pages import app1, app2
 
 log = u.ulog.set_logger(__name__)
 
-app = dash.Dash()
-app.config.supress_callback_exceptions = True
-app.css.config.serve_locally = True
+APP = dash.Dash()
+APP.config.supress_callback_exceptions = True
+APP.css.config.serve_locally = True
 
-app.layout = layout
+APP.layout = layout
+
+DFG = pd.read_excel("../data/data.xlsx", "Expenses_raw")
+CATEGORIES = DFG["Type"].unique().tolist()
 
 
-@app.server.route('/static/<path:path>')
+@APP.callback(Output('df', 'children'), [Input("category", "value")])
+def filter_data(values):
+    df = DFG.copy()
+
+    if values:
+        if isinstance(values, list):
+            df = df[df["Type"].isin(values)]
+        else:
+            df = df[df["Type"] == values]
+
+    return df.to_json()
+
+
+@APP.server.route('/static/<path:path>')
 def static_file(path):
+    """Adds local css to dash """
     static_folder = os.path.join(os.getcwd(), 'static')
     return send_from_directory(static_folder, path)
 
 
-@app.callback(Output('sidebar', 'children'),
+@APP.callback(Output('sidebar', 'children'),
               [Input('url', 'pathname')])
 def display_sidebar(pathname):
+    """Updates sidebar based on current page"""
 
     if (pathname == "/") or (pathname == '/app1'):
         return app1.sidebar
@@ -41,9 +60,10 @@ def display_sidebar(pathname):
         return '404'
 
 
-@app.callback(Output('page-content', 'children'),
+@APP.callback(Output('page-content', 'children'),
               [Input('url', 'pathname')])
 def display_content(pathname):
+    """Updates content based on current page"""
 
     if (pathname == "/") or (pathname == '/app1'):
         return app1.content
@@ -54,4 +74,4 @@ def display_content(pathname):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    APP.run_server(debug=True)
