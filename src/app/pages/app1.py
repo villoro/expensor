@@ -9,7 +9,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 from app.layout import PLOT_CONFIG
 
-from dash_app import APP, CATEGORIES
+from dash_app import DFG, APP, CATEGORIES
 
 
 def get_options(iterable):
@@ -20,17 +20,20 @@ def get_options(iterable):
 
 
 sidebar = [
-    #html.Div(dcc.Link('Go to App 1', href='/app1')),
-    #html.Div(dcc.Link('Go to App 2', href='/app2')),
+    html.Div(dcc.Link('Go to App 1', href='/app1')),
+    html.Div(dcc.Link('Go to App 2', href='/app2')),
     dcc.Dropdown(id='category', options=get_options(CATEGORIES), multi=True),
-    html.Div("text", id='aux2'),
 ]
 
 content = [
     dcc.Graph(id="plot1", config=PLOT_CONFIG,
-              figure={"data": [go.Bar(y=list("5945626454198514586548654158463"))]}),
+              figure={"data": [go.Bar(x=DFG["Date"], y=DFG["Value"])]}),
 ]
 
-@APP.callback(Output('aux2', 'children'), [Input("category", "value")])
-def temp2(value):
-    return value
+
+@APP.callback(Output('plot1', 'figure'), [Input("df", "children")])
+def update_plot(df_input):
+
+    df = DFG if df_input is None else pd.read_json(df_input)
+    
+    return {"data": [go.Bar(x=df["Date"], y=df["Value"])]}
