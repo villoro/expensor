@@ -23,7 +23,7 @@ sidebar = [
     #html.Div(dcc.Link('Go to App 1', href='/app1')),
     #html.Div(dcc.Link('Go to App 2', href='/app2')),
     dcc.Dropdown(id='category', options=get_options(CATEGORIES), multi=True),
-    html.Div("text", id='app-1-display-value'),
+    html.Div("text", id='aux2'),
 ]
 
 content = [
@@ -31,9 +31,6 @@ content = [
               figure={"data": [go.Bar(y=list("5945626454198514586548654158463"))]}),
 ]
 
-
-@APP.callback(
-    Output('app-1-display-valu', 'children'),
-    [Input("category", "value")])
-def temp(value):
+@APP.callback(Output('aux2', 'children'), [Input("category", "value")])
+def temp2(value):
     return value
