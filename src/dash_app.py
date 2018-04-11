@@ -2,14 +2,13 @@
     Dash app
 """
 import os
-import pandas as pd
 from flask import send_from_directory
 from dash import Dash
 from dash.dependencies import Input, Output
 
 import utilities as u
 import constants as c
-from app.layout import layout
+from app import layout
 
 
 log = u.ulog.set_logger(__name__)
@@ -18,22 +17,28 @@ APP = Dash()
 APP.config.supress_callback_exceptions = True
 APP.css.config.serve_locally = True
 
-APP.layout = layout
-
 DFG = u.uos.get_df(c.os.FILE_DATA_SAMPLE)
 CATEGORIES = DFG[c.cols.CATEGORY].unique().tolist()
 
+APP.layout = layout.get_layout(CATEGORIES)
+
 
 @APP.callback(Output('df', 'children'), [Input("category", "value")])
-def filter_data(values):
+def filter_data(categories):
+    """
+        Filters the dataframe that will be reused in all plots
+
+        Args:
+            categories
+    """
 
     df = DFG.copy()
 
-    if values:
-        if isinstance(values, list):
-            df = df[df[c.cols.CATEGORY].isin(values)]
+    if categories:
+        if isinstance(categories, list):
+            df = df[df[c.cols.CATEGORY].isin(categories)]
         else:
-            df = df[df[c.cols.CATEGORY] == values]
+            df = df[df[c.cols.CATEGORY] == categories]
 
     return df.to_json()
 

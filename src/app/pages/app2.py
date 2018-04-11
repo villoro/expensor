@@ -3,17 +3,11 @@
 """
 
 import dash_core_components as dcc
-import dash_html_components as html
 import plotly.graph_objs as go
 from app.layout import PLOT_CONFIG
 
 
-sidebar = [
-    html.Div(dcc.Link('Go to App 1', href='/app1')),
-    html.Div(dcc.Link('Go to App 2', href='/app2'))
-]
-
-content = [
+CONTENT = [
     dcc.Graph(
         id="plot2", config=PLOT_CONFIG,
         figure={

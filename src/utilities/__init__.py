@@ -1,3 +1,8 @@
+"""
+	Utilities module
+"""
+
+
 # Local imports
 from utilities import ulog
 from utilities import utime

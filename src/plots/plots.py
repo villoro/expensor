@@ -2,9 +2,10 @@
 	Individual plots
 """
 
+import plotly.graph_objs as go
+
 import constants as c
 import utilities as u
-import plotly.graph_objs as go
 
 
 def plot_timeserie(df_input, timewindow="M"):

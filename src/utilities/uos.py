@@ -42,7 +42,7 @@ def get_df(uri):
 
     # Add time filter columns
     df[c.cols.DATE] = pd.to_datetime(df[c.cols.DATE])
-    df[c.cols.MONTH] = pd.to_datetime(df[c.cols.DATE].dt.strftime("%Y/%m"))
+    df[c.cols.MONTH] = pd.to_datetime(df[c.cols.DATE].dt.strftime("%Y/%m/01"))
     df[c.cols.YEAR] = df[c.cols.DATE].dt.year
 
     # Tag expenses/incomes
