@@ -27,7 +27,7 @@ sidebar = [
 
 content = [
     dcc.Graph(id="plot1", config=PLOT_CONFIG,
-              figure={"data": [go.Bar(x=DFG["Date"], y=DFG["Value"])]}),
+              figure={"data": [go.Bar(x=DFG["Date"], y=DFG["Amount"])]}),
 ]
 
 
@@ -36,4 +36,4 @@ def update_plot(df_input):
 
     df = DFG if df_input is None else pd.read_json(df_input)
     
-    return {"data": [go.Bar(x=df["Date"], y=df["Value"])]}
+    return {"data": [go.Bar(x=df["Date"], y=df["Amount"])]}

@@ -19,8 +19,9 @@ APP.css.config.serve_locally = True
 
 APP.layout = layout
 
-DFG = pd.read_excel("../data/data.xlsx", "Expenses_raw")
-CATEGORIES = DFG["Type"].unique().tolist()
+DFG = pd.read_csv("../sample_data/data.csv", sep=";", index_col=0)
+DFG["Date"] = pd.to_datetime(DFG["Date"])
+CATEGORIES = DFG["Category"].unique().tolist()
 
 
 @APP.callback(Output('df', 'children'), [Input("category", "value")])
@@ -29,9 +30,9 @@ def filter_data(values):
 
     if values:
         if isinstance(values, list):
-            df = df[df["Type"].isin(values)]
+            df = df[df["Category"].isin(values)]
         else:
-            df = df[df["Type"] == values]
+            df = df[df["Category"] == values]
 
     return df.to_json()
 
