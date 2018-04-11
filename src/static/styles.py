@@ -34,7 +34,6 @@ style_sidebar = {
     "padding-bottom": "{}px".format(PADDING_V),
     "padding-left": "{}px".format(PADDING_H),
     "padding-right": "{}px".format(PADDING_H),
-    "overflow-y": "scroll"
 }
 
 style_filters_container = {

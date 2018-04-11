@@ -16,7 +16,7 @@ PLOT_CONFIG = {
 layout = html.Div([
     # Header
     html.Div([
-        html.H1("ExpensORpy", id="title")
+        html.H1("ExpensORpy", id="title", style={"color": "white"})
     ], style=styles.style_header),
 
     # Sidebar
@@ -37,16 +37,19 @@ layout = html.Div([
 ])
 
 
-def get_sidebar_elem(title, children):
+def get_sidebar_elem(title, data):
     """
         Creates an element for the sidebar
 
         Args:
-            title:      name to display
-            children:   what to include in the element
+            title:  name to display
+            data:   what to include in the element
 
         Return:
             html div with the element
     """
 
-    return html.Div([html.H6(title + ":"), children], style=styles.style_sidebar_elem)
+    aux = html.H6(title + ":")
+    children = [aux] + data if isinstance(data, list) else [aux, data]
+
+    return html.Div(children, style=styles.style_sidebar_elem)

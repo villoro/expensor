@@ -23,8 +23,13 @@ def get_options(iterable):
 
 
 sidebar = [
-    # html.Div(dcc.Link("Go to App 1", href="/app1")),
-    # html.Div(dcc.Link("Go to App 2", href="/app2")),
+    layout.get_sidebar_elem(
+        "Sections",
+        [
+            html.Div(dcc.Link("App 1", href="/app1")),
+            html.Div(dcc.Link("App 2", href="/app2"))
+        ]
+    ),
     layout.get_sidebar_elem(
         "Categories",
         dcc.Dropdown(id="category", options=get_options(CATEGORIES), multi=True)
