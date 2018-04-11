@@ -3,9 +3,12 @@
 """
 
 DATE = "Date"
+MONTH = "Month"
+YEAR = "Year"
 NOTES = "Note"
 AMOUNT = "Amount"
 CATEGORY = "Category"
+TYPE = "Type"
 
 LOG_MODULE = "Module"
 LOG_TYPE = "Type"

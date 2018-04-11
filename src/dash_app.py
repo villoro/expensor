@@ -20,8 +20,7 @@ APP.css.config.serve_locally = True
 
 APP.layout = layout
 
-DFG = pd.read_csv(c.os.FILE_DATA_SAMPLE, sep=";", index_col=0)
-DFG[c.cols.DATE] = pd.to_datetime(DFG[c.cols.DATE])
+DFG = u.uos.get_df(c.os.FILE_DATA_SAMPLE)
 CATEGORIES = DFG[c.cols.CATEGORY].unique().tolist()
 
 

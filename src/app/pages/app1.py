@@ -11,6 +11,7 @@ from app.layout import PLOT_CONFIG
 
 import constants as c
 from dash_app import DFG, APP, CATEGORIES
+from plots import plots
 
 
 def get_options(iterable):
@@ -21,20 +22,25 @@ def get_options(iterable):
 
 
 sidebar = [
-    html.Div(dcc.Link('Go to App 1', href='/app1')),
-    html.Div(dcc.Link('Go to App 2', href='/app2')),
-    dcc.Dropdown(id='category', options=get_options(CATEGORIES), multi=True),
+    # html.Div(dcc.Link("Go to App 1", href="/app1")),
+    # html.Div(dcc.Link("Go to App 2", href="/app2")),
+    dcc.Dropdown(id="category", options=get_options(CATEGORIES), multi=True),
+    dcc.RadioItems(id="timewindow", value="M",
+                   options=[{"label": "Day", "value": "D"},
+                            {"label": "Month", "value": "M"},
+                            {"label": "Year", "value": "Y"}])
 ]
 
 content = [
     dcc.Graph(id="plot1", config=PLOT_CONFIG,
-              figure={"data": [go.Bar(x=DFG[c.cols.DATE], y=DFG[c.cols.AMOUNT])]}),
+              figure=plots.plot_timeserie(DFG)),
 ]
 
 
-@APP.callback(Output('plot1', 'figure'), [Input("df", "children")])
-def update_plot(df_input):
+@APP.callback(Output("plot1", "figure"),
+              [Input("df", "children"), Input("timewindow", "value")])
+def update_plot(df_input, timewindow):
 
     df = DFG if df_input is None else pd.read_json(df_input)
     
-    return {"data": [go.Bar(x=df[c.cols.DATE], y=df[c.cols.AMOUNT])]}
+    return plots.plot_timeserie(df)

@@ -3,6 +3,8 @@
 """
 
 import os
+import pandas as pd
+import constants as c
 from utilities import ulog
 
 log = ulog.set_logger(__file__)
@@ -29,3 +31,25 @@ def check_if_uri_exist(uris):
                 os.makedirs(uri, exist_ok=True)
 
                 log.info("Path %s doesn't exists. Created automatically", uri)
+
+
+def get_df(uri):
+    """
+        Retrives a dataframe with data.
+    """
+
+    df = pd.read_csv(uri, sep=";", index_col=0)
+
+    # Add time filter columns
+    df[c.cols.DATE] = pd.to_datetime(df[c.cols.DATE])
+    df[c.cols.MONTH] = pd.to_datetime(df[c.cols.DATE].dt.strftime("%Y/%m"))
+    df[c.cols.YEAR] = df[c.cols.DATE].dt.year
+
+    # Tag expenses/incomes
+    df.loc[df[c.cols.AMOUNT] > 0, c.cols.TYPE] = c.names.INCOMES
+    df[c.cols.TYPE].fillna(c.names.EXPENSES, inplace=True)
+
+    # Amount as positve number
+    df[c.cols.AMOUNT] = df[c.cols.AMOUNT].apply(abs)
+
+    return df
