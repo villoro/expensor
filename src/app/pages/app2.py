@@ -8,11 +8,6 @@ import plotly.graph_objs as go
 from app.layout import PLOT_CONFIG
 
 
-sidebar = [
-    html.Div(dcc.Link('Go to App 1', href='/app1')),
-    html.Div(dcc.Link('Go to App 2', href='/app2'))
-]
-
 content = [
     dcc.Graph(
         id="plot2", config=PLOT_CONFIG,

@@ -9,7 +9,7 @@ from dash.dependencies import Input, Output
 
 import utilities as u
 import constants as c
-from app.layout import layout
+from app import layout
 
 
 log = u.ulog.set_logger(__name__)
@@ -18,10 +18,10 @@ APP = Dash()
 APP.config.supress_callback_exceptions = True
 APP.css.config.serve_locally = True
 
-APP.layout = layout
-
 DFG = u.uos.get_df(c.os.FILE_DATA_SAMPLE)
 CATEGORIES = DFG[c.cols.CATEGORY].unique().tolist()
+
+APP.layout = layout.get_layout(CATEGORIES)
 
 
 @APP.callback(Output('df', 'children'), [Input("category", "value")])
