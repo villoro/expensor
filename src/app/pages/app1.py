@@ -12,6 +12,7 @@ from app.layout import PLOT_CONFIG
 import constants as c
 from dash_app import DFG, APP, CATEGORIES
 from plots import plots
+from app import layout
 
 
 def get_options(iterable):
@@ -24,11 +25,17 @@ def get_options(iterable):
 sidebar = [
     # html.Div(dcc.Link("Go to App 1", href="/app1")),
     # html.Div(dcc.Link("Go to App 2", href="/app2")),
-    dcc.Dropdown(id="category", options=get_options(CATEGORIES), multi=True),
-    dcc.RadioItems(id="timewindow", value="M",
-                   options=[{"label": "Day", "value": "D"},
-                            {"label": "Month", "value": "M"},
-                            {"label": "Year", "value": "Y"}])
+    layout.get_sidebar_elem(
+        "Categories",
+        dcc.Dropdown(id="category", options=get_options(CATEGORIES), multi=True)
+    ),
+    layout.get_sidebar_elem(
+        "Group by",
+        dcc.RadioItems(id="timewindow", value="M",
+                       options=[{"label": "Day", "value": "D"},
+                                {"label": "Month", "value": "M"},
+                                {"label": "Year", "value": "Y"}])
+    ),
 ]
 
 content = [

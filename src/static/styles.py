@@ -9,7 +9,7 @@ PADDING_V = 10
 PADDING_H = 15
 
 style_header = {
-    "background-color": "#03A9F4",
+    "background-color": "#2196F3", # Blue 500
     "top": 0,
     "left": 0,
     "height": "{}px".format(HEIGHT_HEADER - PADDING_V),
@@ -23,7 +23,7 @@ style_header = {
 }
 
 style_sidebar = {
-    "background-color": "#EEEEEE",
+    "background-color": "#FAFAFA", # Grey 50
     "top": HEIGHT_HEADER,
     "left": 0,
     "height": "100%",
@@ -34,6 +34,7 @@ style_sidebar = {
     "padding-bottom": "{}px".format(PADDING_V),
     "padding-left": "{}px".format(PADDING_H),
     "padding-right": "{}px".format(PADDING_H),
+    "overflow-y": "scroll"
 }
 
 style_filters_container = {
@@ -53,4 +54,9 @@ style_body = {
     "position": "fixed",
     "padding": 0,
     "overflow-y": "scroll"
+}
+
+style_sidebar_elem = {
+    "padding-bottom": "15px",
+    "border-bottom": "1px solid #E0E0E0" # Grey 300
 }
