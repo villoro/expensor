@@ -24,8 +24,9 @@ DFG = u.uos.get_df(c.os.FILE_DATA_SAMPLE)
 CATEGORIES = DFG[c.cols.CATEGORY].unique().tolist()
 
 
-@APP.callback(Output('df', 'children'), [Input(c.cols.CATEGORY, "value")])
+@APP.callback(Output('df', 'children'), [Input("category", "value")])
 def filter_data(values):
+
     df = DFG.copy()
 
     if values:

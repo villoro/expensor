@@ -32,8 +32,7 @@ sidebar = [
 ]
 
 content = [
-    dcc.Graph(id="plot1", config=PLOT_CONFIG,
-              figure=plots.plot_timeserie(DFG)),
+    dcc.Graph(id="plot1", config=PLOT_CONFIG),
 ]
 
 
@@ -43,4 +42,4 @@ def update_plot(df_input, timewindow):
 
     df = DFG if df_input is None else pd.read_json(df_input)
     
-    return plots.plot_timeserie(df)
+    return plots.plot_timeserie(df, timewindow)
