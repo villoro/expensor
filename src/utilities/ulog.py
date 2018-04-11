@@ -303,8 +303,8 @@ def fix_module_name(name):
     return name
 
 
-def set_logger(module_name=c.cos.LOG_MODULE,
-               uri_log=c.cos.FILE_LOG,
+def set_logger(module_name=c.os.LOG_MODULE,
+               uri_log=c.os.FILE_LOG,
                file_log_level=logging.INFO,
                console_log_level=logging.INFO):
     """
@@ -330,8 +330,8 @@ def set_logger(module_name=c.cos.LOG_MODULE,
     module_name = fix_module_name(module_name)
 
     # Keep only relevant part of long uri
-    if c.cos.LOG_MODULE in module_name:
+    if c.os.LOG_MODULE in module_name:
         uri_list = module_name.split("\\")
-        module_name = "/".join(uri_list[uri_list.index(c.cos.LOG_MODULE) + 1:])
+        module_name = "/".join(uri_list[uri_list.index(c.os.LOG_MODULE) + 1:])
 
     return _CustomLogger(module_name, uri_log, file_log_level, console_log_level)

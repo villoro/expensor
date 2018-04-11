@@ -8,6 +8,7 @@ from dash import Dash
 from dash.dependencies import Input, Output
 
 import utilities as u
+import constants as c
 from app.layout import layout
 
 
@@ -19,20 +20,20 @@ APP.css.config.serve_locally = True
 
 APP.layout = layout
 
-DFG = pd.read_csv("../sample_data/data.csv", sep=";", index_col=0)
-DFG["Date"] = pd.to_datetime(DFG["Date"])
-CATEGORIES = DFG["Category"].unique().tolist()
+DFG = pd.read_csv(c.os.FILE_DATA_SAMPLE, sep=";", index_col=0)
+DFG[c.cols.DATE] = pd.to_datetime(DFG[c.cols.DATE])
+CATEGORIES = DFG[c.cols.CATEGORY].unique().tolist()
 
 
-@APP.callback(Output('df', 'children'), [Input("category", "value")])
+@APP.callback(Output('df', 'children'), [Input(c.cols.CATEGORY, "value")])
 def filter_data(values):
     df = DFG.copy()
 
     if values:
         if isinstance(values, list):
-            df = df[df["Category"].isin(values)]
+            df = df[df[c.cols.CATEGORY].isin(values)]
         else:
-            df = df[df["Category"] == values]
+            df = df[df[c.cols.CATEGORY] == values]
 
     return df.to_json()
 

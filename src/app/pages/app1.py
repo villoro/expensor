@@ -9,6 +9,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 from app.layout import PLOT_CONFIG
 
+import constants as c
 from dash_app import DFG, APP, CATEGORIES
 
 
@@ -27,7 +28,7 @@ sidebar = [
 
 content = [
     dcc.Graph(id="plot1", config=PLOT_CONFIG,
-              figure={"data": [go.Bar(x=DFG["Date"], y=DFG["Amount"])]}),
+              figure={"data": [go.Bar(x=DFG[c.cols.DATE], y=DFG[c.cols.AMOUNT])]}),
 ]
 
 
@@ -36,4 +37,4 @@ def update_plot(df_input):
 
     df = DFG if df_input is None else pd.read_json(df_input)
     
-    return {"data": [go.Bar(x=df["Date"], y=df["Amount"])]}
+    return {"data": [go.Bar(x=df[c.cols.DATE], y=df[c.cols.AMOUNT])]}

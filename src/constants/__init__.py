@@ -1,3 +1,4 @@
 # Local imports
 from constants import cols
-from constants import cos
+from constants import os
+from constants import colors
