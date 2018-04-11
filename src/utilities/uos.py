@@ -40,10 +40,9 @@ def get_df(uri):
 
     df = pd.read_csv(uri, sep=";", index_col=0)
 
-    # Add time filter columns
-    df[c.cols.DATE] = pd.to_datetime(df[c.cols.DATE])
-    df[c.cols.MONTH] = pd.to_datetime(df[c.cols.DATE].dt.strftime("%Y/%m/01"))
-    df[c.cols.YEAR] = df[c.cols.DATE].dt.year
+    # Add time filter columns (store everything as string to ensure JSON compatibility)
+    df[c.cols.MONTH] = pd.to_datetime(df[c.cols.DATE]).dt.strftime("%Y-%m-01")
+    df[c.cols.YEAR] = pd.to_datetime(df[c.cols.DATE]).dt.year
 
     # Tag expenses/incomes
     df.loc[df[c.cols.AMOUNT] > 0, c.cols.TYPE] = c.names.INCOMES
