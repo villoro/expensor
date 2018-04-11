@@ -4,9 +4,9 @@
 
 import dash_core_components as dcc
 import dash_html_components as html
-import plotly.graph_objs as go
 
 from static import styles
+
 
 PLOT_CONFIG = {
     "displaylogo": False,
@@ -36,7 +36,7 @@ def get_sidebar_elem(title, data):
     aux = html.H6(title + ":")
     children = [aux] + data if isinstance(data, list) else [aux, data]
 
-    return html.Div(children, style=styles.style_sidebar_elem)
+    return html.Div(children, style=styles.STYLE_SIDEBAR_ELEM)
 
 
 def get_layout(categories):
@@ -74,18 +74,18 @@ def get_layout(categories):
         # Header
         html.Div([
             html.H1("ExpensORpy", id="title", style={"color": "white"})
-        ], style=styles.style_header),
+        ], style=styles.STYLE_HEADER),
 
         # Sidebar
-        html.Div(sidebar, id="sidebar", style=styles.style_sidebar),
+        html.Div(sidebar, id="sidebar", style=styles.STYLE_SIDEBAR),
 
         # Header
         html.Div([
             html.H2("Filters")
-        ], style=styles.style_filters_container),
+        ], style=styles.STYLE_FILTER_DIV),
 
         # Body
-        html.Div(id="page-content", style=styles.style_body),
+        html.Div(id="page-content", style=styles.STYLE_BODY),
 
         # Others
         html.Link(rel='stylesheet', href='/static/styles.css'),

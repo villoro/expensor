@@ -18,11 +18,10 @@ def display_content(pathname):
     """Updates content based on current page"""
 
     if (pathname == "/") or (pathname == '/app1'):
-        return app1.content
+        return app1.CONTENT
     elif pathname == '/app2':
-        return app2.content
-    else:
-        return '404'
+        return app2.CONTENT
+    return '404'
 
 
 
