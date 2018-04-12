@@ -8,7 +8,6 @@ from dash.dependencies import Input, Output
 
 import constants as c
 from app import layout
-from static import styles
 from dash_app import DFG, APP
 from plots import plots
 
@@ -56,7 +55,7 @@ def update_timeserie_plot(df_input, timewindow):
 @APP.callback(Output("plot_ts_detail", "figure"),
               [Input("df", "children"), Input("radio_type_trans", "value"),
                Input("timewindow", "value")])
-def update_timeserie_by_categories_plot(df_input, type_trans, timewindow):
+def update_ts_by_categories_plot(df_input, type_trans, timewindow):
     """
         Updates the timeserie by categories plot
 

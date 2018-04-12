@@ -67,7 +67,7 @@ def get_layout(categories):
         get_sidebar_elem(
             "Sections",
             [
-                html.Div(dcc.Link("App 1", href="/app1")),
+                html.Div(dcc.Link("Evolution", href="/evolution")),
                 html.Div(dcc.Link("App 2", href="/app2"))
             ]
         ),
