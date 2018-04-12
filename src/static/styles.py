@@ -2,6 +2,8 @@
     Styles for dash
 """
 
+from utilities.upalette import get_colors
+
 HEIGHT_HEADER = 75
 HEIGHT_FILTERS = 0
 WIDTH_SIDEBAR = 350
@@ -9,7 +11,7 @@ PADDING_V = 10
 PADDING_H = 15
 
 STYLE_HEADER = {
-    "background-color": "#2196F3", # Blue 500
+    "background-color": get_colors(("blue", 500)),
     "top": 0,
     "left": 0,
     "height": "{}px".format(HEIGHT_HEADER - PADDING_V),
@@ -23,7 +25,7 @@ STYLE_HEADER = {
 }
 
 STYLE_SIDEBAR = {
-    "background-color": "#FAFAFA", # Grey 50
+    "background-color": get_colors(("grey", 50)),
     "top": HEIGHT_HEADER,
     "left": 0,
     "height": "100%",
@@ -57,11 +59,11 @@ STYLE_BODY = {
 
 STYLE_SIDEBAR_ELEM = {
     "padding-bottom": "15px",
-    "border-bottom": "1px solid #E0E0E0" # Grey 300
+    "border-bottom": "1px solid {}".format(get_colors(("grey", 300)))
 }
 
 STYLE_DIV_CONTROL_IN_BODY = {
     "text-align": "center",
     "padding-bottom": "15px",
-    "border-bottom": "1px solid #E0E0E0" # Grey 300
+    "border-bottom": "2px solid {}".format(get_colors(("grey", 50)))
 }

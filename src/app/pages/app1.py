@@ -4,41 +4,35 @@
 
 import pandas as pd
 import dash_core_components as dcc
-import dash_html_components as html
 from dash.dependencies import Input, Output
 
 import constants as c
-from app.layout import PLOT_CONFIG
+from app import layout
 from static import styles
 from dash_app import DFG, APP
 from plots import plots
 
 
 CONTENT = [
-    html.Div(
+    layout.get_body_elem(
         dcc.Graph(
-            id="plot_ts", config=PLOT_CONFIG,
+            id="plot_ts", config=layout.PLOT_CONFIG,
             figure=plots.plot_timeserie(DFG)
-        ),
-        style=styles.STYLE_DIV_CONTROL_IN_BODY
+        )
     ),
-    html.Div(
+    layout.get_body_elem(
         [
             dcc.Graph(
-                id="plot_ts_detail", config=PLOT_CONFIG,
+                id="plot_ts_detail", config=layout.PLOT_CONFIG,
                 figure=plots.plot_timeserie_by_categories(DFG)
             ),
             dcc.RadioItems(
                 id="radio_type_trans",
-                options=[
-                    {'label': c.names.EXPENSES, 'value': c.names.EXPENSES},
-                    {'label': c.names.INCOMES, 'value': c.names.INCOMES},
-                ],
+                options=layout.get_options([c.names.EXPENSES, c.names.INCOMES]),
                 value=c.names.EXPENSES,
                 labelStyle={'display': 'inline-block'}
             )
-        ],
-        style=styles.STYLE_DIV_CONTROL_IN_BODY
+        ]
     ),
 ]
 
