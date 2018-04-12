@@ -39,6 +39,20 @@ def get_sidebar_elem(title, data):
     return html.Div(children, style=styles.STYLE_SIDEBAR_ELEM)
 
 
+def get_body_elem(data):
+    """
+        Creates an element for the body
+
+        Args:
+            data:   what to include in the element
+
+        Return:
+            html div with the element
+    """
+
+    return html.Div(data, style=styles.STYLE_DIV_CONTROL_IN_BODY)
+
+
 def get_layout(categories):
     """
         Creates the dash layout
@@ -53,7 +67,7 @@ def get_layout(categories):
         get_sidebar_elem(
             "Sections",
             [
-                html.Div(dcc.Link("App 1", href="/app1")),
+                html.Div(dcc.Link("Evolution", href="/evolution")),
                 html.Div(dcc.Link("App 2", href="/app2"))
             ]
         ),
