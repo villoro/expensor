@@ -59,3 +59,9 @@ STYLE_SIDEBAR_ELEM = {
     "padding-bottom": "15px",
     "border-bottom": "1px solid #E0E0E0" # Grey 300
 }
+
+STYLE_DIV_CONTROL_IN_BODY = {
+    "text-align": "center",
+    "padding-bottom": "15px",
+    "border-bottom": "1px solid #E0E0E0" # Grey 300
+}
