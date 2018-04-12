@@ -5,7 +5,7 @@
 from dash.dependencies import Input, Output
 
 import utilities as u
-from app.pages import app1, app2
+from app.pages import app_evolution, app2
 from dash_app import APP
 
 
@@ -17,8 +17,8 @@ log = u.ulog.set_logger(__name__)
 def display_content(pathname):
     """Updates content based on current page"""
 
-    if (pathname == "/") or (pathname == '/app1'):
-        return app1.CONTENT
+    if (pathname == "/") or (pathname == '/evolution'):
+        return app_evolution.CONTENT
     elif pathname == '/app2':
         return app2.CONTENT
     return '404'
