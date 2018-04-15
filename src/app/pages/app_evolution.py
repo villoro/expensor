@@ -2,7 +2,6 @@
     Dash app
 """
 
-import pandas as pd
 import dash_core_components as dcc
 from dash.dependencies import Input, Output
 

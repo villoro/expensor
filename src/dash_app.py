@@ -4,7 +4,6 @@
 import os
 from flask import send_from_directory
 from dash import Dash
-from dash.dependencies import Input, Output
 
 import utilities as u
 import constants as c

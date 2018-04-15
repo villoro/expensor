@@ -22,7 +22,7 @@ def group_df_by(df, timewindow):
     return df[[col, c.cols.AMOUNT]].groupby(col).sum()
 
 
-def filter_data(df_input, categories):
+def filter_data(df_input, categories=None):
     """
         Filters the dataframe that will be reused in all plots
 
