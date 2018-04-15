@@ -21,22 +21,43 @@ def get_options(iterable):
     return [{"label": x, "value": x} for x in iterable]
 
 
-def get_sidebar_elem(title, data):
+def create_sidebar(categories, elements=None):
     """
-        Creates an element for the sidebar
-
-        Args:
-            title:  name to display
-            data:   what to include in the element
-
-        Return:
-            html div with the element
+        Creates the sidebar given a list of elements.
+        Each element should have a title and some data
     """
 
-    aux = html.H6(title + ":")
-    children = [aux] + data if isinstance(data, list) else [aux, data]
+    def _get_sidebar_elem(title, data):
+        """
+            Creates an element for the sidebar
 
-    return html.Div(children, style=styles.STYLE_SIDEBAR_ELEM)
+            Args:
+                title:  name to display
+                data:   what to include in the element
+
+            Return:
+                html div with the element
+        """
+
+        aux = html.H6(title + ":")
+        children = [aux] + data if isinstance(data, list) else [aux, data]
+
+        return html.Div(children, style=styles.STYLE_SIDEBAR_ELEM)
+
+    sidebar_basic = [
+        ("Sections", [
+            html.Div(dcc.Link("1. Evolution", href="/evolution")),
+            html.Div(dcc.Link("2. Comparison", href="/comparison"))]
+        ),
+        ("Categories", dcc.Dropdown(
+            id="category", options=get_options(categories), multi=True
+            )
+        )
+    ]
+
+    elements = sidebar_basic + elements if elements else sidebar_basic
+
+    return [_get_sidebar_elem(title, data) for title, data in elements]
 
 
 def get_body_elem(data):
@@ -53,36 +74,10 @@ def get_body_elem(data):
     return html.Div(data, style=styles.STYLE_DIV_CONTROL_IN_BODY)
 
 
-def get_layout(categories):
+def get_layout():
     """
         Creates the dash layout
-
-        Args:
-            categories: values for categories dropdown
-
-        Returns:
-            html layout
     """
-    sidebar = [
-        get_sidebar_elem(
-            "Sections",
-            [
-                html.Div(dcc.Link("Evolution", href="/evolution")),
-                html.Div(dcc.Link("App 2", href="/app2"))
-            ]
-        ),
-        get_sidebar_elem(
-            "Categories",
-            dcc.Dropdown(id="category", options=get_options(categories), multi=True)
-        ),
-        get_sidebar_elem(
-            "Group by",
-            dcc.RadioItems(id="timewindow", value="M",
-                           options=[{"label": "Day", "value": "D"},
-                                    {"label": "Month", "value": "M"},
-                                    {"label": "Year", "value": "Y"}])
-        ),
-    ]
 
     return html.Div([
         # Header
@@ -91,7 +86,7 @@ def get_layout(categories):
         ], style=styles.STYLE_HEADER),
 
         # Sidebar
-        html.Div(sidebar, id="sidebar", style=styles.STYLE_SIDEBAR),
+        html.Div(id="sidebar", style=styles.STYLE_SIDEBAR),
 
         # Header
         html.Div([
@@ -104,5 +99,4 @@ def get_layout(categories):
         # Others
         html.Link(rel='stylesheet', href='/static/styles.css'),
         dcc.Location(id='url', refresh=False),
-        html.Div(id='df', style={'display': 'none'})
     ])
