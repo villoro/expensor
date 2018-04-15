@@ -10,8 +10,11 @@ WIDTH_SIDEBAR = 350
 PADDING_V = 10
 PADDING_H = 15
 
+COLOR_HEADER = get_colors(("blue", 500))
+COLOR_SIDEBAR, COLOR_SIDEBAR_SEP = get_colors([("grey", 200), ("grey", 400)])
+
 STYLE_HEADER = {
-    "background-color": get_colors(("blue", 500)),
+    "background-color": COLOR_HEADER,
     "top": 0,
     "left": 0,
     "height": "{}px".format(HEIGHT_HEADER - PADDING_V),
@@ -25,7 +28,7 @@ STYLE_HEADER = {
 }
 
 STYLE_SIDEBAR = {
-    "background-color": get_colors(("grey", 50)),
+    "background-color": COLOR_SIDEBAR,
     "top": HEIGHT_HEADER,
     "left": 0,
     "height": "100%",
@@ -59,11 +62,11 @@ STYLE_BODY = {
 
 STYLE_SIDEBAR_ELEM = {
     "padding-bottom": "15px",
-    "border-bottom": "1px solid {}".format(get_colors(("grey", 300)))
+    "border-bottom": "1px solid {}".format(COLOR_SIDEBAR_SEP)
 }
 
 STYLE_DIV_CONTROL_IN_BODY = {
     "text-align": "center",
     "padding-bottom": "15px",
-    "border-bottom": "2px solid {}".format(get_colors(("grey", 50)))
+    "border-bottom": "2px solid {}".format(COLOR_SIDEBAR)
 }

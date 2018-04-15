@@ -21,7 +21,7 @@ def get_options(iterable):
     return [{"label": x, "value": x} for x in iterable]
 
 
-def create_sidebar(categories, elements=[]):
+def create_sidebar(categories, elements=None):
     """
         Creates the sidebar given a list of elements.
         Each element should have a title and some data
@@ -55,7 +55,9 @@ def create_sidebar(categories, elements=[]):
         )
     ]
 
-    return [_get_sidebar_elem(title, data) for title, data in sidebar_basic + elements]
+    elements = sidebar_basic + elements if elements else sidebar_basic
+
+    return [_get_sidebar_elem(title, data) for title, data in elements]
 
 
 def get_body_elem(data):
@@ -72,15 +74,9 @@ def get_body_elem(data):
     return html.Div(data, style=styles.STYLE_DIV_CONTROL_IN_BODY)
 
 
-def get_layout(categories):
+def get_layout():
     """
         Creates the dash layout
-
-        Args:
-            categories: values for categories dropdown
-
-        Returns:
-            html layout
     """
 
     return html.Div([

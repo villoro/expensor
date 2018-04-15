@@ -19,7 +19,7 @@ APP.css.config.serve_locally = True
 DFG = u.uos.get_df(c.os.FILE_DATA_SAMPLE)
 CATEGORIES = DFG[c.cols.CATEGORY].unique().tolist()
 
-APP.layout = layout.get_layout(CATEGORIES)
+APP.layout = layout.get_layout()
 
 
 @APP.server.route('/static/<path:path>')
