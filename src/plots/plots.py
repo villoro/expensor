@@ -79,7 +79,7 @@ def plot_timeserie_by_categories(dfg, type_trans=c.names.EXPENSES, timewindow="M
     return go.Figure(data=data, layout=layout)
 
 
-def ts_gradient(dfg, type_trans, timewindow="M"):
+def ts_gradient(dfg, type_trans):
     """
         Creates a timeseries plot where all years are ploted simultaneously
 
@@ -91,7 +91,7 @@ def ts_gradient(dfg, type_trans, timewindow="M"):
             the plotly plot as html-div format
     """
 
-    df = u.dfs.group_df_by(dfg[dfg[c.cols.TYPE] == type_trans], timewindow)
+    df = u.dfs.group_df_by(dfg[dfg[c.cols.TYPE] == type_trans], "M")
 
     if df.shape[0] == 0:
         return None
@@ -116,7 +116,7 @@ def ts_gradient(dfg, type_trans, timewindow="M"):
 
         data.append(
             go.Scatter(
-                #x=u.get_txt("Months").split(", "),
+                x=df.index.month,
                 y=df[df.index.year == year][c.cols.AMOUNT].values,
                 line={"width": min(0.5*(year - min_year) + 1, max_width)},
                 marker={"color": color, "size": year - min_year + min_size},

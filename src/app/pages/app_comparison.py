@@ -28,39 +28,29 @@ CONTENT = [
 ]
 
 
-@APP.callback(Output("plot_ts_grad_i", "figure"),
-              [Input("category", "value"), Input("timewindow", "value")])
-def update_ts_grad_i(categories, timewindow):
+@APP.callback(Output("plot_ts_grad_i", "figure"), [Input("category", "value")])
+def update_ts_grad_i(categories):
     """
         Updates the timeserie gradient plot
 
         Args:
             categories: categories to use
-            timewindow: timewindow to use for grouping
     """
-
-    if timewindow == "Y":
-        return None
 
     df = u.dfs.filter_data(DFG, categories)
 
-    return plots.ts_gradient(df, c.names.INCOMES, timewindow=timewindow)
+    return plots.ts_gradient(df, c.names.INCOMES)
 
 
-@APP.callback(Output("plot_ts_grad_e", "figure"),
-              [Input("category", "value"), Input("timewindow", "value")])
-def update_ts_grad_e(categories, timewindow):
+@APP.callback(Output("plot_ts_grad_e", "figure"), [Input("category", "value")])
+def update_ts_grad_e(categories):
     """
         Updates the timeserie gradient plot
 
         Args:
             categories: categories to use
-            timewindow: timewindow to use for grouping
     """
-
-    if timewindow == "Y":
-        return None
 
     df = u.dfs.filter_data(DFG, categories)
 
-    return plots.ts_gradient(df, c.names.EXPENSES, timewindow=timewindow)
+    return plots.ts_gradient(df, c.names.EXPENSES)
