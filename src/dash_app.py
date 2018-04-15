@@ -23,26 +23,6 @@ CATEGORIES = DFG[c.cols.CATEGORY].unique().tolist()
 APP.layout = layout.get_layout(CATEGORIES)
 
 
-@APP.callback(Output('df', 'children'), [Input("category", "value")])
-def filter_data(categories):
-    """
-        Filters the dataframe that will be reused in all plots
-
-        Args:
-            categories
-    """
-
-    df = DFG.copy()
-
-    if categories:
-        if isinstance(categories, list):
-            df = df[df[c.cols.CATEGORY].isin(categories)]
-        else:
-            df = df[df[c.cols.CATEGORY] == categories]
-
-    return df.to_json()
-
-
 @APP.server.route('/static/<path:path>')
 def static_file(path):
     """Adds local css to dash """

@@ -104,5 +104,4 @@ def get_layout(categories):
         # Others
         html.Link(rel='stylesheet', href='/static/styles.css'),
         dcc.Location(id='url', refresh=False),
-        html.Div(id='df', style={'display': 'none'})
     ])
