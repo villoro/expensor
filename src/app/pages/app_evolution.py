@@ -2,10 +2,10 @@
     Dash app
 """
 
-import pandas as pd
 import dash_core_components as dcc
 from dash.dependencies import Input, Output
 
+import utilities as u
 import constants as c
 from app import layout
 from dash_app import DFG, APP
@@ -37,33 +37,33 @@ CONTENT = [
 
 
 @APP.callback(Output("plot_ts", "figure"),
-              [Input("df", "children"), Input("timewindow", "value")])
-def update_timeserie_plot(df_input, timewindow):
+              [Input("category", "value"), Input("timewindow", "value")])
+def update_timeserie_plot(categories, timewindow):
     """
         Updates the timeserie plot
 
         Args:
-            df_input:	dataframe to use
+            categories:	categories to use
             timewindow:	timewindow to use for grouping
     """
 
-    df = DFG if df_input is None else pd.read_json(df_input)
+    df = u.dfs.filter_data(DFG, categories)
 
     return plots.plot_timeserie(df, timewindow)
 
 
 @APP.callback(Output("plot_ts_detail", "figure"),
-              [Input("df", "children"), Input("radio_type_trans", "value"),
+              [Input("category", "value"), Input("radio_type_trans", "value"),
                Input("timewindow", "value")])
-def update_ts_by_categories_plot(df_input, type_trans, timewindow):
+def update_ts_by_categories_plot(categories, type_trans, timewindow):
     """
         Updates the timeserie by categories plot
 
         Args:
-            df_input:   dataframe to use
+            categories: categories to use
             timewindow: timewindow to use for grouping
     """
 
-    df = DFG if df_input is None else pd.read_json(df_input)
+    df = u.dfs.filter_data(DFG, categories)
 
     return plots.plot_timeserie_by_categories(df, type_trans, timewindow)
