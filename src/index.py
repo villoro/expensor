@@ -5,7 +5,7 @@
 from dash.dependencies import Input, Output
 
 import utilities as u
-from app.pages import app_evolution, app2
+from app.pages import app_evolution, app_comparison
 from dash_app import APP
 
 
@@ -19,8 +19,8 @@ def display_content(pathname):
 
     if (pathname == "/") or (pathname == '/evolution'):
         return app_evolution.CONTENT
-    elif pathname == '/app2':
-        return app2.CONTENT
+    elif pathname == '/comparison':
+        return app_comparison.CONTENT
     return '404'
 
 

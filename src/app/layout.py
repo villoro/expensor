@@ -73,8 +73,8 @@ def get_layout(categories):
     """
     sidebar = [
         ("Sections", [
-            html.Div(dcc.Link("Evolution", href="/evolution")),
-            html.Div(dcc.Link("App 2", href="/app2"))]
+            html.Div(dcc.Link("1. Evolution", href="/evolution")),
+            html.Div(dcc.Link("2. Comparison", href="/comparison"))]
         ),
         ("Categories", dcc.Dropdown(
             id="category", options=get_options(categories), multi=True
