@@ -21,7 +21,7 @@ def get_options(iterable):
     return [{"label": x, "value": x} for x in iterable]
 
 
-def create_sidebar(elements):
+def create_sidebar(categories, elements=[]):
     """
         Creates the sidebar given a list of elements.
         Each element should have a title and some data
@@ -44,7 +44,18 @@ def create_sidebar(elements):
 
         return html.Div(children, style=styles.STYLE_SIDEBAR_ELEM)
 
-    return [_get_sidebar_elem(title, data) for title, data in elements]
+    sidebar_basic = [
+        ("Sections", [
+            html.Div(dcc.Link("1. Evolution", href="/evolution")),
+            html.Div(dcc.Link("2. Comparison", href="/comparison"))]
+        ),
+        ("Categories", dcc.Dropdown(
+            id="category", options=get_options(categories), multi=True
+            )
+        )
+    ]
+
+    return [_get_sidebar_elem(title, data) for title, data in sidebar_basic + elements]
 
 
 def get_body_elem(data):
@@ -71,23 +82,6 @@ def get_layout(categories):
         Returns:
             html layout
     """
-    sidebar = [
-        ("Sections", [
-            html.Div(dcc.Link("1. Evolution", href="/evolution")),
-            html.Div(dcc.Link("2. Comparison", href="/comparison"))]
-        ),
-        ("Categories", dcc.Dropdown(
-            id="category", options=get_options(categories), multi=True
-            )
-        ),
-        ("Group by", dcc.RadioItems(
-            id="timewindow", value="M",
-            options=[{"label": "Day", "value": "D"},
-                     {"label": "Month", "value": "M"},
-                     {"label": "Year", "value": "Y"}]
-            )
-        ),
-    ]
 
     return html.Div([
         # Header
@@ -96,7 +90,7 @@ def get_layout(categories):
         ], style=styles.STYLE_HEADER),
 
         # Sidebar
-        html.Div(create_sidebar(sidebar), id="sidebar", style=styles.STYLE_SIDEBAR),
+        html.Div(id="sidebar", style=styles.STYLE_SIDEBAR),
 
         # Header
         html.Div([

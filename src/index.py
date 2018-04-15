@@ -24,6 +24,18 @@ def display_content(pathname):
     return '404'
 
 
+@APP.callback(Output('sidebar', 'children'),
+              [Input('url', 'pathname')])
+def display_sidebar(pathname):
+    """Updates sidebar based on current page"""
+
+    if (pathname == "/") or (pathname == '/evolution'):
+        return app_evolution.SIDEBAR
+    elif pathname == '/comparison':
+        return app_comparison.SIDEBAR
+    return '404'
+
+
 
 if __name__ == '__main__':
     APP.run_server(debug=True)

@@ -8,7 +8,7 @@ from dash.dependencies import Input, Output
 import utilities as u
 import constants as c
 from app import layout
-from dash_app import DFG, APP
+from dash_app import DFG, CATEGORIES, APP
 from plots import plots
 
 
@@ -34,6 +34,19 @@ CONTENT = [
         ]
     ),
 ]
+
+SIDEBAR = layout.create_sidebar(
+    CATEGORIES,
+    [
+        ("Group by", dcc.RadioItems(
+            id="timewindow", value="M",
+            options=[{"label": "Day", "value": "D"},
+                     {"label": "Month", "value": "M"},
+                     {"label": "Year", "value": "Y"}]
+            )
+        ),
+    ]
+)
 
 
 @APP.callback(Output("plot_ts", "figure"),
