@@ -37,3 +37,45 @@ CONTENT = [
 SIDEBAR = layout.create_sidebar(
     CATEGORIES,
 )
+
+@APP.callback(Output("heatmap_i", "figure"),
+              [Input("category", "value")])
+def update_heatmap_i(categories):
+    """
+        Updates the incomes heatmap
+
+        Args:
+            categories: categories to use
+    """
+
+    df = u.dfs.filter_data(DFG, categories)
+
+    return plots.get_heatmap(df, c.names.INCOMES)
+
+
+@APP.callback(Output("heatmap_e", "figure"),
+              [Input("category", "value")])
+def update_heatmap_e(categories):
+    """
+        Updates the expenses heatmap
+
+        Args:
+            categories: categories to use
+    """
+
+    df = u.dfs.filter_data(DFG, categories)
+
+    return plots.get_heatmap(df, c.names.EXPENSES)
+
+
+@APP.callback(Output("dist_plot", "figure"),
+              [Input("category", "value")])
+def update_distplot(categories):
+    """
+        Updates the distribution plot
+
+        Args:
+            categories: categories to use
+    """
+
+    return plots.dist_plot(u.dfs.filter_data(DFG, categories))

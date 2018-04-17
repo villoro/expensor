@@ -26,7 +26,7 @@ def get_heatmap(dfg, type_trans):
 
     # No data no fun
     if df.shape[0] < 2:
-        return None
+        return {}
 
     df[c.cols.YEAR], df[c.cols.MONTH] = df.index.year, df.index.month
 
@@ -58,19 +58,30 @@ def dist_plot(dfg):
     dfe = u.dfs.group_df_by(dfg[dfg[c.cols.TYPE] == c.names.EXPENSES], "M")
     dfi = u.dfs.group_df_by(dfg[dfg[c.cols.TYPE] == c.names.INCOMES], "M")
 
-    # Minimum of 2 months of data
-    if min(dfe.shape[0], dfi.shape[0]) < 2:
-        return None
-
     df_baii = dfi - dfe
 
-    df_baii.fillna(0, inplace=True)
+    iter_data = [
+        (df_baii, c.names.EBIT, c.colors.EBIT),
+        (dfe, c.names.EXPENSES, c.colors.EXPENSES),
+        (dfi, c.names.INCOMES, c.colors.INCOMES)
+    ]
 
-    fig = FF.create_distplot(
-        [df_baii[c.cols.AMOUNT], dfe[c.cols.AMOUNT], dfi[c.cols.AMOUNT]],
-        [c.names.EBIT,  c.names.EXPENSES, c.names.INCOMES],
-        colors=u.get_colors([("amber", 500), ("red", 500), ("green", 500)]),
-        bin_size=100)
+    # Generate traces to show. This allow to disable traces if there is no data
+    data, names, colors = [], [], []
+    for df, name, color in iter_data:
+
+        # Some data needed
+        if (df[c.cols.AMOUNT].sum() > 0) and (len(df[c.cols.AMOUNT].unique()) > 1):
+            data.append(df[c.cols.AMOUNT].fillna(0).tolist())
+            names.append(name)
+            colors.append(color)
+
+    if not data:
+        return {}
+
+    print(data)
+
+    fig = FF.create_distplot(data, names, colors=colors, bin_size=100)
 
     fig['layout'].update(title="Incomes, Expenses and EBIT distribution")
 
