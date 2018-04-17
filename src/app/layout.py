@@ -101,3 +101,26 @@ def get_layout():
         html.Link(rel='stylesheet', href='/static/styles.css'),
         dcc.Location(id='url', refresh=False),
     ])
+
+
+def get_one_column(data, n_rows=12):
+    """
+        Creates one column that will contain the data
+
+        Args:
+            data:   what to put inside
+            n_rows: width relative to a 12 column system
+
+        Returns:
+            html div containg the data
+    """
+
+    return html.Div(data, className="{} columns".format(c.dash.NUM_DICT[n_rows]))
+
+
+def get_row(data):
+    """
+        Creates the html row container
+    """
+
+    return html.Div(data, className="row")
