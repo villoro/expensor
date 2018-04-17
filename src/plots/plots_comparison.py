@@ -23,7 +23,7 @@ def ts_gradient(dfg, type_trans):
     df = u.dfs.group_df_by(dfg[dfg[c.cols.TYPE] == type_trans], "M")
 
     if df.shape[0] == 0:
-        return None
+        return {}
 
     min_size, max_width = 3, 5
 
