@@ -13,11 +13,19 @@ from plots import plots_heatmaps as plots
 
 
 CONTENT = [
-    # layout.get_body_elem(
-    #     [
-    #         layout.get_one_column()
-    #     ]
-    # ),
+    layout.get_body_elem([
+        layout.get_one_column(
+            dcc.Graph(
+                id="heatmap_i", config=layout.PLOT_CONFIG,
+                figure=plots.get_heatmap(DFG, c.names.INCOMES)
+            ), n_rows=6),
+        layout.get_one_column(
+            dcc.Graph(
+                id="heatmap_e", config=layout.PLOT_CONFIG,
+                figure=plots.get_heatmap(DFG, c.names.EXPENSES)
+            ), n_rows=6
+        )]
+    ),
 ]
 
 SIDEBAR = layout.create_sidebar(
