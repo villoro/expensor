@@ -79,8 +79,6 @@ def dist_plot(dfg):
     if not data:
         return {}
 
-    print(data)
-
     fig = FF.create_distplot(data, names, colors=colors, bin_size=100)
 
     fig['layout'].update(title="Incomes, Expenses and EBIT distribution")

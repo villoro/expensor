@@ -24,8 +24,8 @@ CONTENT = [
                 id="heatmap_e", config=layout.PLOT_CONFIG,
                 figure=plots.get_heatmap(DFG, c.names.EXPENSES)
             ), n_rows=6
-        )]
-    ),
+        )
+    ]),
     layout.get_body_elem(
         dcc.Graph(
             id="dist_plot", config=layout.PLOT_CONFIG,
