@@ -10,8 +10,6 @@ import constants as c
 from app import layout
 
 
-log = u.ulog.set_logger(__name__)
-
 APP = Dash()
 APP.config.supress_callback_exceptions = True
 APP.css.config.serve_locally = True

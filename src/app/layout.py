@@ -6,7 +6,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from static import styles
-
+import constants as c
 
 PLOT_CONFIG = {
     "displaylogo": False,
@@ -46,8 +46,9 @@ def create_sidebar(categories, elements=None):
 
     sidebar_basic = [
         ("Sections", [
-            html.Div(dcc.Link("1. Evolution", href="/evolution")),
-            html.Div(dcc.Link("2. Comparison", href="/comparison"))]
+            html.Div(dcc.Link("1. Evolution", href=c.dash.LINK_EVOLUTION)),
+            html.Div(dcc.Link("2. Comparison", href=c.dash.LINK_COMPARISON)),
+            html.Div(dcc.Link("3. Heatmaps", href=c.dash.LINK_HEATMAPS))]
         ),
         ("Categories", dcc.Dropdown(
             id="category", options=get_options(categories), multi=True
@@ -71,7 +72,7 @@ def get_body_elem(data):
             html div with the element
     """
 
-    return html.Div(data, style=styles.STYLE_DIV_CONTROL_IN_BODY)
+    return html.Div(data, className="row", style=styles.STYLE_DIV_CONTROL_IN_BODY)
 
 
 def get_layout():
@@ -100,3 +101,18 @@ def get_layout():
         html.Link(rel='stylesheet', href='/static/styles.css'),
         dcc.Location(id='url', refresh=False),
     ])
+
+
+def get_one_column(data, n_rows=12):
+    """
+        Creates one column that will contain the data
+
+        Args:
+            data:   what to put inside
+            n_rows: width relative to a 12 column system
+
+        Returns:
+            html div containg the data
+    """
+
+    return html.Div(data, className="{} columns".format(c.dash.NUM_DICT[n_rows]))

@@ -4,12 +4,10 @@
 
 from dash.dependencies import Input, Output
 
+import constants as c
 import utilities as u
-from app.pages import app_evolution, app_comparison
+from app import pages
 from dash_app import APP
-
-
-log = u.ulog.set_logger(__name__)
 
 
 @APP.callback(Output('page-content', 'children'),
@@ -17,10 +15,12 @@ log = u.ulog.set_logger(__name__)
 def display_content(pathname):
     """Updates content based on current page"""
 
-    if (pathname == "/") or (pathname == '/evolution'):
-        return app_evolution.CONTENT
-    elif pathname == '/comparison':
-        return app_comparison.CONTENT
+    if (pathname == "/") or (pathname == c.dash.LINK_EVOLUTION):
+        return pages.app_evolution.CONTENT
+    elif pathname == c.dash.LINK_COMPARISON:
+        return pages.app_comparison.CONTENT
+    elif pathname == c.dash.LINK_HEATMAPS:
+        return pages.app_heatmaps.CONTENT
     return '404'
 
 
@@ -29,10 +29,12 @@ def display_content(pathname):
 def display_sidebar(pathname):
     """Updates sidebar based on current page"""
 
-    if (pathname == "/") or (pathname == '/evolution'):
-        return app_evolution.SIDEBAR
-    elif pathname == '/comparison':
-        return app_comparison.SIDEBAR
+    if (pathname == "/") or (pathname == c.dash.LINK_EVOLUTION):
+        return pages.app_evolution.SIDEBAR
+    elif pathname == c.dash.LINK_COMPARISON:
+        return pages.app_comparison.SIDEBAR
+    elif pathname == c.dash.LINK_HEATMAPS:
+        return pages.app_heatmaps.SIDEBAR
     return '404'
 
 
