@@ -6,7 +6,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from static import styles
-
+import constants as c
 
 PLOT_CONFIG = {
     "displaylogo": False,
@@ -46,8 +46,9 @@ def create_sidebar(categories, elements=None):
 
     sidebar_basic = [
         ("Sections", [
-            html.Div(dcc.Link("1. Evolution", href="/evolution")),
-            html.Div(dcc.Link("2. Comparison", href="/comparison"))]
+            html.Div(dcc.Link("1. Evolution", href=c.dash.LINK_EVOLUTION)),
+            html.Div(dcc.Link("2. Comparison", href=c.dash.LINK_COMPARISON)),
+            html.Div(dcc.Link("3. Heatmaps", href=c.dash.LINK_HEATMAPS))]
         ),
         ("Categories", dcc.Dropdown(
             id="category", options=get_options(categories), multi=True
