@@ -10,9 +10,6 @@ from app import pages
 from dash_app import APP
 
 
-log = u.ulog.set_logger(__name__)
-
-
 @APP.callback(Output('page-content', 'children'),
               [Input('url', 'pathname')])
 def display_content(pathname):
