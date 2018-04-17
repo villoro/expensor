@@ -2,6 +2,7 @@
 	Individual plots
 """
 
+from calendar import month_abbr # options: [month_name, month_abbr]
 import plotly.graph_objs as go
 
 import constants as c
@@ -28,7 +29,10 @@ def get_heatmap(dfg, type_trans):
 
     df[c.cols.YEAR], df[c.cols.MONTH] = df.index.year, df.index.month
 
-    df = df.pivot(c.cols.MONTH, c.cols.YEAR, c.cols.AMOUNT).copy()
+    df = df.pivot(c.cols.MONTH, c.cols.YEAR, c.cols.AMOUNT).sort_index(ascending=False)
+
+    # Fix month names
+    df.index = [month_abbr[x] for x in df.index]
 
     cmap = {c.names.INCOMES: "Greens", c.names.EXPENSES: "YIOrRd"}[type_trans]
 
