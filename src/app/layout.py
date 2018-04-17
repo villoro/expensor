@@ -72,7 +72,7 @@ def get_body_elem(data):
             html div with the element
     """
 
-    return html.Div(data, style=styles.STYLE_DIV_CONTROL_IN_BODY)
+    return html.Div(data, className="row", style=styles.STYLE_DIV_CONTROL_IN_BODY)
 
 
 def get_layout():
@@ -116,11 +116,3 @@ def get_one_column(data, n_rows=12):
     """
 
     return html.Div(data, className="{} columns".format(c.dash.NUM_DICT[n_rows]))
-
-
-def get_row(data):
-    """
-        Creates the html row container
-    """
-
-    return html.Div(data, className="row")

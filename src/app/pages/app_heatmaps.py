@@ -26,6 +26,12 @@ CONTENT = [
             ), n_rows=6
         )]
     ),
+    layout.get_body_elem(
+        dcc.Graph(
+            id="dist_plot", config=layout.PLOT_CONFIG,
+            figure=plots.dist_plot(DFG)
+        )
+    ),
 ]
 
 SIDEBAR = layout.create_sidebar(

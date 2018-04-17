@@ -3,6 +3,7 @@
 """
 
 from calendar import month_abbr # options: [month_name, month_abbr]
+from plotly import figure_factory as FF
 import plotly.graph_objs as go
 
 import constants as c
@@ -41,3 +42,36 @@ def get_heatmap(dfg, type_trans):
 
     layout = go.Layout(title="Heatmap ({})".format(type_trans))
     return go.Figure(data=[data], layout=layout)
+
+
+def dist_plot(dfg):
+    """
+        Creates a distribution plot with expenses, incomes and ebit
+
+        Args:
+            dfg:    dataframe to use
+
+        Returns:
+            the plotly plot as html-div format
+    """
+
+    dfe = u.dfs.group_df_by(dfg[dfg[c.cols.TYPE] == c.names.EXPENSES], "M")
+    dfi = u.dfs.group_df_by(dfg[dfg[c.cols.TYPE] == c.names.INCOMES], "M")
+
+    # Minimum of 2 months of data
+    if min(dfe.shape[0], dfi.shape[0]) < 2:
+        return None
+
+    df_baii = dfi - dfe
+
+    df_baii.fillna(0, inplace=True)
+
+    fig = FF.create_distplot(
+        [df_baii[c.cols.AMOUNT], dfe[c.cols.AMOUNT], dfi[c.cols.AMOUNT]],
+        [c.names.EBIT,  c.names.EXPENSES, c.names.INCOMES],
+        colors=u.get_colors([("amber", 500), ("red", 500), ("green", 500)]),
+        bin_size=100)
+
+    fig['layout'].update(title="Incomes, Expenses and EBIT distribution")
+
+    return fig
