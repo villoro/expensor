@@ -5,7 +5,6 @@
 import plotly.graph_objs as go
 
 import constants as c
-import utilities as u
 
 
 def violin_plot(dfg, col_group):
@@ -21,18 +20,18 @@ def violin_plot(dfg, col_group):
     """
 
     df = dfg.groupby([c.cols.YEAR, c.cols.MONTH, c.cols.TYPE]).sum().reset_index()
-    
+
     iter_data = [
-        (c.names.EXPENSES, "negative", c.colors.EXPENSES), 
+        (c.names.EXPENSES, "negative", c.colors.EXPENSES),
         (c.names.INCOMES, "positive", c.colors.INCOMES)
     ]
-    
+
     data = []
-    
+
     for name, side, color in iter_data:
-        
+
         df_aux = df[df[c.cols.TYPE] == name]
-        
+
         data.append(
             go.Violin(
                 x=df_aux[col_group], y=df_aux[c.cols.AMOUNT],

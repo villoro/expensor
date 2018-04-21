@@ -33,7 +33,7 @@ SIDEBAR = layout.create_sidebar(
 
 @APP.callback(Output("violin_year", "figure"),
               [Input("category", "value")])
-def update_heatmap_i(categories):
+def update_violin_y(categories):
     """
         Updates the violin year plot
 
@@ -48,7 +48,7 @@ def update_heatmap_i(categories):
 
 @APP.callback(Output("violin_month", "figure"),
               [Input("category", "value")])
-def update_heatmap_i(categories):
+def update_violin_m(categories):
     """
         Updates the violin year plot
 

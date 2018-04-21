@@ -5,7 +5,6 @@
 from dash.dependencies import Input, Output
 
 import constants as c
-import utilities as u
 from app import pages
 from dash_app import APP
 
