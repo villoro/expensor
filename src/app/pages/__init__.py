@@ -5,3 +5,4 @@
 from app.pages import app_evolution
 from app.pages import app_comparison
 from app.pages import app_heatmaps
+from app.pages import app_violins

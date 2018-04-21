@@ -5,7 +5,6 @@
 from dash.dependencies import Input, Output
 
 import constants as c
-import utilities as u
 from app import pages
 from dash_app import APP
 
@@ -21,6 +20,8 @@ def display_content(pathname):
         return pages.app_comparison.CONTENT
     elif pathname == c.dash.LINK_HEATMAPS:
         return pages.app_heatmaps.CONTENT
+    elif pathname == c.dash.LINK_VIOLINS:
+        return pages.app_violins.CONTENT
     return '404'
 
 
@@ -35,6 +36,8 @@ def display_sidebar(pathname):
         return pages.app_comparison.SIDEBAR
     elif pathname == c.dash.LINK_HEATMAPS:
         return pages.app_heatmaps.SIDEBAR
+    elif pathname == c.dash.LINK_VIOLINS:
+        return pages.app_violins.SIDEBAR
     return '404'
 
 

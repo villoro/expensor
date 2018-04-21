@@ -42,7 +42,8 @@ def get_df(uri):
 
     # Add time filter columns (store everything as string to ensure JSON compatibility)
     df[c.cols.DATE] = pd.to_datetime(df[c.cols.DATE])
-    df[c.cols.MONTH] = pd.to_datetime(df[c.cols.DATE].dt.strftime("%Y-%m-01"))
+    df[c.cols.MONTH_DATE] = pd.to_datetime(df[c.cols.DATE].dt.strftime("%Y-%m-01"))
+    df[c.cols.MONTH] = df[c.cols.DATE].dt.month
     df[c.cols.YEAR] = df[c.cols.DATE].dt.year
 
     # Tag expenses/incomes
