@@ -28,9 +28,9 @@ def get_heatmap(dfg, type_trans):
     if df.shape[0] < 2:
         return {}
 
-    df[c.cols.YEAR], df[c.cols.MONTH] = df.index.year, df.index.month
+    df[c.cols.YEAR], df[c.cols.MONTH_DATE] = df.index.year, df.index.month
 
-    df = df.pivot(c.cols.MONTH, c.cols.YEAR, c.cols.AMOUNT).sort_index(ascending=False)
+    df = df.pivot(c.cols.MONTH_DATE, c.cols.YEAR, c.cols.AMOUNT).sort_index(ascending=False)
 
     # Fix month names
     df.index = [month_abbr[x] for x in df.index]

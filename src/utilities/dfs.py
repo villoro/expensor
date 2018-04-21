@@ -17,7 +17,7 @@ def group_df_by(df, timewindow):
             dataframe grouped
     """
 
-    col = {"D": c.cols.DATE, "M": c.cols.MONTH, "Y": c.cols.YEAR}[timewindow]
+    col = {"D": c.cols.DATE, "M": c.cols.MONTH_DATE, "Y": c.cols.YEAR}[timewindow]
 
     return df[[col, c.cols.AMOUNT]].groupby(col).sum()
 
