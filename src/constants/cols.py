@@ -3,6 +3,7 @@
 """
 
 DATE = "Date"
+MONTH_DATE = "Month_date"
 MONTH = "Month"
 YEAR = "Year"
 NOTES = "Note"
