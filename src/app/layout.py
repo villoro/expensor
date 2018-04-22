@@ -48,8 +48,9 @@ def create_sidebar(categories, elements=None):
         ("Sections", [
             html.Div(dcc.Link("1. Evolution", href=c.dash.LINK_EVOLUTION)),
             html.Div(dcc.Link("2. Comparison", href=c.dash.LINK_COMPARISON)),
-            html.Div(dcc.Link("3. Heatmaps", href=c.dash.LINK_HEATMAPS)),
-            html.Div(dcc.Link("4. Violins", href=c.dash.LINK_VIOLINS))]
+            html.Div(dcc.Link("3. Pies", href=c.dash.LINK_PIES)),
+            html.Div(dcc.Link("4. Heatmaps", href=c.dash.LINK_HEATMAPS)),
+            html.Div(dcc.Link("5. Violins", href=c.dash.LINK_VIOLINS))]
         ),
         ("Categories", dcc.Dropdown(
             id="category", options=get_options(categories), multi=True

@@ -26,6 +26,9 @@ def get_app_from_url(pathname):
     elif pathname == c.dash.LINK_VIOLINS:
         return pages.app_violins
 
+    elif pathname == c.dash.LINK_PIES:
+        return pages.app_pies
+
     return None
 
 
