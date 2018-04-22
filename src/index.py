@@ -9,20 +9,37 @@ from app import pages
 from dash_app import APP
 
 
+def get_app_from_url(pathname):
+    """
+        Gets the app from the pathname
+    """
+
+    if (pathname == "/") or (pathname == c.dash.LINK_EVOLUTION):
+        return pages.app_evolution
+
+    elif pathname == c.dash.LINK_COMPARISON:
+        return pages.app_comparison
+
+    elif pathname == c.dash.LINK_HEATMAPS:
+        return pages.app_heatmaps
+
+    elif pathname == c.dash.LINK_VIOLINS:
+        return pages.app_violins
+
+    return None
+
+
 @APP.callback(Output('page-content', 'children'),
               [Input('url', 'pathname')])
 def display_content(pathname):
     """Updates content based on current page"""
 
-    if (pathname == "/") or (pathname == c.dash.LINK_EVOLUTION):
-        return pages.app_evolution.CONTENT
-    elif pathname == c.dash.LINK_COMPARISON:
-        return pages.app_comparison.CONTENT
-    elif pathname == c.dash.LINK_HEATMAPS:
-        return pages.app_heatmaps.CONTENT
-    elif pathname == c.dash.LINK_VIOLINS:
-        return pages.app_violins.CONTENT
-    return '404'
+    m_app = get_app_from_url(pathname)
+
+    if m_app is not None:
+        return m_app.CONTENT
+
+    return "404"
 
 
 @APP.callback(Output('sidebar', 'children'),
@@ -30,15 +47,12 @@ def display_content(pathname):
 def display_sidebar(pathname):
     """Updates sidebar based on current page"""
 
-    if (pathname == "/") or (pathname == c.dash.LINK_EVOLUTION):
-        return pages.app_evolution.SIDEBAR
-    elif pathname == c.dash.LINK_COMPARISON:
-        return pages.app_comparison.SIDEBAR
-    elif pathname == c.dash.LINK_HEATMAPS:
-        return pages.app_heatmaps.SIDEBAR
-    elif pathname == c.dash.LINK_VIOLINS:
-        return pages.app_violins.SIDEBAR
-    return '404'
+    m_app = get_app_from_url(pathname)
+
+    if m_app is not None:
+        return m_app.SIDEBAR
+
+    return "404"
 
 
 
