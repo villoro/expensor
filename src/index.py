@@ -14,21 +14,8 @@ def get_app_from_url(pathname):
         Gets the app from the pathname
     """
 
-    if (pathname == "/") or (pathname == c.dash.LINK_EVOLUTION):
-        return pages.app_evolution
-
-    elif pathname == c.dash.LINK_COMPARISON:
-        return pages.app_comparison
-
-    elif pathname == c.dash.LINK_HEATMAPS:
-        return pages.app_heatmaps
-
-    elif pathname == c.dash.LINK_VIOLINS:
-        return pages.app_violins
-
-    elif pathname == c.dash.LINK_PIES:
-        return pages.app_pies
-
+    if pathname in pages.ALL_APPS:
+        return pages.ALL_APPS[pathname]
     return None
 
 
@@ -37,11 +24,8 @@ def get_app_from_url(pathname):
 def display_content(pathname):
     """Updates content based on current page"""
 
-    m_app = get_app_from_url(pathname)
-
-    if m_app is not None:
-        return m_app.CONTENT
-
+    if pathname in pages.ALL_APPS:
+        return pages.ALL_APPS[pathname].CONTENT
     return "404"
 
 
@@ -50,11 +34,8 @@ def display_content(pathname):
 def display_sidebar(pathname):
     """Updates sidebar based on current page"""
 
-    m_app = get_app_from_url(pathname)
-
-    if m_app is not None:
-        return m_app.SIDEBAR
-
+    if pathname in pages.ALL_APPS:
+        return pages.ALL_APPS[pathname].SIDEBAR
     return "404"
 
 
