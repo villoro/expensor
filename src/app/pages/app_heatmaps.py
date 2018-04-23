@@ -16,19 +16,19 @@ CONTENT = [
     layout.get_body_elem([
         layout.get_one_column(
             dcc.Graph(
-                id="heatmap_i", config=layout.PLOT_CONFIG,
+                id="plot_heat_i", config=layout.PLOT_CONFIG,
                 figure=plots.get_heatmap(DFG, c.names.INCOMES)
             ), n_rows=6),
         layout.get_one_column(
             dcc.Graph(
-                id="heatmap_e", config=layout.PLOT_CONFIG,
+                id="plot_heat_e", config=layout.PLOT_CONFIG,
                 figure=plots.get_heatmap(DFG, c.names.EXPENSES)
             ), n_rows=6
         )
     ]),
     layout.get_body_elem(
         dcc.Graph(
-            id="dist_plot", config=layout.PLOT_CONFIG,
+            id="plot_heat_distribution", config=layout.PLOT_CONFIG,
             figure=plots.dist_plot(DFG)
         )
     ),
@@ -38,7 +38,7 @@ SIDEBAR = layout.create_sidebar(
     CATEGORIES,
 )
 
-@APP.callback(Output("heatmap_i", "figure"),
+@APP.callback(Output("plot_heat_i", "figure"),
               [Input("category", "value")])
 def update_heatmap_i(categories):
     """
@@ -53,7 +53,7 @@ def update_heatmap_i(categories):
     return plots.get_heatmap(df, c.names.INCOMES)
 
 
-@APP.callback(Output("heatmap_e", "figure"),
+@APP.callback(Output("plot_heat_e", "figure"),
               [Input("category", "value")])
 def update_heatmap_e(categories):
     """
@@ -68,7 +68,7 @@ def update_heatmap_e(categories):
     return plots.get_heatmap(df, c.names.EXPENSES)
 
 
-@APP.callback(Output("dist_plot", "figure"),
+@APP.callback(Output("plot_heat_distribution", "figure"),
               [Input("category", "value")])
 def update_distplot(categories):
     """

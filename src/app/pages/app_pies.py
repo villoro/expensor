@@ -28,14 +28,14 @@ for num, default_years in enumerate([YEARS[-1], None]):
             layout.get_row([
                 layout.get_one_column(
                     dcc.Graph(
-                        id="pie_{}_{}".format(num, c.names.INCOMES),
+                        id="plot_pie_{}_{}".format(num, c.names.INCOMES),
                         config=layout.PLOT_CONFIG,
                         figure=plots.get_pie(DFG, c.names.INCOMES, default_years)
                     ), n_rows=6
                 ),
                 layout.get_one_column(
                     dcc.Graph(
-                        id="pie_{}_{}".format(num, c.names.EXPENSES),
+                        id="plot_pie_{}_{}".format(num, c.names.EXPENSES),
                         config=layout.PLOT_CONFIG,
                         figure=plots.get_pie(DFG, c.names.EXPENSES, default_years)
                     ), n_rows=6
@@ -51,7 +51,7 @@ SIDEBAR = layout.create_sidebar(
 
 for num in range(2):
 
-    @APP.callback(Output("pie_{}_{}".format(num, c.names.INCOMES), "figure"),
+    @APP.callback(Output("plot_pie_{}_{}".format(num, c.names.INCOMES), "figure"),
                   [Input("category", "value"),
                    Input("drop_pie_{}".format(num), "value")])
     def update_pie_incomes(categories, years):
@@ -68,7 +68,7 @@ for num in range(2):
         return plots.get_pie(df, c.names.INCOMES, years)
 
 
-    @APP.callback(Output("pie_{}_{}".format(num, c.names.EXPENSES), "figure"),
+    @APP.callback(Output("plot_pie_{}_{}".format(num, c.names.EXPENSES), "figure"),
                   [Input("category", "value"),
                    Input("drop_pie_{}".format(num), "value")])
     def update_pie_expenses(categories, years):

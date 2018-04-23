@@ -15,13 +15,13 @@ from plots import plots_violins as plots
 CONTENT = [
     layout.get_body_elem(
         dcc.Graph(
-            id="violin_year", config=layout.PLOT_CONFIG,
+            id="plot_violin_year", config=layout.PLOT_CONFIG,
             figure=plots.violin_plot(DFG, c.cols.YEAR)
         )
     ),
     layout.get_body_elem(
         dcc.Graph(
-            id="violin_month", config=layout.PLOT_CONFIG,
+            id="plot_violin_month", config=layout.PLOT_CONFIG,
             figure=plots.violin_plot(DFG, c.cols.MONTH)
         )
     ),
@@ -31,7 +31,7 @@ SIDEBAR = layout.create_sidebar(
     CATEGORIES,
 )
 
-@APP.callback(Output("violin_year", "figure"),
+@APP.callback(Output("plot_violin_year", "figure"),
               [Input("category", "value")])
 def update_violin_y(categories):
     """
@@ -46,7 +46,7 @@ def update_violin_y(categories):
     return plots.violin_plot(df, c.cols.YEAR)
 
 
-@APP.callback(Output("violin_month", "figure"),
+@APP.callback(Output("plot_violin_month", "figure"),
               [Input("category", "value")])
 def update_violin_m(categories):
     """
