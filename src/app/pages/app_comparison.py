@@ -7,23 +7,23 @@ from dash.dependencies import Input, Output
 
 import utilities as u
 import constants as c
-from app import layout
+from app import uiutils as uiu
 from dash_app import DFG, CATEGORIES, APP
 from plots import plots_comparison as plots
 
 
-CONTENT = layout.create_body([
+CONTENT = uiu.create_body([
     dcc.Graph(
-        id="plot_comp_i", config=layout.PLOT_CONFIG,
+        id="plot_comp_i", config=uiu.PLOT_CONFIG,
         figure=plots.ts_gradient(DFG, c.names.INCOMES)
     ),
     dcc.Graph(
-        id="plot_comp_e", config=layout.PLOT_CONFIG,
+        id="plot_comp_e", config=uiu.PLOT_CONFIG,
         figure=plots.ts_gradient(DFG, c.names.EXPENSES)
     ),
 ])
 
-SIDEBAR = layout.create_sidebar(CATEGORIES)
+SIDEBAR = uiu.create_sidebar(CATEGORIES)
 
 
 @APP.callback(Output("plot_comp_i", "figure"), [Input("category", "value")])

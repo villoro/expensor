@@ -7,23 +7,23 @@ from dash.dependencies import Input, Output
 
 import utilities as u
 import constants as c
-from app import layout
+from app import uiutils as uiu
 from dash_app import DFG, CATEGORIES, APP
 from plots import plots_violins as plots
 
 
-CONTENT = layout.create_body([
+CONTENT = uiu.create_body([
     dcc.Graph(
-        id="plot_violin_year", config=layout.PLOT_CONFIG,
+        id="plot_violin_year", config=uiu.PLOT_CONFIG,
         figure=plots.violin_plot(DFG, c.cols.YEAR)
     ),
     dcc.Graph(
-        id="plot_violin_month", config=layout.PLOT_CONFIG,
+        id="plot_violin_month", config=uiu.PLOT_CONFIG,
         figure=plots.violin_plot(DFG, c.cols.MONTH)
     )
 ])
 
-SIDEBAR = layout.create_sidebar(
+SIDEBAR = uiu.create_sidebar(
     CATEGORIES,
 )
 

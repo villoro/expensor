@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output
 
 import utilities as u
 import constants as c
-from app import layout
+from app import uiutils as uiu
 from dash_app import DFG, CATEGORIES, APP
 from plots import plots_pies as plots
 
@@ -21,22 +21,22 @@ for num, default_years in enumerate([YEARS[-1], None]):
         [
             dcc.Dropdown(
                 id="drop_pie_{}".format(num),
-                options=layout.get_options(YEARS),
+                options=uiu.get_options(YEARS),
                 value=default_years,
                 multi=True
             ),
-            layout.get_row([
-                layout.get_one_column(
+            uiu.get_row([
+                uiu.get_one_column(
                     dcc.Graph(
                         id="plot_pie_{}_{}".format(num, c.names.INCOMES),
-                        config=layout.PLOT_CONFIG,
+                        config=uiu.PLOT_CONFIG,
                         figure=plots.get_pie(DFG, c.names.INCOMES, default_years)
                     ), n_rows=6
                 ),
-                layout.get_one_column(
+                uiu.get_one_column(
                     dcc.Graph(
                         id="plot_pie_{}_{}".format(num, c.names.EXPENSES),
-                        config=layout.PLOT_CONFIG,
+                        config=uiu.PLOT_CONFIG,
                         figure=plots.get_pie(DFG, c.names.EXPENSES, default_years)
                     ), n_rows=6
                 )
@@ -44,9 +44,9 @@ for num, default_years in enumerate([YEARS[-1], None]):
         ],
     )
 
-CONTENT = layout.create_body(CONTENT)
+CONTENT = uiu.create_body(CONTENT)
 
-SIDEBAR = layout.create_sidebar(
+SIDEBAR = uiu.create_sidebar(
     CATEGORIES,
 )
 

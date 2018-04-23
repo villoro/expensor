@@ -7,31 +7,31 @@ from dash.dependencies import Input, Output
 
 import utilities as u
 import constants as c
-from app import layout
+from app import uiutils as uiu
 from dash_app import DFG, CATEGORIES, APP
 from plots import plots_evolution as plots
 
 
-CONTENT = layout.create_body([
+CONTENT = uiu.create_body([
     dcc.Graph(
-        id="plot_evol", config=layout.PLOT_CONFIG,
+        id="plot_evol", config=uiu.PLOT_CONFIG,
         figure=plots.plot_timeserie(DFG)
     ),
     [
         dcc.Graph(
-            id="plot_evo_detail", config=layout.PLOT_CONFIG,
+            id="plot_evo_detail", config=uiu.PLOT_CONFIG,
             figure=plots.plot_timeserie_by_categories(DFG)
         ),
         dcc.RadioItems(
             id="radio_evol_type",
-            options=layout.get_options([c.names.EXPENSES, c.names.INCOMES]),
+            options=uiu.get_options([c.names.EXPENSES, c.names.INCOMES]),
             value=c.names.EXPENSES,
             labelStyle={'display': 'inline-block'}
         )
     ]
 ])
 
-SIDEBAR = layout.create_sidebar(
+SIDEBAR = uiu.create_sidebar(
     CATEGORIES,
     [
         ("Group by", dcc.RadioItems(

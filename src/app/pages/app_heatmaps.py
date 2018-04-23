@@ -7,32 +7,32 @@ from dash.dependencies import Input, Output
 
 import utilities as u
 import constants as c
-from app import layout
+from app import uiutils as uiu
 from dash_app import DFG, CATEGORIES, APP
 from plots import plots_heatmaps as plots
 
 
-CONTENT = layout.create_body([
+CONTENT = uiu.create_body([
     [
-        layout.get_one_column(
+        uiu.get_one_column(
             dcc.Graph(
-                id="plot_heat_i", config=layout.PLOT_CONFIG,
+                id="plot_heat_i", config=uiu.PLOT_CONFIG,
                 figure=plots.get_heatmap(DFG, c.names.INCOMES)
             ), n_rows=6),
-        layout.get_one_column(
+        uiu.get_one_column(
             dcc.Graph(
-                id="plot_heat_e", config=layout.PLOT_CONFIG,
+                id="plot_heat_e", config=uiu.PLOT_CONFIG,
                 figure=plots.get_heatmap(DFG, c.names.EXPENSES)
             ), n_rows=6
         )
     ],
     dcc.Graph(
-        id="plot_heat_distribution", config=layout.PLOT_CONFIG,
+        id="plot_heat_distribution", config=uiu.PLOT_CONFIG,
         figure=plots.dist_plot(DFG)
     )
 ])
 
-SIDEBAR = layout.create_sidebar(
+SIDEBAR = uiu.create_sidebar(
     CATEGORIES,
 )
 
