@@ -14,52 +14,37 @@ from plots import plots_pies as plots
 
 YEARS = sorted(DFG[c.cols.YEAR].unique())
 
-CONTENT = [
-    layout.get_body_elem([
-        dcc.Dropdown(
-            id="drop-pie_1",
-            options=layout.get_options(YEARS),
-            value=YEARS[-1],
-            multi=True
-        ),
-        layout.get_row([
-            layout.get_one_column(
-                dcc.Graph(
-                    id="pie_1_i", config=layout.PLOT_CONFIG,
-                    #figure=plots.plot_timeserie(DFG)
-                ), n_rows=6
+CONTENT = []
+
+for num, default_years in enumerate([YEARS[-1], YEARS]):
+
+    print("Start", "drop_pie_{}".format(num), "pie_{}_{}".format(num, c.names.INCOMES))
+    CONTENT.append(
+        layout.get_body_elem([
+            dcc.Dropdown(
+                id="drop_pie_{}".format(num),
+                options=layout.get_options(YEARS),
+                value=default_years,
+                multi=True
             ),
-            layout.get_one_column(
-                dcc.Graph(
-                    id="pie_1_e", config=layout.PLOT_CONFIG,
-                    #figure=plots.plot_timeserie(DFG)
-                ), n_rows=6
-            )
-        ])
-    ]),
-    layout.get_body_elem([
-        dcc.Dropdown(
-            id="drop-pie_2",
-            options=layout.get_options(YEARS),
-            value=YEARS,
-            multi=True
-        ),
-        layout.get_row([
-            layout.get_one_column(
-                dcc.Graph(
-                    id="pie_2_i", config=layout.PLOT_CONFIG,
-                    #figure=plots.plot_timeserie(DFG)
-                ), n_rows=6
-            ),
-            layout.get_one_column(
-                dcc.Graph(
-                    id="pie_2_e", config=layout.PLOT_CONFIG,
-                    #figure=plots.plot_timeserie(DFG)
-                ), n_rows=6
-            )
-        ])
-    ]),
-]
+            layout.get_row([
+                layout.get_one_column(
+                    dcc.Graph(
+                        id="pie_{}_{}".format(num, c.names.INCOMES),
+                        config=layout.PLOT_CONFIG,
+                        figure=plots.get_pie(DFG, c.names.INCOMES, default_years)
+                    ), n_rows=6
+                ),
+                layout.get_one_column(
+                    dcc.Graph(
+                        id="pie_{}_{}".format(num, c.names.EXPENSES),
+                        config=layout.PLOT_CONFIG,
+                        figure=plots.get_pie(DFG, c.names.EXPENSES, default_years)
+                    ), n_rows=6
+                )
+            ])
+        ]),
+    )
 
 SIDEBAR = layout.create_sidebar(
     CATEGORIES,
