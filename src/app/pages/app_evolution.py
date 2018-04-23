@@ -12,28 +12,24 @@ from dash_app import DFG, CATEGORIES, APP
 from plots import plots_evolution as plots
 
 
-CONTENT = [
-    layout.get_body_elem(
+CONTENT = layout.create_body([
+    dcc.Graph(
+        id="plot_evol", config=layout.PLOT_CONFIG,
+        figure=plots.plot_timeserie(DFG)
+    ),
+    [
         dcc.Graph(
-            id="plot_evol", config=layout.PLOT_CONFIG,
-            figure=plots.plot_timeserie(DFG)
+            id="plot_evo_detail", config=layout.PLOT_CONFIG,
+            figure=plots.plot_timeserie_by_categories(DFG)
+        ),
+        dcc.RadioItems(
+            id="radio_evol_type",
+            options=layout.get_options([c.names.EXPENSES, c.names.INCOMES]),
+            value=c.names.EXPENSES,
+            labelStyle={'display': 'inline-block'}
         )
-    ),
-    layout.get_body_elem(
-        [
-            dcc.Graph(
-                id="plot_evo_detail", config=layout.PLOT_CONFIG,
-                figure=plots.plot_timeserie_by_categories(DFG)
-            ),
-            dcc.RadioItems(
-                id="radio_evol_type",
-                options=layout.get_options([c.names.EXPENSES, c.names.INCOMES]),
-                value=c.names.EXPENSES,
-                labelStyle={'display': 'inline-block'}
-            )
-        ]
-    ),
-]
+    ]
+])
 
 SIDEBAR = layout.create_sidebar(
     CATEGORIES,

@@ -18,7 +18,7 @@ CONTENT = []
 for num, default_years in enumerate([YEARS[-1], None]):
 
     CONTENT.append(
-        layout.get_body_elem([
+        [
             dcc.Dropdown(
                 id="drop_pie_{}".format(num),
                 options=layout.get_options(YEARS),
@@ -41,8 +41,10 @@ for num, default_years in enumerate([YEARS[-1], None]):
                     ), n_rows=6
                 )
             ])
-        ]),
+        ],
     )
+
+CONTENT = layout.create_body(CONTENT)
 
 SIDEBAR = layout.create_sidebar(
     CATEGORIES,

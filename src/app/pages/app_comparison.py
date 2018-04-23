@@ -12,20 +12,16 @@ from dash_app import DFG, CATEGORIES, APP
 from plots import plots_comparison as plots
 
 
-CONTENT = [
-    layout.get_body_elem(
-        dcc.Graph(
-            id="plot_comp_i", config=layout.PLOT_CONFIG,
-            figure=plots.ts_gradient(DFG, c.names.INCOMES)
-        )
+CONTENT = layout.create_body([
+    dcc.Graph(
+        id="plot_comp_i", config=layout.PLOT_CONFIG,
+        figure=plots.ts_gradient(DFG, c.names.INCOMES)
     ),
-    layout.get_body_elem(
-        dcc.Graph(
-            id="plot_comp_e", config=layout.PLOT_CONFIG,
-            figure=plots.ts_gradient(DFG, c.names.EXPENSES)
-        )
+    dcc.Graph(
+        id="plot_comp_e", config=layout.PLOT_CONFIG,
+        figure=plots.ts_gradient(DFG, c.names.EXPENSES)
     ),
-]
+])
 
 SIDEBAR = layout.create_sidebar(CATEGORIES)
 

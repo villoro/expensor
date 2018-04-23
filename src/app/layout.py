@@ -59,18 +59,20 @@ def create_sidebar(categories, elements=None):
     return [_get_sidebar_elem(title, data) for title, data in elements]
 
 
-def get_body_elem(data):
+def create_body(datalist):
     """
         Creates an element for the body
 
         Args:
-            data:   what to include in the element
+            datalist:   what to include in the body
 
         Return:
             html div with the element
     """
 
-    return html.Div(data, className="row", style=styles.STYLE_DIV_CONTROL_IN_BODY)
+    elem_style = styles.STYLE_DIV_CONTROL_IN_BODY
+
+    return [html.Div(data, className="row", style=elem_style) for data in datalist]
 
 
 def get_layout():

@@ -12,8 +12,8 @@ from dash_app import DFG, CATEGORIES, APP
 from plots import plots_heatmaps as plots
 
 
-CONTENT = [
-    layout.get_body_elem([
+CONTENT = layout.create_body([
+    [
         layout.get_one_column(
             dcc.Graph(
                 id="plot_heat_i", config=layout.PLOT_CONFIG,
@@ -25,14 +25,12 @@ CONTENT = [
                 figure=plots.get_heatmap(DFG, c.names.EXPENSES)
             ), n_rows=6
         )
-    ]),
-    layout.get_body_elem(
-        dcc.Graph(
-            id="plot_heat_distribution", config=layout.PLOT_CONFIG,
-            figure=plots.dist_plot(DFG)
-        )
-    ),
-]
+    ],
+    dcc.Graph(
+        id="plot_heat_distribution", config=layout.PLOT_CONFIG,
+        figure=plots.dist_plot(DFG)
+    )
+])
 
 SIDEBAR = layout.create_sidebar(
     CATEGORIES,
