@@ -7,30 +7,26 @@ from dash.dependencies import Input, Output
 
 import utilities as u
 import constants as c
-from app import layout
+from app import ui_utils as uiu
 from dash_app import DFG, CATEGORIES, APP
 from plots import plots_comparison as plots
 
 
-CONTENT = [
-    layout.get_body_elem(
-        dcc.Graph(
-            id="plot_ts_grad_i", config=layout.PLOT_CONFIG,
-            figure=plots.ts_gradient(DFG, c.names.INCOMES)
-        )
+CONTENT = uiu.create_body([
+    dcc.Graph(
+        id="plot_comp_i", config=uiu.PLOT_CONFIG,
+        figure=plots.ts_gradient(DFG, c.names.INCOMES)
     ),
-    layout.get_body_elem(
-        dcc.Graph(
-            id="plot_ts_grad_e", config=layout.PLOT_CONFIG,
-            figure=plots.ts_gradient(DFG, c.names.EXPENSES)
-        )
+    dcc.Graph(
+        id="plot_comp_e", config=uiu.PLOT_CONFIG,
+        figure=plots.ts_gradient(DFG, c.names.EXPENSES)
     ),
-]
+])
 
-SIDEBAR = layout.create_sidebar(CATEGORIES)
+SIDEBAR = uiu.create_sidebar(CATEGORIES)
 
 
-@APP.callback(Output("plot_ts_grad_i", "figure"), [Input("category", "value")])
+@APP.callback(Output("plot_comp_i", "figure"), [Input("category", "value")])
 def update_ts_grad_i(categories):
     """
         Updates the timeserie gradient plot
@@ -44,7 +40,7 @@ def update_ts_grad_i(categories):
     return plots.ts_gradient(df, c.names.INCOMES)
 
 
-@APP.callback(Output("plot_ts_grad_e", "figure"), [Input("category", "value")])
+@APP.callback(Output("plot_comp_e", "figure"), [Input("category", "value")])
 def update_ts_grad_e(categories):
     """
         Updates the timeserie gradient plot

@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output
 
 import utilities as u
 import constants as c
-from app import layout
+from app import ui_utils as uiu
 from dash_app import DFG, CATEGORIES, APP
 from plots import plots_pies as plots
 
@@ -18,40 +18,42 @@ CONTENT = []
 for num, default_years in enumerate([YEARS[-1], None]):
 
     CONTENT.append(
-        layout.get_body_elem([
+        [
             dcc.Dropdown(
                 id="drop_pie_{}".format(num),
-                options=layout.get_options(YEARS),
+                options=uiu.get_options(YEARS),
                 value=default_years,
                 multi=True
             ),
-            layout.get_row([
-                layout.get_one_column(
+            uiu.get_row([
+                uiu.get_one_column(
                     dcc.Graph(
-                        id="pie_{}_{}".format(num, c.names.INCOMES),
-                        config=layout.PLOT_CONFIG,
+                        id="plot_pie_{}_{}".format(num, c.names.INCOMES),
+                        config=uiu.PLOT_CONFIG,
                         figure=plots.get_pie(DFG, c.names.INCOMES, default_years)
                     ), n_rows=6
                 ),
-                layout.get_one_column(
+                uiu.get_one_column(
                     dcc.Graph(
-                        id="pie_{}_{}".format(num, c.names.EXPENSES),
-                        config=layout.PLOT_CONFIG,
+                        id="plot_pie_{}_{}".format(num, c.names.EXPENSES),
+                        config=uiu.PLOT_CONFIG,
                         figure=plots.get_pie(DFG, c.names.EXPENSES, default_years)
                     ), n_rows=6
                 )
             ])
-        ]),
+        ],
     )
 
-SIDEBAR = layout.create_sidebar(
+CONTENT = uiu.create_body(CONTENT)
+
+SIDEBAR = uiu.create_sidebar(
     CATEGORIES,
 )
 
 
 for num in range(2):
 
-    @APP.callback(Output("pie_{}_{}".format(num, c.names.INCOMES), "figure"),
+    @APP.callback(Output("plot_pie_{}_{}".format(num, c.names.INCOMES), "figure"),
                   [Input("category", "value"),
                    Input("drop_pie_{}".format(num), "value")])
     def update_pie_incomes(categories, years):
@@ -68,7 +70,7 @@ for num in range(2):
         return plots.get_pie(df, c.names.INCOMES, years)
 
 
-    @APP.callback(Output("pie_{}_{}".format(num, c.names.EXPENSES), "figure"),
+    @APP.callback(Output("plot_pie_{}_{}".format(num, c.names.EXPENSES), "figure"),
                   [Input("category", "value"),
                    Input("drop_pie_{}".format(num), "value")])
     def update_pie_expenses(categories, years):
