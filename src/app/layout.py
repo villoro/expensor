@@ -114,3 +114,17 @@ def get_one_column(data, n_rows=12):
     """
 
     return html.Div(data, className="{} columns".format(c.dash.NUM_DICT[n_rows]))
+
+
+def get_row(data):
+    """
+        Creates one row that will contain the data
+
+        Args:
+            data:   what to put inside
+
+        Returns:
+            html div containg the data
+    """
+
+    return html.Div(data, className="row")
