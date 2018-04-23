@@ -46,10 +46,7 @@ def create_sidebar(categories, elements=None):
 
     sidebar_basic = [
         ("Sections", [
-            html.Div(dcc.Link("1. Evolution", href=c.dash.LINK_EVOLUTION)),
-            html.Div(dcc.Link("2. Comparison", href=c.dash.LINK_COMPARISON)),
-            html.Div(dcc.Link("3. Heatmaps", href=c.dash.LINK_HEATMAPS)),
-            html.Div(dcc.Link("4. Violins", href=c.dash.LINK_VIOLINS))]
+            html.Div(dcc.Link(name, href=link)) for name, link in c.dash.DICT_APPS.items()]
         ),
         ("Categories", dcc.Dropdown(
             id="category", options=get_options(categories), multi=True
@@ -117,3 +114,17 @@ def get_one_column(data, n_rows=12):
     """
 
     return html.Div(data, className="{} columns".format(c.dash.NUM_DICT[n_rows]))
+
+
+def get_row(data):
+    """
+        Creates one row that will contain the data
+
+        Args:
+            data:   what to put inside
+
+        Returns:
+            html div containg the data
+    """
+
+    return html.Div(data, className="row")

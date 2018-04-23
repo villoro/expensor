@@ -4,9 +4,18 @@
 
 from dash.dependencies import Input, Output
 
-import constants as c
 from app import pages
 from dash_app import APP
+
+
+def get_app_from_url(pathname):
+    """
+        Gets the app from the pathname
+    """
+
+    if pathname in pages.ALL_APPS:
+        return pages.ALL_APPS[pathname]
+    return None
 
 
 @APP.callback(Output('page-content', 'children'),
@@ -14,15 +23,9 @@ from dash_app import APP
 def display_content(pathname):
     """Updates content based on current page"""
 
-    if (pathname == "/") or (pathname == c.dash.LINK_EVOLUTION):
-        return pages.app_evolution.CONTENT
-    elif pathname == c.dash.LINK_COMPARISON:
-        return pages.app_comparison.CONTENT
-    elif pathname == c.dash.LINK_HEATMAPS:
-        return pages.app_heatmaps.CONTENT
-    elif pathname == c.dash.LINK_VIOLINS:
-        return pages.app_violins.CONTENT
-    return '404'
+    if pathname in pages.ALL_APPS:
+        return pages.ALL_APPS[pathname].CONTENT
+    return "404"
 
 
 @APP.callback(Output('sidebar', 'children'),
@@ -30,15 +33,9 @@ def display_content(pathname):
 def display_sidebar(pathname):
     """Updates sidebar based on current page"""
 
-    if (pathname == "/") or (pathname == c.dash.LINK_EVOLUTION):
-        return pages.app_evolution.SIDEBAR
-    elif pathname == c.dash.LINK_COMPARISON:
-        return pages.app_comparison.SIDEBAR
-    elif pathname == c.dash.LINK_HEATMAPS:
-        return pages.app_heatmaps.SIDEBAR
-    elif pathname == c.dash.LINK_VIOLINS:
-        return pages.app_violins.SIDEBAR
-    return '404'
+    if pathname in pages.ALL_APPS:
+        return pages.ALL_APPS[pathname].SIDEBAR
+    return "404"
 
 
 
