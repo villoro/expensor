@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output
 
 import utilities as u
 import constants as c
-from app import uiutils as uiu
+from app import ui_utils as uiu
 from dash_app import DFG, CATEGORIES, APP
 from plots import plots_heatmaps as plots
 
