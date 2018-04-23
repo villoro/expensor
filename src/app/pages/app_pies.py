@@ -3,7 +3,6 @@
 """
 
 import dash_core_components as dcc
-import dash_html_components as html
 from dash.dependencies import Input, Output
 
 import utilities as u
@@ -16,9 +15,8 @@ YEARS = sorted(DFG[c.cols.YEAR].unique())
 
 CONTENT = []
 
-for num, default_years in enumerate([YEARS[-1], YEARS]):
+for num, default_years in enumerate([YEARS[-1], None]):
 
-    print("Start", "drop_pie_{}".format(num), "pie_{}_{}".format(num, c.names.INCOMES))
     CONTENT.append(
         layout.get_body_elem([
             dcc.Dropdown(
@@ -49,3 +47,39 @@ for num, default_years in enumerate([YEARS[-1], YEARS]):
 SIDEBAR = layout.create_sidebar(
     CATEGORIES,
 )
+
+
+for num in range(2):
+
+    @APP.callback(Output("pie_{}_{}".format(num, c.names.INCOMES), "figure"),
+                  [Input("category", "value"),
+                   Input("drop_pie_{}".format(num), "value")])
+    def update_pie_incomes(categories, years):
+        """
+            Updates the incomes pie plot
+
+            Args:
+                categories: categories to use
+                years:      years to include in pie
+        """
+
+        df = u.dfs.filter_data(DFG, categories)
+
+        return plots.get_pie(df, c.names.INCOMES, years)
+
+
+    @APP.callback(Output("pie_{}_{}".format(num, c.names.EXPENSES), "figure"),
+                  [Input("category", "value"),
+                   Input("drop_pie_{}".format(num), "value")])
+    def update_pie_expenses(categories, years):
+        """
+            Updates the expenses pie plot
+
+            Args:
+                categories: categories to use
+                years:      years to include in pie
+        """
+
+        df = u.dfs.filter_data(DFG, categories)
+
+        return plots.get_pie(df, c.names.EXPENSES, years)
