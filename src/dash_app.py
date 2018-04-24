@@ -11,6 +11,10 @@ from app import layout
 
 
 def create_dash_app():
+	"""
+		Creates the dash app and gets the related data
+	"""
+
 	app = Dash()
 	app.config.supress_callback_exceptions = True
 	app.css.config.serve_locally = True

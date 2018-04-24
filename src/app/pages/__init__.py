@@ -23,12 +23,33 @@ import constants as c
 
 
 def get_pages(app, dfg, pages):
+    """
+        Creates all dash pages
+
+        Args:
+            app:        dash app
+            dfg:        dataframe with all data
+            categories: list of categories avaiables
+
+        Returns:
+            Pages as a json with the next structure
+
+            --page_link_1
+                --conent
+                --sidebar
+
+            --page_link_n
+                --content
+                --sidebar
+    """
 
     from app.pages import app_comparison as mapp
 
     output = {}
     for mapp in [app_evolution, app_comparison, app_heatmaps, app_violins, app_pies]:
         content, sidebar = mapp.get_content(app, dfg, pages)
-        output[mapp.LINK] = {"content": content, "sidebar": sidebar}
+        output[mapp.LINK] = {c.dash.CONTENT: content, c.dash.SIDEBAR: sidebar}
+
+    output[c.dash.LINK_MAIN] = output[c.dash.LANDING_APP]
 
     return output

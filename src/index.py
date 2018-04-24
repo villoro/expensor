@@ -9,6 +9,9 @@ from dash_app import create_dash_app
 
 
 def get_dash_app():
+    """
+        Gets the dash app with all pages, callbacks and content
+    """
 
     app, dfg, categories = create_dash_app()
 
@@ -21,7 +24,7 @@ def get_dash_app():
         """Updates content based on current page"""
 
         if pathname in pages_json:
-            return pages_json[pathname]["content"]
+            return pages_json[pathname][c.dash.CONTENT]
         return "404"
 
 
@@ -31,7 +34,7 @@ def get_dash_app():
         """Updates sidebar based on current page"""
 
         if pathname in pages_json:
-            return pages_json[pathname]["sidebar"]
+            return pages_json[pathname][c.dash.SIDEBAR]
         return "404"
 
     return app
