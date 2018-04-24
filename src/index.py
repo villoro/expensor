@@ -7,15 +7,15 @@ from dash.dependencies import Input, Output
 from app.pages import get_pages
 from dash_app import create_dash_app
 
+import constants as c
 
 def get_dash_app():
     """
         Gets the dash app with all pages, callbacks and content
     """
 
-    app, dfg, categories = create_dash_app()
-
-    pages_json = get_pages(app, dfg, categories)
+    app = create_dash_app()
+    pages_json = get_pages(app)
 
 
     @app.callback(Output('page-content', 'children'),

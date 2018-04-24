@@ -8,28 +8,16 @@ from app.pages import app_heatmaps
 from app.pages import app_violins
 from app.pages import app_pies
 
+import utilities as u
 import constants as c
 
-# ALL_APPS = {
-#     # c.dash.LINK_EVOLUTION: app_evolution,
-#     # c.dash.LINK_COMPARISON: app_comparison,
-#     # c.dash.LINK_HEATMAPS: app_heatmaps,
-#     # c.dash.LINK_VIOLINS: app_violins,
-#     # c.dash.LINK_PIES: app_pies,
-# }
 
-# Add an app for root path
-# ALL_APPS[c.dash.LINK_MAIN] = app_evolution
-
-
-def get_pages(app, dfg, pages):
+def get_pages(app):
     """
         Creates all dash pages
 
         Args:
             app:        dash app
-            dfg:        dataframe with all data
-            categories: list of categories avaiables
 
         Returns:
             Pages as a json with the next structure
@@ -43,11 +31,12 @@ def get_pages(app, dfg, pages):
                 --sidebar
     """
 
-    from app.pages import app_comparison as mapp
+    dfg = u.uos.get_df(c.os.FILE_DATA_SAMPLE)
+    categories = dfg[c.cols.CATEGORY].unique().tolist()
 
     output = {}
     for mapp in [app_evolution, app_comparison, app_heatmaps, app_violins, app_pies]:
-        content, sidebar = mapp.get_content(app, dfg, pages)
+        content, sidebar = mapp.get_content(app, dfg, categories)
         output[mapp.LINK] = {c.dash.CONTENT: content, c.dash.SIDEBAR: sidebar}
 
     output[c.dash.LINK_MAIN] = output[c.dash.LANDING_APP]
