@@ -2,11 +2,11 @@
     Folder for all dash pages
 """
 
-# from app.pages import app_evolution
-# from app.pages import app_comparison
-# from app.pages import app_heatmaps
-# from app.pages import app_violins
-# from app.pages import app_pies
+from app.pages import app_evolution
+from app.pages import app_comparison
+from app.pages import app_heatmaps
+from app.pages import app_violins
+from app.pages import app_pies
 
 import constants as c
 
@@ -24,6 +24,11 @@ import constants as c
 
 def get_pages(app, dfg, pages):
 
-	from app.pages import app_comparison as mapp
-	content, sidebar = mapp.get_content(app, dfg, pages)
-	return {mapp.LINK: {"content": content, "sidebar": sidebar}}
+    from app.pages import app_comparison as mapp
+
+    output = {}
+    for mapp in [app_evolution, app_comparison, app_heatmaps, app_violins, app_pies]:
+        content, sidebar = mapp.get_content(app, dfg, pages)
+        output[mapp.LINK] = {"content": content, "sidebar": sidebar}
+
+    return output

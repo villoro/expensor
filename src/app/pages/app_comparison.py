@@ -14,6 +14,19 @@ from plots import plots_comparison as plots
 LINK = c.dash.LINK_COMPARISON
 
 def get_content(app, dfg, categories):
+    """
+        Creates the page
+
+        Args:
+            app:        dash app
+            dfg:        dataframe with all data
+            categories: list of categories avaiables
+
+        Returns:
+            content:    body of the page
+            sidebar:    content of the sidebar
+    """
+
     content = uiu.create_body([
         dcc.Graph(
             id="plot_comp_i", config=uiu.PLOT_CONFIG,
