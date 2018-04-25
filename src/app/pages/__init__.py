@@ -2,21 +2,60 @@
     Folder for all dash pages
 """
 
-from app.pages import app_evolution
-from app.pages import app_comparison
-from app.pages import app_heatmaps
-from app.pages import app_violins
-from app.pages import app_pies
+import os
+import importlib
 
+import utilities as u
 import constants as c
 
-ALL_APPS = {
-    c.dash.LINK_EVOLUTION: app_evolution,
-    c.dash.LINK_COMPARISON: app_comparison,
-    c.dash.LINK_HEATMAPS: app_heatmaps,
-    c.dash.LINK_VIOLINS: app_violins,
-    c.dash.LINK_PIES: app_pies,
-}
+from app import ui_utils as uiu
 
-# Add an app for root path
-ALL_APPS[c.dash.LINK_MAIN] = app_evolution
+
+def get_pages(app):
+    """
+        Creates all dash pages
+
+        Args:
+            app:        dash app
+
+        Returns:
+            Pages as a json with the next structure
+
+            --page_link_1
+                --conent
+                --sidebar
+
+            --page_link_n
+                --content
+                --sidebar
+    """
+
+    dfg = u.uos.get_df(c.os.FILE_DATA_SAMPLE)
+    categories = dfg[c.cols.CATEGORY].unique().tolist()
+
+    output = {}
+    for app_name in os.listdir("app/pages"):
+
+        # Check if it is an app
+        if (app_name.startswith("app")) and (app_name.endswith(".py")):
+
+            # Fix app name
+            app_name = ".{}".format(app_name.split(".")[0])
+
+            # Import it programatically
+            m_app = importlib.import_module(app_name, "app.pages")
+
+            # Retrive lists with content and sidebar
+            content_raw, sidebar_raw = m_app.get_content(app, dfg, categories)
+
+            # Construct body and sidebar
+            content = uiu.create_body(content_raw)
+            sidebar = uiu.create_sidebar(categories, sidebar_raw)
+
+            # Add content to the output dict
+            output[m_app.LINK] = {c.dash.CONTENT: content, c.dash.SIDEBAR: sidebar}
+
+    # Clone content of the page that will appear in the root path
+    output[c.dash.LINK_MAIN] = output[c.dash.LANDING_APP]
+
+    return output

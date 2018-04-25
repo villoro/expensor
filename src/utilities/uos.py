@@ -9,6 +9,7 @@ from utilities import ulog
 
 log = ulog.set_logger(__file__)
 
+
 def check_if_uri_exist(uris):
     """
         Checks if the folder is trying to use exists and if not, it will create it.
@@ -31,6 +32,25 @@ def check_if_uri_exist(uris):
                 os.makedirs(uri, exist_ok=True)
 
                 log.info("Path %s doesn't exists. Created automatically", uri)
+
+
+def delete_if_possible(uri):
+    """
+        Deletes a file if exists
+
+        Args:
+            uri:    file to delete
+    """
+
+    if os.path.isfile(uri):
+        try:
+            os.remove(uri)
+            return True
+
+        except IOError as e:
+            log.error("Unable to delete.", error=e)
+
+    return False
 
 
 def get_df(uri):
