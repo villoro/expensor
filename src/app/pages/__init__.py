@@ -3,6 +3,7 @@
 """
 
 import os
+import importlib
 
 import utilities as u
 import constants as c
@@ -29,8 +30,6 @@ def get_pages(app):
                 --sidebar
     """
 
-    exec("from app.pages import app_evolution")
-
     dfg = u.uos.get_df(c.os.FILE_DATA_SAMPLE)
     categories = dfg[c.cols.CATEGORY].unique().tolist()
 
@@ -39,22 +38,24 @@ def get_pages(app):
 
         # Check if it is an app
         if (app_name.startswith("app")) and (app_name.endswith(".py")):
-            
+
             # Fix app name
-            app_name = app_name.split(".")[0]
+            app_name = ".{}".format(app_name.split(".")[0])
 
-            # Import it programatically and retrive it from globals
-            exec("from app.pages import {}".format(app_name))
-            m_app = globals()[app_name]
+            # Import it programatically
+            m_app = importlib.import_module(app_name, "app.pages")
 
-            # Add content to the output dict
+            # Retrive lists with content and sidebar
             content_raw, sidebar_raw = m_app.get_content(app, dfg, categories)
 
+            # Construct body and sidebar
             content = uiu.create_body(content_raw)
             sidebar = uiu.create_sidebar(categories, sidebar_raw)
 
+            # Add content to the output dict
             output[m_app.LINK] = {c.dash.CONTENT: content, c.dash.SIDEBAR: sidebar}
 
+    # Clone content of the page that will appear in the root path
     output[c.dash.LINK_MAIN] = output[c.dash.LANDING_APP]
 
     return output
