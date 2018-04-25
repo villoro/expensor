@@ -2,11 +2,7 @@
     Folder for all dash pages
 """
 
-from app.pages import app_evolution
-from app.pages import app_comparison
-from app.pages import app_heatmaps
-from app.pages import app_violins
-from app.pages import app_pies
+import os
 
 import utilities as u
 import constants as c
@@ -31,13 +27,27 @@ def get_pages(app):
                 --sidebar
     """
 
+    exec("from app.pages import app_evolution")
+
     dfg = u.uos.get_df(c.os.FILE_DATA_SAMPLE)
     categories = dfg[c.cols.CATEGORY].unique().tolist()
 
     output = {}
-    for mapp in [app_evolution, app_comparison, app_heatmaps, app_violins, app_pies]:
-        content, sidebar = mapp.get_content(app, dfg, categories)
-        output[mapp.LINK] = {c.dash.CONTENT: content, c.dash.SIDEBAR: sidebar}
+    for app_name in os.listdir("app/pages"):
+
+        # Check if it is an app
+        if (app_name.startswith("app")) and (app_name.endswith(".py")):
+            
+            # Fix app name
+            app_name = app_name.split(".")[0]
+
+            # Import it programatically and retrive it from globals
+            exec("from app.pages import {}".format(app_name))
+            m_app = globals()[app_name]
+
+            # Add content to the output dict
+            content, sidebar = m_app.get_content(app, dfg, categories)
+            output[m_app.LINK] = {c.dash.CONTENT: content, c.dash.SIDEBAR: sidebar}
 
     output[c.dash.LINK_MAIN] = output[c.dash.LANDING_APP]
 
