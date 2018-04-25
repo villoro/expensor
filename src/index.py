@@ -4,40 +4,46 @@
 
 from dash.dependencies import Input, Output
 
-from app import pages
-from dash_app import APP
+from app.pages import get_pages
+from dash_app import create_dash_app
 
+import constants as c
 
-def get_app_from_url(pathname):
+def get_dash_app():
     """
-        Gets the app from the pathname
+        Gets the dash app with all pages, callbacks and content
     """
 
-    if pathname in pages.ALL_APPS:
-        return pages.ALL_APPS[pathname]
-    return None
+    # Create dash app with styles
+    app = create_dash_app()
+
+    # Add pages with content, sidebar and callbacks
+    pages_json = get_pages(app)
 
 
-@APP.callback(Output('page-content', 'children'),
-              [Input('url', 'pathname')])
-def display_content(pathname):
-    """Updates content based on current page"""
+    @app.callback(Output('page-content', 'children'),
+                  [Input('url', 'pathname')])
+    #pylint: disable=unused-variable
+    def display_content(pathname):
+        """Updates content based on current page"""
 
-    if pathname in pages.ALL_APPS:
-        return pages.ALL_APPS[pathname].CONTENT
-    return "404"
+        if pathname in pages_json:
+            return pages_json[pathname][c.dash.CONTENT]
+        return "404"
 
 
-@APP.callback(Output('sidebar', 'children'),
-              [Input('url', 'pathname')])
-def display_sidebar(pathname):
-    """Updates sidebar based on current page"""
+    @app.callback(Output('sidebar', 'children'),
+                  [Input('url', 'pathname')])
+    #pylint: disable=unused-variable
+    def display_sidebar(pathname):
+        """Updates sidebar based on current page"""
 
-    if pathname in pages.ALL_APPS:
-        return pages.ALL_APPS[pathname].SIDEBAR
-    return "404"
+        if pathname in pages_json:
+            return pages_json[pathname][c.dash.SIDEBAR]
+        return "404"
 
+    return app
 
 
 if __name__ == '__main__':
-    APP.run_server(debug=True)
+    get_dash_app().run_server(debug=True)
