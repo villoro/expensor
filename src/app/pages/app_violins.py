@@ -27,7 +27,7 @@ def get_content(app, dfg, categories):
             sidebar:    content of the sidebar
     """
 
-    content = uiu.create_body([
+    content = [
         dcc.Graph(
             id="plot_violin_year", config=uiu.PLOT_CONFIG,
             figure=plots.violin_plot(dfg, c.cols.YEAR)
@@ -36,11 +36,7 @@ def get_content(app, dfg, categories):
             id="plot_violin_month", config=uiu.PLOT_CONFIG,
             figure=plots.violin_plot(dfg, c.cols.MONTH)
         )
-    ])
-
-    sidebar = uiu.create_sidebar(
-        categories,
-    )
+    ]
 
     @app.callback(Output("plot_violin_year", "figure"),
                   [Input("category", "value")])
@@ -71,4 +67,4 @@ def get_content(app, dfg, categories):
 
         return plots.violin_plot(df, c.cols.MONTH)
 
-    return content, sidebar
+    return content, None

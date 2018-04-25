@@ -60,13 +60,6 @@ def get_content(app, dfg, categories):
             ],
         )
 
-    content = uiu.create_body(content)
-
-    sidebar = uiu.create_sidebar(
-        categories,
-    )
-
-
     for num in range(2):
 
         @app.callback(Output("plot_pie_{}_{}".format(num, c.names.INCOMES), "figure"),
@@ -102,4 +95,4 @@ def get_content(app, dfg, categories):
 
             return plots.get_pie(df, c.names.EXPENSES, years)
 
-    return content, sidebar
+    return content, None

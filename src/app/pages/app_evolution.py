@@ -27,7 +27,7 @@ def get_content(app, dfg, categories):
             sidebar:    content of the sidebar
     """
 
-    content = uiu.create_body([
+    content = [
         dcc.Graph(
             id="plot_evol", config=uiu.PLOT_CONFIG,
             figure=plots.plot_timeserie(dfg)
@@ -44,20 +44,17 @@ def get_content(app, dfg, categories):
                 labelStyle={'display': 'inline-block'}
             )
         ]
-    ])
+    ]
 
-    sidebar = uiu.create_sidebar(
-        categories,
-        [
-            ("Group by", dcc.RadioItems(
-                id="radio_evol_tw", value="M",
-                options=[{"label": "Day", "value": "D"},
-                         {"label": "Month", "value": "M"},
-                         {"label": "Year", "value": "Y"}]
-                )
-            ),
-        ]
-    )
+    sidebar = [
+        ("Group by", dcc.RadioItems(
+            id="radio_evol_tw", value="M",
+            options=[{"label": "Day", "value": "D"},
+                     {"label": "Month", "value": "M"},
+                     {"label": "Year", "value": "Y"}]
+            )
+        ),
+    ]
 
 
     @app.callback(Output("plot_evol", "figure"),

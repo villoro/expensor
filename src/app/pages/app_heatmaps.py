@@ -27,7 +27,7 @@ def get_content(app, dfg, categories):
             sidebar:    content of the sidebar
     """
 
-    content = uiu.create_body([
+    content = [
         [
             uiu.get_one_column(
                 dcc.Graph(
@@ -45,11 +45,7 @@ def get_content(app, dfg, categories):
             id="plot_heat_distribution", config=uiu.PLOT_CONFIG,
             figure=plots.dist_plot(dfg)
         )
-    ])
-
-    sidebar = uiu.create_sidebar(
-        categories,
-    )
+    ]
 
     @app.callback(Output("plot_heat_i", "figure"),
                   [Input("category", "value")])
@@ -93,4 +89,4 @@ def get_content(app, dfg, categories):
 
         return plots.dist_plot(u.dfs.filter_data(dfg, categories))
 
-    return content, sidebar
+    return content, None

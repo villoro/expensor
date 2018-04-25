@@ -7,6 +7,8 @@ import os
 import utilities as u
 import constants as c
 
+from app import ui_utils as uiu
+
 
 def get_pages(app):
     """
@@ -46,7 +48,11 @@ def get_pages(app):
             m_app = globals()[app_name]
 
             # Add content to the output dict
-            content, sidebar = m_app.get_content(app, dfg, categories)
+            content_raw, sidebar_raw = m_app.get_content(app, dfg, categories)
+
+            content = uiu.create_body(content_raw)
+            sidebar = uiu.create_sidebar(categories, sidebar_raw)
+
             output[m_app.LINK] = {c.dash.CONTENT: content, c.dash.SIDEBAR: sidebar}
 
     output[c.dash.LINK_MAIN] = output[c.dash.LANDING_APP]

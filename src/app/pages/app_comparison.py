@@ -27,7 +27,7 @@ def get_content(app, dfg, categories):
             sidebar:    content of the sidebar
     """
 
-    content = uiu.create_body([
+    content = [
         dcc.Graph(
             id="plot_comp_i", config=uiu.PLOT_CONFIG,
             figure=plots.ts_gradient(dfg, c.names.INCOMES)
@@ -36,9 +36,7 @@ def get_content(app, dfg, categories):
             id="plot_comp_e", config=uiu.PLOT_CONFIG,
             figure=plots.ts_gradient(dfg, c.names.EXPENSES)
         ),
-    ])
-
-    sidebar = uiu.create_sidebar(categories)
+    ]
 
 
     @app.callback(Output("plot_comp_i", "figure"), [Input("category", "value")])
@@ -68,4 +66,4 @@ def get_content(app, dfg, categories):
 
         return plots.ts_gradient(df, c.names.EXPENSES)
 
-    return content, sidebar
+    return content, None
