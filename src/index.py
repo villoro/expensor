@@ -14,12 +14,16 @@ def get_dash_app():
         Gets the dash app with all pages, callbacks and content
     """
 
+    # Create dash app with styles
     app = create_dash_app()
+
+    # Add pages with content, sidebar and callbacks
     pages_json = get_pages(app)
 
 
     @app.callback(Output('page-content', 'children'),
                   [Input('url', 'pathname')])
+    #pylint: disable=unused-variable
     def display_content(pathname):
         """Updates content based on current page"""
 
@@ -30,6 +34,7 @@ def get_dash_app():
 
     @app.callback(Output('sidebar', 'children'),
                   [Input('url', 'pathname')])
+    #pylint: disable=unused-variable
     def display_sidebar(pathname):
         """Updates sidebar based on current page"""
 

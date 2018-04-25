@@ -13,6 +13,8 @@ from plots import plots_violins as plots
 
 LINK = c.dash.LINK_VIOLINS
 
+
+#pylint: disable=unused-argument
 def get_content(app, dfg, categories):
     """
         Creates the page
@@ -40,6 +42,7 @@ def get_content(app, dfg, categories):
 
     @app.callback(Output("plot_violin_year", "figure"),
                   [Input("category", "value")])
+    #pylint: disable=unused-variable
     def update_violin_y(categories):
         """
             Updates the violin year plot
@@ -55,6 +58,7 @@ def get_content(app, dfg, categories):
 
     @app.callback(Output("plot_violin_month", "figure"),
                   [Input("category", "value")])
+    #pylint: disable=unused-variable
     def update_violin_m(categories):
         """
             Updates the violin year plot

@@ -13,6 +13,8 @@ from plots import plots_heatmaps as plots
 
 LINK = c.dash.LINK_HEATMAPS
 
+
+#pylint: disable=unused-argument
 def get_content(app, dfg, categories):
     """
         Creates the page
@@ -49,6 +51,7 @@ def get_content(app, dfg, categories):
 
     @app.callback(Output("plot_heat_i", "figure"),
                   [Input("category", "value")])
+    #pylint: disable=unused-variable
     def update_heatmap_i(categories):
         """
             Updates the incomes heatmap
@@ -64,6 +67,7 @@ def get_content(app, dfg, categories):
 
     @app.callback(Output("plot_heat_e", "figure"),
                   [Input("category", "value")])
+    #pylint: disable=unused-variable
     def update_heatmap_e(categories):
         """
             Updates the expenses heatmap
@@ -79,6 +83,7 @@ def get_content(app, dfg, categories):
 
     @app.callback(Output("plot_heat_distribution", "figure"),
                   [Input("category", "value")])
+    #pylint: disable=unused-variable
     def update_distplot(categories):
         """
             Updates the distribution plot

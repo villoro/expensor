@@ -13,6 +13,8 @@ from plots import plots_comparison as plots
 
 LINK = c.dash.LINK_COMPARISON
 
+
+#pylint: disable=unused-argument
 def get_content(app, dfg, categories):
     """
         Creates the page
@@ -40,6 +42,7 @@ def get_content(app, dfg, categories):
 
 
     @app.callback(Output("plot_comp_i", "figure"), [Input("category", "value")])
+    #pylint: disable=unused-variable
     def update_ts_grad_i(categories):
         """
             Updates the timeserie gradient plot
@@ -54,6 +57,7 @@ def get_content(app, dfg, categories):
 
 
     @app.callback(Output("plot_comp_e", "figure"), [Input("category", "value")])
+    #pylint: disable=unused-variable
     def update_ts_grad_e(categories):
         """
             Updates the timeserie gradient plot

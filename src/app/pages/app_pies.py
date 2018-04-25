@@ -13,6 +13,8 @@ from plots import plots_pies as plots
 
 LINK = c.dash.LINK_PIES
 
+
+#pylint: disable=unused-argument
 def get_content(app, dfg, categories):
     """
         Creates the page
@@ -65,6 +67,7 @@ def get_content(app, dfg, categories):
         @app.callback(Output("plot_pie_{}_{}".format(num, c.names.INCOMES), "figure"),
                       [Input("category", "value"),
                        Input("drop_pie_{}".format(num), "value")])
+        #pylint: disable=unused-variable
         def update_pie_incomes(categories, years):
             """
                 Updates the incomes pie plot
@@ -82,6 +85,7 @@ def get_content(app, dfg, categories):
         @app.callback(Output("plot_pie_{}_{}".format(num, c.names.EXPENSES), "figure"),
                       [Input("category", "value"),
                        Input("drop_pie_{}".format(num), "value")])
+        #pylint: disable=unused-variable
         def update_pie_expenses(categories, years):
             """
                 Updates the expenses pie plot

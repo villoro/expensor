@@ -13,6 +13,8 @@ from plots import plots_evolution as plots
 
 LINK = c.dash.LINK_EVOLUTION
 
+
+#pylint: disable=unused-argument
 def get_content(app, dfg, categories):
     """
         Creates the page
@@ -59,6 +61,7 @@ def get_content(app, dfg, categories):
 
     @app.callback(Output("plot_evol", "figure"),
                   [Input("category", "value"), Input("radio_evol_tw", "value")])
+    #pylint: disable=unused-variable
     def update_timeserie_plot(categories, timewindow):
         """
             Updates the timeserie plot
@@ -76,6 +79,7 @@ def get_content(app, dfg, categories):
     @app.callback(Output("plot_evo_detail", "figure"),
                   [Input("category", "value"), Input("radio_evol_type", "value"),
                    Input("radio_evol_tw", "value")])
+    #pylint: disable=unused-variable
     def update_ts_by_categories_plot(categories, type_trans, timewindow):
         """
             Updates the timeserie by categories plot

@@ -5,8 +5,6 @@ import os
 from flask import send_from_directory
 from dash import Dash
 
-import utilities as u
-import constants as c
 from app import layout
 
 
@@ -23,6 +21,7 @@ def create_dash_app():
 
 
     @app.server.route('/static/<path:path>')
+    #pylint: disable=unused-variable
     def static_file(path):
         """Adds local css to dash """
         static_folder = os.path.join(os.getcwd(), 'static')
