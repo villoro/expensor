@@ -4,7 +4,7 @@
 
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State, Event
 
 import utilities as u
 import constants as c
@@ -14,6 +14,11 @@ from plots import plots_upload as plots
 
 
 LINK = c.dash.LINK_UPLOAD
+
+DICT_SHOW = {
+    True: {},
+    False: {"display":"none"},
+}
 
 
 def get_content(app, mdata):
@@ -39,14 +44,17 @@ def get_content(app, mdata):
             style=styles.STYLE_UPLOAD_CONTAINER,
             id="upload_container"
         ),
-        html.Div(id="upload_results")
+        html.Div([
+            html.Div(id="upload_results"),
+            html.Button('Use this file', id='upload_button', style=DICT_SHOW[False]),
+        ])
     ]
 
     @app.callback(Output("upload_results", "children"),
                   [Input("upload_container", "contents"),
                    Input("upload_container", "filename")])
     #pylint: disable=unused-variable
-    def update_df_trans(contents, filename):
+    def show_df_trans(contents, filename):
         """
             Updates the transaction dataframe
 
@@ -68,5 +76,52 @@ def get_content(app, mdata):
             id="upload_plot_trans", config=uiu.PLOT_CONFIG,
             figure=plots.table_transactions(df)
         )
+
+
+
+    @app.callback(Output("upload_button", "style"),
+                  [Input("upload_container", "contents"),
+                   Input("upload_container", "filename")])
+    #pylint: disable=unused-variable
+    def allow_update(contents, filename):
+        """
+            Updates the transaction dataframe
+
+            Args:
+                contents:   file uploaded
+                filename:   name of the file uploaded
+        """
+
+        if (contents is None) or (filename is None):
+            return DICT_SHOW[False]
+
+        df = u.uos.parse_dataframe_uploaded(contents, filename)
+
+        # If there has been a reading error, df would be an error message
+        if isinstance(df, str):
+            return DICT_SHOW[False]
+
+        return DICT_SHOW[True]
+
+
+    @app.callback(Output("upload_container", "contents"),
+                  [Input("upload_button", "n_cliks")],
+                  [State("upload_container", "contents"),
+                   State('upload_container', 'filename')])
+    #pylint: disable=unused-variable
+    def update_df_trans(n_clicks, contents, filename):
+        """
+            Updates the transaction dataframe
+
+            Args:
+                contents:   file uploaded
+                filename:   name of the file uploaded
+                n_cliks:    number of time that upload button has been clicked
+        """
+
+        print("HEEEEEEEEEEEEEEEEEEY")
+
+        return []
+
 
     return {c.dash.KEY_BODY: content, c.dash.KEY_INCLUDE_CATEGORIES_IN_SIDEBAR: False}
