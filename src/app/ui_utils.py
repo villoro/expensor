@@ -21,7 +21,7 @@ def get_options(iterable):
     return [{"label": x, "value": x} for x in iterable]
 
 
-def create_sidebar(categories, elements=None):
+def create_sidebar(categories, kwa):
     """
         Creates the sidebar given a list of elements.
         Each element should have a title and some data
@@ -44,17 +44,30 @@ def create_sidebar(categories, elements=None):
 
         return html.Div(children, style=styles.STYLE_SIDEBAR_ELEM)
 
-    sidebar_basic = [
-        ("Sections", [
-            html.Div(dcc.Link(name, href=link)) for name, link in c.dash.DICT_APPS.items()]
-        ),
-        ("Categories", dcc.Dropdown(
-            id="category", options=get_options(categories), multi=True
-            )
-        )
-    ]
+    sidebar_raw = {
+        c.dash.KEY_INCLUDE_LINKS_IN_SIDEBAR:[
+                ("Sections", [
+                    html.Div(dcc.Link(name, href=link)) for name, link in c.dash.DICT_APPS.items()]
+                )
+            ],
+        c.dash.KEY_INCLUDE_CATEGORIES_IN_SIDEBAR:[
+                ("Categories", dcc.Dropdown(
+                    id="category", options=get_options(categories), multi=True
+                    )
+                )
+            ]
+    }
 
-    elements = sidebar_basic + elements if elements else sidebar_basic
+    elements = []
+
+    # Only add a bloc in sidebar if asked (or if nothing is stated)
+    for key, values in sidebar_raw.items():
+        if (key not in kwa) or (kwa[key]):
+            elements += values
+
+    # Finally add extra things in sidebar
+    if c.dash.KEY_SIDEBAR in kwa:
+        elements += kwa[c.dash.KEY_SIDEBAR]
 
     return [_get_sidebar_elem(title, data) for title, data in elements]
 

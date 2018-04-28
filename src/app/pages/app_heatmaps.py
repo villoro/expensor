@@ -23,8 +23,9 @@ def get_content(app, mdata):
             mdata:      data helper class, used for retriving dataframes
 
         Returns:
-            content:    body of the page
-            sidebar:    content of the sidebar
+            dict with content:
+                body:       body of the page
+                sidebar:    content of the sidebar
     """
 
     # Retreive transactions dataframe from data helper
@@ -95,4 +96,4 @@ def get_content(app, mdata):
 
         return plots.dist_plot(u.dfs.filter_data(dfg, categories))
 
-    return content, None
+    return {"body": content}

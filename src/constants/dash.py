@@ -26,3 +26,8 @@ DICT_APPS = {
 
 CONTENT = "content"
 SIDEBAR = "sidebar"
+
+KEY_BODY = "body"
+KEY_SIDEBAR = "sidebar"
+KEY_INCLUDE_LINKS_IN_SIDEBAR = "include-links"
+KEY_INCLUDE_CATEGORIES_IN_SIDEBAR = "include-categories"

@@ -25,8 +25,9 @@ def get_content(app, mdata):
             mdata:      data helper class, used for retriving dataframes
 
         Returns:
-            content:    body of the page
-            sidebar:    content of the sidebar
+            dict with content:
+                body:       body of the page
+                sidebar:    content of the sidebar
     """
 
     content = [
@@ -68,4 +69,4 @@ def get_content(app, mdata):
             figure=plots.table_transactions(df)
         )
 
-    return content, None
+    return {"body": content}

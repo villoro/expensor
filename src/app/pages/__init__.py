@@ -43,15 +43,15 @@ def get_pages(app):
             # Import it programatically
             m_app = importlib.import_module(app_name, "app.pages")
 
-            # Retrive lists with content and sidebar
-            content_raw, sidebar_raw = m_app.get_content(app, mdata)
+            # Retrive content from the page
+            content = m_app.get_content(app, mdata)
 
             # Construct body and sidebar
-            content = uiu.create_body(content_raw)
-            sidebar = uiu.create_sidebar(mdata.categories, sidebar_raw)
+            content = uiu.create_body(content["body"])
+            sidebar = uiu.create_sidebar(mdata.categories, content)
 
             # Add content to the output dict
-            output[m_app.LINK] = {c.dash.CONTENT: content, c.dash.SIDEBAR: sidebar}
+            output[m_app.LINK] = {c.dash.KEY_BODY: content, c.dash.KEY_SIDEBAR: sidebar}
 
     # Clone content of the page that will appear in the root path
     output[c.dash.LINK_MAIN] = output[c.dash.LANDING_APP]

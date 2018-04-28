@@ -23,8 +23,9 @@ def get_content(app, mdata):
             mdata:      data helper class, used for retriving dataframes
 
         Returns:
-            content:    body of the page
-            sidebar:    content of the sidebar
+            dict with content:
+                body:       body of the page
+                sidebar:    content of the sidebar
     """
 
     # Retreive transactions dataframe from data helper
@@ -94,4 +95,4 @@ def get_content(app, mdata):
 
         return plots.plot_timeserie_by_categories(df, type_trans, timewindow)
 
-    return content, sidebar
+    return {"body": content, "sidebar": sidebar}
