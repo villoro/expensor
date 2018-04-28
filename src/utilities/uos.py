@@ -3,6 +3,11 @@
 """
 
 import os
+import io
+import base64
+import pandas as pd
+
+import constants as c
 from utilities import ulog
 
 log = ulog.set_logger(__file__)
@@ -49,3 +54,44 @@ def delete_if_possible(uri):
             log.error("Unable to delete.", error=e)
 
     return False
+
+
+def parse_dataframe_uploaded(contents, filename):
+    """
+        Tries to parse a dataframe from a file uploaded
+
+        Args:
+            contents:   data uploaded
+            filename:   name of the file uploaded
+
+        Returns:
+            dataframe if possible
+    """
+
+    if (not contents) or (contents is None):
+        return None
+
+    _, content_string = contents.split(',')
+
+    # Decode from base64 and get from bytes
+    data = io.BytesIO(base64.b64decode(content_string))
+
+    extension = filename.split(".")[-1]
+
+    # Try to read it as an excel file
+    if extension == "xlsx":
+        try:
+            return pd.read_excel(data)
+        except Exception:
+            return c.os.ERROR_UNPARSABLE
+
+    # Try to read it as a csv
+    elif extension == "csv":
+        try:
+            return pd.read_csv(data)
+        except Exception:
+            return c.os.ERROR_UNPARSABLE
+
+    # For unkown file extension throw an error message
+    else:
+        return c.os.ERROR_EXTENSION
