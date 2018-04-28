@@ -15,6 +15,8 @@ from plots import plots_upload as plots
 
 LINK = c.dash.LINK_UPLOAD
 
+CONTENT_UPDATED = "File has been updated"
+
 DICT_SHOW = {
     True: {},
     False: {"display":"none"},
@@ -66,6 +68,9 @@ def get_content(app, mdata):
         if (contents is None) or (filename is None):
             return []
 
+        if contents == CONTENT_UPDATED:
+            return CONTENT_UPDATED
+
         df = u.uos.parse_dataframe_uploaded(contents, filename)
 
         # If there has been a reading error, df would be an error message
@@ -92,7 +97,7 @@ def get_content(app, mdata):
                 filename:   name of the file uploaded
         """
 
-        if (contents is None) or (filename is None):
+        if (contents is None) or (filename is None) or (contents == CONTENT_UPDATED):
             return DICT_SHOW[False]
 
         df = u.uos.parse_dataframe_uploaded(contents, filename)
@@ -105,23 +110,32 @@ def get_content(app, mdata):
 
 
     @app.callback(Output("upload_container", "contents"),
-                  [Input("upload_button", "n_cliks")],
+                  [],
                   [State("upload_container", "contents"),
-                   State('upload_container', 'filename')])
+                   State('upload_container', 'filename')],
+                  [Event("upload_button", "click")])
     #pylint: disable=unused-variable
-    def update_df_trans(n_clicks, contents, filename):
+    def update_df_trans(contents, filename):
         """
             Updates the transaction dataframe
 
             Args:
                 contents:   file uploaded
                 filename:   name of the file uploaded
-                n_cliks:    number of time that upload button has been clicked
         """
 
-        print("HEEEEEEEEEEEEEEEEEEY")
+        if (contents is None) or (filename is None) or (contents == CONTENT_UPDATED):
+            return None
 
-        return []
+        df = u.uos.parse_dataframe_uploaded(contents, filename)
+
+        # If there has been a reading error, df would be an error message
+        if isinstance(df, str):
+            return None
+        
+        print("DATA UPDATED")
+
+        return CONTENT_UPDATED
 
 
     return {c.dash.KEY_BODY: content, c.dash.KEY_INCLUDE_CATEGORIES_IN_SIDEBAR: False}
