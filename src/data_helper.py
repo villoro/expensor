@@ -7,12 +7,10 @@ import pandas as pd
 import constants as c
 
 
-def get_df(uri):
+def fix_df_trans(df):
     """
-        Retrives a dataframe with data.
+        It does all required transformations in order to use the transaction dataframe
     """
-
-    df = pd.read_csv(uri, sep=";", index_col=0)
 
     # Add time filter columns (store everything as string to ensure JSON compatibility)
     df[c.cols.DATE] = pd.to_datetime(df[c.cols.DATE])
@@ -28,6 +26,7 @@ def get_df(uri):
     df[c.cols.AMOUNT] = df[c.cols.AMOUNT].apply(abs)
 
     return df
+
 
 class Data:
     """
@@ -46,7 +45,7 @@ class Data:
                 uri:        uri of the starter dataframe to load
         """
 
-        df = get_df(uri)
+        df = pd.read_csv(uri, sep=";", index_col=0)
         self.set_transactions(df)
 
 
@@ -55,5 +54,7 @@ class Data:
             Updates the transactions dataframe with the given dataframe
         """
 
-        self.df_trans = df
+        print("DATA CHANGED")
+
+        self.df_trans = fix_df_trans(df)
         self.categories = df[c.cols.CATEGORY].unique().tolist()

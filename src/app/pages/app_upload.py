@@ -135,6 +135,8 @@ def get_content(app, mdata):
         
         print("DATA UPDATED")
 
+        mdata.set_transactions(df)
+
         return CONTENT_UPDATED
 
 
