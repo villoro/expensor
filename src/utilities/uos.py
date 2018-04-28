@@ -3,8 +3,6 @@
 """
 
 import os
-import pandas as pd
-import constants as c
 from utilities import ulog
 
 log = ulog.set_logger(__file__)
@@ -51,26 +49,3 @@ def delete_if_possible(uri):
             log.error("Unable to delete.", error=e)
 
     return False
-
-
-def get_df(uri):
-    """
-        Retrives a dataframe with data.
-    """
-
-    df = pd.read_csv(uri, sep=";", index_col=0)
-
-    # Add time filter columns (store everything as string to ensure JSON compatibility)
-    df[c.cols.DATE] = pd.to_datetime(df[c.cols.DATE])
-    df[c.cols.MONTH_DATE] = pd.to_datetime(df[c.cols.DATE].dt.strftime("%Y-%m-01"))
-    df[c.cols.MONTH] = df[c.cols.DATE].dt.month
-    df[c.cols.YEAR] = df[c.cols.DATE].dt.year
-
-    # Tag expenses/incomes
-    df.loc[df[c.cols.AMOUNT] > 0, c.cols.TYPE] = c.names.INCOMES
-    df[c.cols.TYPE].fillna(c.names.EXPENSES, inplace=True)
-
-    # Amount as positve number
-    df[c.cols.AMOUNT] = df[c.cols.AMOUNT].apply(abs)
-
-    return df

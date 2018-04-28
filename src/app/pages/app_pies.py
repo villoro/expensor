@@ -15,19 +15,21 @@ LINK = c.dash.LINK_PIES
 
 
 #pylint: disable=unused-argument
-def get_content(app, dfg, categories):
+def get_content(app, mdata):
     """
         Creates the page
 
         Args:
             app:        dash app
-            dfg:        dataframe with all data
-            categories: list of categories avaiables
+            mdata:      data helper class, used for retriving dataframes
 
         Returns:
             content:    body of the page
             sidebar:    content of the sidebar
     """
+
+    # Retreive transactions dataframe from data helper
+    dfg = mdata.df_trans
 
     years = sorted(dfg[c.cols.YEAR].unique())
 

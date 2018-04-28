@@ -5,9 +5,8 @@
 import os
 import importlib
 
-import utilities as u
+import data_helper
 import constants as c
-
 from app import ui_utils as uiu
 
 
@@ -30,8 +29,7 @@ def get_pages(app):
                 --sidebar
     """
 
-    dfg = u.uos.get_df(c.os.FILE_DATA_SAMPLE)
-    categories = dfg[c.cols.CATEGORY].unique().tolist()
+    mdata = data_helper.Data()
 
     output = {}
     for app_name in os.listdir("app/pages"):
@@ -46,11 +44,11 @@ def get_pages(app):
             m_app = importlib.import_module(app_name, "app.pages")
 
             # Retrive lists with content and sidebar
-            content_raw, sidebar_raw = m_app.get_content(app, dfg, categories)
+            content_raw, sidebar_raw = m_app.get_content(app, mdata)
 
             # Construct body and sidebar
             content = uiu.create_body(content_raw)
-            sidebar = uiu.create_sidebar(categories, sidebar_raw)
+            sidebar = uiu.create_sidebar(mdata.categories, sidebar_raw)
 
             # Add content to the output dict
             output[m_app.LINK] = {c.dash.CONTENT: content, c.dash.SIDEBAR: sidebar}
