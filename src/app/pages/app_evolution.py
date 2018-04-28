@@ -14,7 +14,6 @@ from plots import plots_evolution as plots
 LINK = c.dash.LINK_EVOLUTION
 
 
-#pylint: disable=unused-argument
 def get_content(app, mdata):
     """
         Creates the page

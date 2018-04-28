@@ -14,7 +14,6 @@ from plots import plots_pies as plots
 LINK = c.dash.LINK_PIES
 
 
-#pylint: disable=unused-argument
 def get_content(app, mdata):
     """
         Creates the page

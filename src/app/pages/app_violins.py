@@ -14,7 +14,6 @@ from plots import plots_violins as plots
 LINK = c.dash.LINK_VIOLINS
 
 
-#pylint: disable=unused-argument
 def get_content(app, mdata):
     """
         Creates the page

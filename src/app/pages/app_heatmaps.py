@@ -14,7 +14,6 @@ from plots import plots_heatmaps as plots
 LINK = c.dash.LINK_HEATMAPS
 
 
-#pylint: disable=unused-argument
 def get_content(app, mdata):
     """
         Creates the page
