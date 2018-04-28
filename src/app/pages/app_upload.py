@@ -69,4 +69,4 @@ def get_content(app, mdata):
             figure=plots.table_transactions(df)
         )
 
-    return {"body": content}
+    return {c.dash.KEY_BODY: content, c.dash.KEY_INCLUDE_CATEGORIES_IN_SIDEBAR: False}

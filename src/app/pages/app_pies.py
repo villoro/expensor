@@ -101,4 +101,4 @@ def get_content(app, mdata):
 
             return plots.get_pie(df, c.names.EXPENSES, years)
 
-    return {"body": content}
+    return {c.dash.KEY_BODY: content}

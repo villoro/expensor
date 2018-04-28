@@ -73,4 +73,4 @@ def get_content(app, mdata):
 
         return plots.violin_plot(df, c.cols.MONTH)
 
-    return {"body": content}
+    return {c.dash.KEY_BODY: content}

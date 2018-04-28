@@ -95,4 +95,4 @@ def get_content(app, mdata):
 
         return plots.plot_timeserie_by_categories(df, type_trans, timewindow)
 
-    return {"body": content, "sidebar": sidebar}
+    return {c.dash.KEY_BODY: content, c.dash.KEY_SIDEBAR: sidebar}

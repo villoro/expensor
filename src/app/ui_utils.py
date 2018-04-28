@@ -45,12 +45,12 @@ def create_sidebar(categories, kwa):
         return html.Div(children, style=styles.STYLE_SIDEBAR_ELEM)
 
     sidebar_raw = {
-        c.dash.KEY_INCLUDE_LINKS_IN_SIDEBAR:[
+        c.dash.KEY_INCLUDE_LINKS_IN_SIDEBAR: [
                 ("Sections", [
                     html.Div(dcc.Link(name, href=link)) for name, link in c.dash.DICT_APPS.items()]
                 )
             ],
-        c.dash.KEY_INCLUDE_CATEGORIES_IN_SIDEBAR:[
+        c.dash.KEY_INCLUDE_CATEGORIES_IN_SIDEBAR: [
                 ("Categories", dcc.Dropdown(
                     id="category", options=get_options(categories), multi=True
                     )

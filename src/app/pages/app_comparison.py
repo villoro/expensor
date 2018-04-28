@@ -72,4 +72,4 @@ def get_content(app, mdata):
 
         return plots.ts_gradient(df, c.names.EXPENSES)
 
-    return {"body": content}
+    return {c.dash.KEY_BODY: content}

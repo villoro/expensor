@@ -96,4 +96,4 @@ def get_content(app, mdata):
 
         return plots.dist_plot(u.dfs.filter_data(dfg, categories))
 
-    return {"body": content}
+    return {c.dash.KEY_BODY: content}
