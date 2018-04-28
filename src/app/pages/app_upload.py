@@ -8,6 +8,7 @@ from dash.dependencies import Input, Output
 
 import utilities as u
 import constants as c
+from static import styles
 from app import ui_utils as uiu
 from plots import plots_upload as plots
 
@@ -34,15 +35,7 @@ def get_content(app, mdata):
                 'Drag and Drop or ',
                 html.A('Select a File')
             ]),
-            style={
-                'width': '100%',
-                'height': '60px',
-                'lineHeight': '60px',
-                'borderWidth': '1px',
-                'borderStyle': 'dashed',
-                'borderRadius': '5px',
-                'textAlign': 'center'
-            },
+            style=styles.STYLE_UPLOAD_CONTAINER,
             id="upload_container"
         ),
         html.Div(id="upload_results")

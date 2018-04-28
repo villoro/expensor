@@ -70,3 +70,15 @@ STYLE_DIV_CONTROL_IN_BODY = {
     "padding-bottom": "15px",
     "border-bottom": "2px solid {}".format(COLOR_SIDEBAR)
 }
+
+STYLE_UPLOAD_CONTAINER = {
+    "height": "60px",
+    "lineHeight": "60px",
+    "borderWidth": "1px",
+    "borderStyle": "dashed",
+    "borderRadius": "5px",
+    "textAlign": "center",
+    "margin-top": "{}px".format(PADDING_V),
+    "margin-left": "{}px".format(PADDING_H),
+    "margin-right": "{}px".format(PADDING_H),
+}
