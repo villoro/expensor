@@ -61,12 +61,18 @@ def get_content(app, mdata):
                 filename:   name of the file uploaded
         """
 
+        if (contents is None) or (filename is None):
+            return []
+
         df = u.uos.parse_dataframe_uploaded(contents, filename)
 
         # If there has been a reading error, df would be an error message
         if isinstance(df, str):
             return df
 
-        return str(df.head())
+        return dcc.Graph(
+            id="upload_plot_trans", config=uiu.PLOT_CONFIG,
+            figure=plots.table_transactions(df)
+        )
 
     return content, None
