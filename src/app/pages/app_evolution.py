@@ -14,13 +14,13 @@ from plots import plots_evolution as plots
 LINK = c.dash.LINK_EVOLUTION
 
 
-def get_content(app, df_trans, categories):
+def get_content(app, df_trans_input, categories):
     """
         Creates the page
 
         Args:
-            app:        dash app
-            df_trans:   dataframe with transactions
+            app:            dash app
+            df_trans_input: dataframe with transactions
 
         Returns:
             dict with content:
@@ -31,12 +31,12 @@ def get_content(app, df_trans, categories):
     content = [
         dcc.Graph(
             id="plot_evol", config=uiu.PLOT_CONFIG,
-            figure=plots.plot_timeserie(df_trans)
+            figure=plots.plot_timeserie(df_trans_input)
         ),
         [
             dcc.Graph(
                 id="plot_evo_detail", config=uiu.PLOT_CONFIG,
-                figure=plots.plot_timeserie_by_categories(df_trans)
+                figure=plots.plot_timeserie_by_categories(df_trans_input)
             ),
             dcc.RadioItems(
                 id="radio_evol_type",
@@ -63,18 +63,17 @@ def get_content(app, df_trans, categories):
                    Input("category", "value"),
                    Input("radio_evol_tw", "value")])
     #pylint: disable=unused-variable
-    def update_timeserie_plot(df_b64, categories, timewindow):
+    def update_timeserie_plot(df_trans, categories, timewindow):
         """
             Updates the timeserie plot
 
             Args:
+                df_trans:   transactions dataframe
                 categories:	categories to use
                 timewindow:	timewindow to use for grouping
         """
 
-        print(len(df_b64))
-
-        df = u.uos.b64_to_df(df_b64)
+        df = u.uos.b64_to_df(df_trans)
         df = u.dfs.filter_data(df, categories)
 
         return plots.plot_timeserie(df, timewindow)
@@ -86,16 +85,18 @@ def get_content(app, df_trans, categories):
                    Input("radio_evol_type", "value"),
                    Input("radio_evol_tw", "value")])
     #pylint: disable=unused-variable
-    def update_ts_by_categories_plot(df_b64, categories, type_trans, timewindow):
+    def update_ts_by_categories_plot(df_trans, categories, type_trans, timewindow):
         """
             Updates the timeserie by categories plot
 
             Args:
+                df_trans:   transactions dataframe
                 categories: categories to use
+                type_trans: type of transacions [Expenses/Incomes]
                 timewindow: timewindow to use for grouping
         """
 
-        df = u.uos.b64_to_df(df_b64)
+        df = u.uos.b64_to_df(df_trans)
         df = u.dfs.filter_data(df, categories)
 
         return plots.plot_timeserie_by_categories(df, type_trans, timewindow)
