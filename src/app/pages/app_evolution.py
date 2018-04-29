@@ -14,7 +14,7 @@ from plots import plots_evolution as plots
 LINK = c.dash.LINK_EVOLUTION
 
 
-def get_content(app, df_trans_input, categories):
+def get_content(app, df_trans_input):
     """
         Creates the page
 
@@ -92,7 +92,7 @@ def get_content(app, df_trans_input, categories):
             Args:
                 df_trans:   transactions dataframe
                 categories: categories to use
-                type_trans: type of transacions [Expenses/Incomes]
+                type_trans: type of transacions [Expenses/Inc]
                 timewindow: timewindow to use for grouping
         """
 

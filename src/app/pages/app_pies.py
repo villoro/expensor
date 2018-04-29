@@ -14,21 +14,20 @@ from plots import plots_pies as plots
 LINK = c.dash.LINK_PIES
 
 
-def get_content(app, dfg, categories):
+def get_content(app, df_trans_input):
     """
         Creates the page
 
         Args:
-            app:        dash app
-            mdata:      data helper class, used for retriving dataframes
+            app:            dash app
+            df_trans_input: dataframe with transactions
 
         Returns:
             dict with content:
                 body:       body of the page
-                sidebar:    content of the sidebar
     """
 
-    years = sorted(dfg[c.cols.YEAR].unique())
+    years = sorted(df_trans_input[c.cols.YEAR].unique())
 
     content = []
 
@@ -47,14 +46,14 @@ def get_content(app, dfg, categories):
                         dcc.Graph(
                             id="plot_pie_{}_{}".format(num, c.names.INCOMES),
                             config=uiu.PLOT_CONFIG,
-                            figure=plots.get_pie(dfg, c.names.INCOMES, default_years)
+                            figure=plots.get_pie(df_trans_input, c.names.INCOMES, default_years)
                         ), n_rows=6
                     ),
                     uiu.get_one_column(
                         dcc.Graph(
                             id="plot_pie_{}_{}".format(num, c.names.EXPENSES),
                             config=uiu.PLOT_CONFIG,
-                            figure=plots.get_pie(dfg, c.names.EXPENSES, default_years)
+                            figure=plots.get_pie(df_trans_input, c.names.EXPENSES, default_years)
                         ), n_rows=6
                     )
                 ])
@@ -64,37 +63,43 @@ def get_content(app, dfg, categories):
     for num in range(2):
 
         @app.callback(Output("plot_pie_{}_{}".format(num, c.names.INCOMES), "figure"),
-                      [Input("category", "value"),
+                      [Input("global_df_trans", "children"),
+                       Input("category", "value"),
                        Input("drop_pie_{}".format(num), "value")])
         #pylint: disable=unused-variable
-        def update_pie_incomes(categories, years):
+        def update_pie_incomes(df_trans, categories, years):
             """
                 Updates the incomes pie plot
 
                 Args:
+                    df_trans:   transactions dataframe
                     categories: categories to use
                     years:      years to include in pie
             """
 
-            df = u.dfs.filter_data(dfg, categories)
+            df = u.uos.b64_to_df(df_trans)
+            df = u.dfs.filter_data(df, categories)
 
             return plots.get_pie(df, c.names.INCOMES, years)
 
 
         @app.callback(Output("plot_pie_{}_{}".format(num, c.names.EXPENSES), "figure"),
-                      [Input("category", "value"),
+                      [Input("global_df_trans", "children"),
+                       Input("category", "value"),
                        Input("drop_pie_{}".format(num), "value")])
         #pylint: disable=unused-variable
-        def update_pie_expenses(categories, years):
+        def update_pie_expenses(df_trans, categories, years):
             """
                 Updates the expenses pie plot
 
                 Args:
+                    df_trans:   transactions dataframe
                     categories: categories to use
                     years:      years to include in pie
             """
 
-            df = u.dfs.filter_data(dfg, categories)
+            df = u.uos.b64_to_df(df_trans)
+            df = u.dfs.filter_data(df, categories)
 
             return plots.get_pie(df, c.names.EXPENSES, years)
 

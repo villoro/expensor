@@ -23,7 +23,7 @@ DICT_SHOW = {
 }
 
 
-def get_content(app, dfg, categories):
+def get_content(app, dfg):
     """
         Creates the page
 

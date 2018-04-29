@@ -41,7 +41,7 @@ def get_pages(app, dfg, categories):
             m_app = importlib.import_module(app_name, "app.pages")
 
             # Retrive content from the page
-            content = m_app.get_content(app, dfg, categories)
+            content = m_app.get_content(app, dfg)
 
             # Construct body and sidebar
             body = uiu.create_body(content["body"])
