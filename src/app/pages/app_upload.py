@@ -83,6 +83,28 @@ def get_content(app, dfg, categories):
         )
 
 
+    def check_contents(contents, filename, fail_return, success_return):
+        """
+            Check if contents are valid. If true returns succes_return else fail_return
+
+            Args:
+                contents:   contents uploaded
+                filename:   name of the file updated
+                fail_return:    return to use when contents are not valid
+                succes_return:  return to use when contents are valid
+        """
+
+        if (contents is None) or (filename is None) or (contents == CONTENT_UPDATED):
+            return fail_return
+
+        df = u.uos.parse_dataframe_uploaded(contents, filename)
+
+        # If there has been a reading error, df would be an error message
+        if isinstance(df, str):
+            return fail_return
+
+        return success_return
+
 
     @app.callback(Output("upload_button", "style"),
                   [Input("upload_container", "contents"),
@@ -97,19 +119,28 @@ def get_content(app, dfg, categories):
                 filename:   name of the file uploaded
         """
 
-        if (contents is None) or (filename is None) or (contents == CONTENT_UPDATED):
-            return DICT_SHOW[False]
-
-        df = u.uos.parse_dataframe_uploaded(contents, filename)
-
-        # If there has been a reading error, df would be an error message
-        if isinstance(df, str):
-            return DICT_SHOW[False]
-
-        return DICT_SHOW[True]
+        return check_contents(contents, filename, DICT_SHOW[False], DICT_SHOW[True])
 
 
     @app.callback(Output("upload_container", "contents"),
+                  [],
+                  [State("upload_container", "contents"),
+                   State('upload_container', 'filename')],
+                  [Event("upload_button", "click")])
+    #pylint: disable=unused-variable
+    def clear_table_when_data_updated(contents, filename):
+        """
+            Updates the transaction dataframe
+
+            Args:
+                contents:   file uploaded
+                filename:   name of the file uploaded
+        """
+
+        return check_contents(contents, filename, None, CONTENT_UPDATED)
+
+
+    @app.callback(Output("global_df_trans", "children"),
                   [],
                   [State("upload_container", "contents"),
                    State('upload_container', 'filename')],
@@ -135,9 +166,7 @@ def get_content(app, dfg, categories):
         
         print("DATA UPDATED")
 
-        mdata.set_transactions(df)
-
-        return CONTENT_UPDATED
+        return u.uos.df_to_b64(df)
 
 
     return {c.dash.KEY_BODY: content, c.dash.KEY_INCLUDE_CATEGORIES_IN_SIDEBAR: False}
