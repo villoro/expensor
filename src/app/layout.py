@@ -39,6 +39,6 @@ def get_layout(df_trans, categories):
         # Others
         html.Link(rel='stylesheet', href='/static/styles.css'),
         dcc.Location(id='url', refresh=False),
-        dcc.Upload(contents=df_trans_bytes, id="global_df_trans", style=styles.STYLE_HIDDEN),
+        html.Div(df_trans_bytes, id="global_df_trans", style=styles.STYLE_HIDDEN),
         html.Div(categories, id="global_categories", style=styles.STYLE_HIDDEN),
     ])

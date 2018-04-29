@@ -105,7 +105,9 @@ def df_to_b64(df):
     mbuffer = io.BytesIO()
     df.to_msgpack(mbuffer)
     mbuffer.seek(0)
-    return base64.b64encode(mbuffer.read())
+    b64_string = base64.b64encode(mbuffer.read())
+
+    return b64_string.decode()
 
 
 def b64_to_df(b64_string):
