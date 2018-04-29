@@ -17,7 +17,7 @@ def get_layout(df_trans, categories):
             df_trans:   excel bytes of df_trans
     """
     
-    df_trans_bytes = u.uos.df_to_excel_bytes(df_trans)
+    df_trans_bytes = u.uos.df_to_b64(df_trans)
 
     return html.Div([
         # Header
@@ -39,6 +39,6 @@ def get_layout(df_trans, categories):
         # Others
         html.Link(rel='stylesheet', href='/static/styles.css'),
         dcc.Location(id='url', refresh=False),
-        # html.Div(df_trans_bytes, id="global_df_trans", style=styles.STYLE_HIDDEN),
+        dcc.Upload(contents=df_trans_bytes, id="global_df_trans", style=styles.STYLE_HIDDEN),
         html.Div(categories, id="global_categories", style=styles.STYLE_HIDDEN),
     ])

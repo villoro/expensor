@@ -97,23 +97,20 @@ def parse_dataframe_uploaded(contents, filename):
         return c.os.ERROR_EXTENSION
 
 
-def df_to_excel_bytes(df):
+def df_to_b64(df):
     """
-        Transform a pandas dataframe to excel bytes
-    """
-
-    output = io.BytesIO()
-
-    writer = pd.ExcelWriter(output, engine='xlsxwriter')
-    df.to_excel(writer)
-    writer.save()
-
-    return output.getvalue()
-
-
-def excel_bytes_to_df(mbytes):
-    """
-        Retrives a pandas dataframes from excel bytes
+        Transform a pandas dataframe to base64 encoded bytes
     """
 
-    return pd.read_excel(io.BytesIO(mbytes))
+    mbuffer = io.BytesIO()
+    df.to_msgpack(mbuffer)
+    mbuffer.seek(0)
+    return base64.b64encode(mbuffer.read())
+
+
+def b64_to_df(b64_string):
+    """
+        Retrives a pandas dataframes from base64 encoded bytes
+    """
+
+    return pd.read_msgpack(io.BytesIO(base64.b64decode(b64_string)))
