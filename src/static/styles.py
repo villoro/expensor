@@ -82,3 +82,5 @@ STYLE_UPLOAD_CONTAINER = {
     "margin-left": "{}px".format(PADDING_H),
     "margin-right": "{}px".format(PADDING_H),
 }
+
+STYLE_HIDDEN = {"display":"none"}

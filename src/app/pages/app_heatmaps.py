@@ -14,7 +14,7 @@ from plots import plots_heatmaps as plots
 LINK = c.dash.LINK_HEATMAPS
 
 
-def get_content(app, mdata):
+def get_content(app, dfg, categories):
     """
         Creates the page
 
@@ -27,9 +27,6 @@ def get_content(app, mdata):
                 body:       body of the page
                 sidebar:    content of the sidebar
     """
-
-    # Retreive transactions dataframe from data helper
-    dfg = mdata.df_trans
 
     content = [
         [

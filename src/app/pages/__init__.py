@@ -5,12 +5,11 @@
 import os
 import importlib
 
-import data_helper
 import constants as c
 from app import ui_utils as uiu
 
 
-def get_pages(app):
+def get_pages(app, dfg, categories):
     """
         Creates all dash pages
 
@@ -29,8 +28,6 @@ def get_pages(app):
                 --sidebar
     """
 
-    mdata = data_helper.Data()
-
     output = {}
     for app_name in os.listdir("app/pages"):
 
@@ -44,11 +41,11 @@ def get_pages(app):
             m_app = importlib.import_module(app_name, "app.pages")
 
             # Retrive content from the page
-            content = m_app.get_content(app, mdata)
+            content = m_app.get_content(app, dfg, categories)
 
             # Construct body and sidebar
             body = uiu.create_body(content["body"])
-            sidebar = uiu.create_sidebar(mdata.categories, content)
+            sidebar = uiu.create_sidebar(categories, content)
 
             # Add content to the output dict
             output[m_app.LINK] = {c.dash.KEY_BODY: body, c.dash.KEY_SIDEBAR: sidebar}

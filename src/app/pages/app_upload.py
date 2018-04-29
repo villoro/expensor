@@ -19,11 +19,11 @@ CONTENT_UPDATED = "File has been updated"
 
 DICT_SHOW = {
     True: {},
-    False: {"display":"none"},
+    False: styles.STYLE_HIDDEN,
 }
 
 
-def get_content(app, mdata):
+def get_content(app, dfg, categories):
     """
         Creates the page
 
