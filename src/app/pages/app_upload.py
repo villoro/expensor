@@ -83,27 +83,25 @@ def get_content(app, dfg, categories):
         )
 
 
-    def check_contents(contents, filename, fail_return, success_return):
+    def check_contents(contents, filename):
         """
-            Check if contents are valid. If true returns succes_return else fail_return
+            Check if contents are valid. If they are it returns the dataframe, else return None
 
             Args:
                 contents:   contents uploaded
                 filename:   name of the file updated
-                fail_return:    return to use when contents are not valid
-                succes_return:  return to use when contents are valid
         """
 
         if (contents is None) or (filename is None) or (contents == CONTENT_UPDATED):
-            return fail_return
+            return None
 
         df = u.uos.parse_dataframe_uploaded(contents, filename)
 
         # If there has been a reading error, df would be an error message
         if isinstance(df, str):
-            return fail_return
+            return None
 
-        return success_return
+        return df
 
 
     @app.callback(Output("upload_button", "style"),
@@ -119,7 +117,8 @@ def get_content(app, dfg, categories):
                 filename:   name of the file uploaded
         """
 
-        return check_contents(contents, filename, DICT_SHOW[False], DICT_SHOW[True])
+        result = check_contents(contents, filename)
+        return DICT_SHOW[False if result is None else True]
 
 
     @app.callback(Output("upload_container", "contents"),
@@ -137,7 +136,8 @@ def get_content(app, dfg, categories):
                 filename:   name of the file uploaded
         """
 
-        return check_contents(contents, filename, None, CONTENT_UPDATED)
+        result = check_contents(contents, filename)
+        return CONTENT_UPDATED if result is not None else None
 
 
     @app.callback(Output("global_df_trans", "children"),
@@ -155,18 +155,8 @@ def get_content(app, dfg, categories):
                 filename:   name of the file uploaded
         """
 
-        if (contents is None) or (filename is None) or (contents == CONTENT_UPDATED):
-            return None
-
-        df = u.uos.parse_dataframe_uploaded(contents, filename)
-
-        # If there has been a reading error, df would be an error message
-        if isinstance(df, str):
-            return None
-        
-        print("DATA UPDATED")
-
-        return u.uos.df_to_b64(df)
+        result = check_contents(contents, filename)
+        return u.uos.df_to_b64(result) if result is not None else None
 
 
     return {c.dash.KEY_BODY: content, c.dash.KEY_INCLUDE_CATEGORIES_IN_SIDEBAR: False}
