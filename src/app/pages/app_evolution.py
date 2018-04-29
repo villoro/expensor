@@ -14,13 +14,13 @@ from plots import plots_evolution as plots
 LINK = c.dash.LINK_EVOLUTION
 
 
-def get_content(app, dfg, categories):
+def get_content(app, df_trans, categories):
     """
         Creates the page
 
         Args:
             app:        dash app
-            mdata:      data helper class, used for retriving dataframes
+            df_trans:   dataframe with transactions
 
         Returns:
             dict with content:
@@ -31,12 +31,12 @@ def get_content(app, dfg, categories):
     content = [
         dcc.Graph(
             id="plot_evol", config=uiu.PLOT_CONFIG,
-            figure=plots.plot_timeserie(dfg)
+            figure=plots.plot_timeserie(df_trans)
         ),
         [
             dcc.Graph(
                 id="plot_evo_detail", config=uiu.PLOT_CONFIG,
-                figure=plots.plot_timeserie_by_categories(dfg)
+                figure=plots.plot_timeserie_by_categories(df_trans)
             ),
             dcc.RadioItems(
                 id="radio_evol_type",
@@ -59,9 +59,11 @@ def get_content(app, dfg, categories):
 
 
     @app.callback(Output("plot_evol", "figure"),
-                  [Input("category", "value"), Input("radio_evol_tw", "value")])
+                  [Input("global_df_trans", "children"),
+                   Input("category", "value"),
+                   Input("radio_evol_tw", "value")])
     #pylint: disable=unused-variable
-    def update_timeserie_plot(categories, timewindow):
+    def update_timeserie_plot(df_b64, categories, timewindow):
         """
             Updates the timeserie plot
 
@@ -70,16 +72,21 @@ def get_content(app, dfg, categories):
                 timewindow:	timewindow to use for grouping
         """
 
-        df = u.dfs.filter_data(dfg, categories)
+        print(len(df_b64))
+
+        df = u.uos.b64_to_df(df_b64)
+        df = u.dfs.filter_data(df, categories)
 
         return plots.plot_timeserie(df, timewindow)
 
 
     @app.callback(Output("plot_evo_detail", "figure"),
-                  [Input("category", "value"), Input("radio_evol_type", "value"),
+                  [Input("global_df_trans", "children"),
+                   Input("category", "value"),
+                   Input("radio_evol_type", "value"),
                    Input("radio_evol_tw", "value")])
     #pylint: disable=unused-variable
-    def update_ts_by_categories_plot(categories, type_trans, timewindow):
+    def update_ts_by_categories_plot(df_b64, categories, type_trans, timewindow):
         """
             Updates the timeserie by categories plot
 
@@ -88,7 +95,8 @@ def get_content(app, dfg, categories):
                 timewindow: timewindow to use for grouping
         """
 
-        df = u.dfs.filter_data(dfg, categories)
+        df = u.uos.b64_to_df(df_b64)
+        df = u.dfs.filter_data(df, categories)
 
         return plots.plot_timeserie_by_categories(df, type_trans, timewindow)
 

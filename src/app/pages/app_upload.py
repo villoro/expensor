@@ -155,8 +155,13 @@ def get_content(app, dfg, categories):
                 filename:   name of the file uploaded
         """
 
-        result = check_contents(contents, filename)
-        return u.uos.df_to_b64(result) if result is not None else None
+        df = check_contents(contents, filename)
+
+        if df is None:
+            return None
+
+        df = u.dfs.fix_df_trans(df)
+        return u.uos.df_to_b64(df)
 
 
     return {c.dash.KEY_BODY: content, c.dash.KEY_INCLUDE_CATEGORIES_IN_SIDEBAR: False}
