@@ -56,7 +56,7 @@ def get_content(app):
     @app.callback(Output("drop_evol_categ", "options"),
                   [Input("global_categories", "children"),
                    Input("evo_aux", "children")])
-    #pylint: disable=unused-variable
+    #pylint: disable=unused-variable,unused-argument
     def update_categories(categories, aux):
         """
             Updates categories dropdown with the actual categories
@@ -70,7 +70,7 @@ def get_content(app):
                    Input("drop_evol_categ", "value"),
                    Input("radio_evol_tw", "value"),
                    Input("evo_aux", "children")])
-    #pylint: disable=unused-variable
+    #pylint: disable=unused-variable,unused-argument
     def update_timeserie_plot(df_trans, categories, timewindow, aux):
         """
             Updates the timeserie plot
@@ -92,7 +92,7 @@ def get_content(app):
                    Input("drop_evol_categ", "value"),
                    Input("radio_evol_type", "value"),
                    Input("radio_evol_tw", "value")])
-    #pylint: disable=unused-variable
+    #pylint: disable=unused-variable,unused-argument
     def update_ts_by_categories_plot(df_trans, categories, type_trans, timewindow):
         """
             Updates the timeserie by categories plot

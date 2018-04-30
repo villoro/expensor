@@ -33,7 +33,7 @@ def get_content(app):
 
     @app.callback(Output("drop_pie_categ", "options"),
                   [Input("global_categories", "children"), Input("pies_aux", "children")])
-    #pylint: disable=unused-variable
+    #pylint: disable=unused-variable,unused-argument
     def update_categories(categories, aux):
         """
             Updates categories dropdown with the actual categories

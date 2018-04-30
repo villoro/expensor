@@ -15,8 +15,11 @@ PLOT_CONFIG = {
 
 
 def get_dummy_div(name):
-
-    return html.Div("Dummy", id=name, style=styles.STYLE_HIDDEN),
+    """
+        Creates a dummy div that will be used to draw plots when a page is loaded
+        using the callbacks in the page
+    """
+    return html.Div("Dummy", id=name, style=styles.STYLE_HIDDEN)
 
 
 def get_options(iterable):

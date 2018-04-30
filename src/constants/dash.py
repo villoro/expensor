@@ -4,7 +4,7 @@
 
 LINK_MAIN = "/"
 LINK_UPLOAD = "/upload"
-LINK_EVOLUTION = "/evolutiuon"
+LINK_EVOLUTION = "/evolution"
 LINK_COMPARISON = "/comparison"
 LINK_HEATMAPS = "/heatmaps"
 LINK_VIOLINS = "/violins"

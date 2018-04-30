@@ -45,7 +45,7 @@ def get_content(app):
     @app.callback(Output("drop_heat_categ", "options"),
                   [Input("global_categories", "children"),
                    Input("pies_aux", "children")])
-    #pylint: disable=unused-variable
+    #pylint: disable=unused-variable,unused-argument
     def update_categories(categories, aux):
         """
             Updates categories dropdown with the actual categories
@@ -58,7 +58,7 @@ def get_content(app):
                   [Input("global_df_trans", "children"),
                    Input("drop_heat_categ", "value"),
                    Input("pies_aux", "children")])
-    #pylint: disable=unused-variable
+    #pylint: disable=unused-variable,unused-argument
     def update_heatmap_i(df_trans, categories, aux):
         """
             Updates the incomes heatmap
@@ -78,7 +78,7 @@ def get_content(app):
                   [Input("global_df_trans", "children"),
                    Input("drop_heat_categ", "value"),
                    Input("pies_aux", "children")])
-    #pylint: disable=unused-variable
+    #pylint: disable=unused-variable,unused-argument
     def update_heatmap_e(df_trans, categories, aux):
         """
             Updates the expenses heatmap
@@ -98,6 +98,7 @@ def get_content(app):
                   [Input("global_df_trans", "children"),
                    Input("drop_heat_categ", "value"),
                    Input("pies_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
     def update_distplot(df_trans, categories, aux):
         """
             Updates the distribution plot

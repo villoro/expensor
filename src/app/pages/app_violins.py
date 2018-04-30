@@ -38,7 +38,7 @@ def get_content(app):
     @app.callback(Output("drop_violin_categ", "options"),
                   [Input("global_categories", "children"),
                    Input("violin_aux", "children")])
-    #pylint: disable=unused-variable
+    #pylint: disable=unused-variable,unused-argument
     def update_categories(categories, aux):
         """
             Updates categories dropdown with the actual categories
@@ -51,7 +51,7 @@ def get_content(app):
                   [Input("global_df_trans", "children"),
                    Input("drop_violin_categ", "value"),
                    Input("violin_aux", "children")])
-    #pylint: disable=unused-variable
+    #pylint: disable=unused-variable,unused-argument
     def update_violin_y(df_trans, categories, aux):
         """
             Updates the violin year plot
@@ -71,7 +71,7 @@ def get_content(app):
                   [Input("global_df_trans", "children"),
                    Input("drop_violin_categ", "value"),
                    Input("violin_aux", "children")])
-    #pylint: disable=unused-variable
+    #pylint: disable=unused-variable,unused-argument
     def update_violin_m(df_trans, categories, aux):
         """
             Updates the violin year plot

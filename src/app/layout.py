@@ -16,7 +16,7 @@ def get_layout(df_trans, categories):
         Args:
             df_trans:   excel bytes of df_trans
     """
-    
+
     df_trans_bytes = u.uos.df_to_b64(df_trans)
 
     return html.Div([
