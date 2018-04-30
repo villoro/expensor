@@ -14,13 +14,12 @@ from plots import plots_heatmaps as plots
 LINK = c.dash.LINK_HEATMAPS
 
 
-def get_content(app, df_trans_input):
+def get_content(app):
     """
         Creates the page
 
         Args:
             app:            dash app
-            df_trans_input: dataframe with transactions
 
         Returns:
             dict with content:
@@ -30,21 +29,13 @@ def get_content(app, df_trans_input):
     content = [
         [
             uiu.get_one_column(
-                dcc.Graph(
-                    id="plot_heat_i", config=uiu.PLOT_CONFIG,
-                    figure=plots.get_heatmap(df_trans_input, c.names.INCOMES)
-                ), n_rows=6),
+                dcc.Graph(id="plot_heat_i", config=uiu.PLOT_CONFIG), n_rows=6
+            ),
             uiu.get_one_column(
-                dcc.Graph(
-                    id="plot_heat_e", config=uiu.PLOT_CONFIG,
-                    figure=plots.get_heatmap(df_trans_input, c.names.EXPENSES)
-                ), n_rows=6
+                dcc.Graph(id="plot_heat_e", config=uiu.PLOT_CONFIG), n_rows=6
             )
         ],
-        dcc.Graph(
-            id="plot_heat_distribution", config=uiu.PLOT_CONFIG,
-            figure=plots.dist_plot(df_trans_input)
-        )
+        dcc.Graph(id="plot_heat_distribution", config=uiu.PLOT_CONFIG)
     ]
 
     @app.callback(Output("plot_heat_i", "figure"),

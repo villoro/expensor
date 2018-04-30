@@ -20,6 +20,8 @@ def plot_timeserie(dfg, timewindow="M"):
             the plotly plot as html-div format
     """
 
+    print("Evolution")
+
     # Income/Expense traces
     iter_data = {c.names.INCOMES: c.colors.INCOMES, c.names.EXPENSES: c.colors.EXPENSES}
 
@@ -66,6 +68,8 @@ def plot_timeserie_by_categories(dfg, type_trans=c.names.EXPENSES, timewindow="M
         Returns:
             the plotly plot as html-div format
     """
+
+    print("Evolution by category")
 
     df = dfg[dfg[c.cols.TYPE] == type_trans].copy()
 

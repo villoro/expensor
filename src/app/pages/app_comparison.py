@@ -14,13 +14,12 @@ from plots import plots_comparison as plots
 LINK = c.dash.LINK_COMPARISON
 
 
-def get_content(app, df_trans_input):
+def get_content(app):
     """
         Creates the page
 
         Args:
             app:            dash app
-            df_trans_input: dataframe with transactions
 
         Returns:
             dict with content:
@@ -28,14 +27,8 @@ def get_content(app, df_trans_input):
     """
 
     content = [
-        dcc.Graph(
-            id="plot_comp_i", config=uiu.PLOT_CONFIG,
-            figure=plots.ts_gradient(df_trans_input, c.names.INCOMES)
-        ),
-        dcc.Graph(
-            id="plot_comp_e", config=uiu.PLOT_CONFIG,
-            figure=plots.ts_gradient(df_trans_input, c.names.EXPENSES)
-        ),
+        dcc.Graph(id="plot_comp_i", config=uiu.PLOT_CONFIG),
+        dcc.Graph(id="plot_comp_e", config=uiu.PLOT_CONFIG),
     ]
 
 

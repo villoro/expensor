@@ -14,13 +14,12 @@ from plots import plots_violins as plots
 LINK = c.dash.LINK_VIOLINS
 
 
-def get_content(app, df_trans_input):
+def get_content(app):
     """
         Creates the page
 
         Args:
             app:            dash app
-            df_trans_input: dataframe with transactions
 
         Returns:
             dict with content:
@@ -28,14 +27,8 @@ def get_content(app, df_trans_input):
     """
 
     content = [
-        dcc.Graph(
-            id="plot_violin_year", config=uiu.PLOT_CONFIG,
-            figure=plots.violin_plot(df_trans_input, c.cols.YEAR)
-        ),
-        dcc.Graph(
-            id="plot_violin_month", config=uiu.PLOT_CONFIG,
-            figure=plots.violin_plot(df_trans_input, c.cols.MONTH)
-        )
+        dcc.Graph(id="plot_violin_year", config=uiu.PLOT_CONFIG),
+        dcc.Graph(id="plot_violin_month", config=uiu.PLOT_CONFIG)
     ]
 
 

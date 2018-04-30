@@ -23,13 +23,12 @@ DICT_SHOW = {
 }
 
 
-def get_content(app, dfg):
+def get_content(app):
     """
         Creates the page
 
         Args:
             app:        dash app
-            mdata:      data helper class, used for retriving dataframes
 
         Returns:
             dict with content:

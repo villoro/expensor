@@ -35,4 +35,4 @@ def create_dash_app():
         static_folder = os.path.join(os.getcwd(), 'static')
         return send_from_directory(static_folder, path)
 
-    return app, df_trans, categories
+    return app

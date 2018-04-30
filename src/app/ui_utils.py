@@ -21,7 +21,7 @@ def get_options(iterable):
     return [{"label": x, "value": x} for x in iterable]
 
 
-def create_sidebar(categories, kwa):
+def create_sidebar(kwa):
     """
         Creates the sidebar given a list of elements.
         Each element should have a title and some data
@@ -51,10 +51,7 @@ def create_sidebar(categories, kwa):
                 )
             ],
         c.dash.KEY_INCLUDE_CATEGORIES_IN_SIDEBAR: [
-                ("Categories", dcc.Dropdown(
-                    id="category", options=get_options(categories), multi=True
-                    )
-                )
+                ("Categories", dcc.Dropdown(id="category", multi=True))
             ]
     }
 

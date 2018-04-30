@@ -14,20 +14,19 @@ from plots import plots_pies as plots
 LINK = c.dash.LINK_PIES
 
 
-def get_content(app, df_trans_input):
+def get_content(app):
     """
         Creates the page
 
         Args:
             app:            dash app
-            df_trans_input: dataframe with transactions
 
         Returns:
             dict with content:
                 body:       body of the page
     """
 
-    years = sorted(df_trans_input[c.cols.YEAR].unique())
+    years = [2017, 2018] # TODO: fix that!
 
     content = []
 
@@ -46,14 +45,12 @@ def get_content(app, df_trans_input):
                         dcc.Graph(
                             id="plot_pie_{}_{}".format(num, c.names.INCOMES),
                             config=uiu.PLOT_CONFIG,
-                            figure=plots.get_pie(df_trans_input, c.names.INCOMES, default_years)
                         ), n_rows=6
                     ),
                     uiu.get_one_column(
                         dcc.Graph(
                             id="plot_pie_{}_{}".format(num, c.names.EXPENSES),
                             config=uiu.PLOT_CONFIG,
-                            figure=plots.get_pie(df_trans_input, c.names.EXPENSES, default_years)
                         ), n_rows=6
                     )
                 ])

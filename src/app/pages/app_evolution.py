@@ -14,13 +14,12 @@ from plots import plots_evolution as plots
 LINK = c.dash.LINK_EVOLUTION
 
 
-def get_content(app, df_trans_input):
+def get_content(app):
     """
         Creates the page
 
         Args:
             app:            dash app
-            df_trans_input: dataframe with transactions
 
         Returns:
             dict with content:
@@ -29,15 +28,9 @@ def get_content(app, df_trans_input):
     """
 
     content = [
-        dcc.Graph(
-            id="plot_evol", config=uiu.PLOT_CONFIG,
-            figure=plots.plot_timeserie(df_trans_input)
-        ),
+        dcc.Graph(id="plot_evol", config=uiu.PLOT_CONFIG),
         [
-            dcc.Graph(
-                id="plot_evo_detail", config=uiu.PLOT_CONFIG,
-                figure=plots.plot_timeserie_by_categories(df_trans_input)
-            ),
+            dcc.Graph(id="plot_evo_detail", config=uiu.PLOT_CONFIG),
             dcc.RadioItems(
                 id="radio_evol_type",
                 options=uiu.get_options([c.names.EXPENSES, c.names.INCOMES]),
