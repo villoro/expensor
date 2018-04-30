@@ -23,13 +23,12 @@ DICT_SHOW = {
 }
 
 
-def get_content(app, dfg):
+def get_content(app):
     """
         Creates the page
 
         Args:
             app:        dash app
-            mdata:      data helper class, used for retriving dataframes
 
         Returns:
             dict with content:
@@ -163,5 +162,28 @@ def get_content(app, dfg):
         df = u.dfs.fix_df_trans(df)
         return u.uos.df_to_b64(df)
 
+    @app.callback(Output("global_categories", "children"),
+                  [],
+                  [State("upload_container", "contents"),
+                   State('upload_container', 'filename')],
+                  [Event("upload_button", "click")])
+    #pylint: disable=unused-variable
+    def update_categories(contents, filename):
+        """
+            Updates the list of categories
 
-    return {c.dash.KEY_BODY: content, c.dash.KEY_INCLUDE_CATEGORIES_IN_SIDEBAR: False}
+            Args:
+                contents:   file uploaded
+                filename:   name of the file uploaded
+        """
+
+        df = check_contents(contents, filename)
+
+        if df is None:
+            return None
+
+        df = u.dfs.fix_df_trans(df)
+        return df[c.cols.CATEGORY].unique().tolist()
+
+
+    return {c.dash.KEY_BODY: content}

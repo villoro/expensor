@@ -14,6 +14,14 @@ PLOT_CONFIG = {
 }
 
 
+def get_dummy_div(name, value="Dummy"):
+    """
+        Creates a dummy div that will be used to draw plots when a page is loaded
+        using the callbacks in the page
+    """
+    return html.Div(value, id=name, style=styles.STYLE_HIDDEN)
+
+
 def get_options(iterable):
     """
         Populates a dash dropdawn from an iterable
@@ -21,7 +29,7 @@ def get_options(iterable):
     return [{"label": x, "value": x} for x in iterable]
 
 
-def create_sidebar(categories, kwa):
+def create_sidebar(kwa):
     """
         Creates the sidebar given a list of elements.
         Each element should have a title and some data
@@ -44,26 +52,11 @@ def create_sidebar(categories, kwa):
 
         return html.Div(children, style=styles.STYLE_SIDEBAR_ELEM)
 
-    sidebar_raw = {
-        c.dash.KEY_INCLUDE_LINKS_IN_SIDEBAR: [
-                ("Sections", [
-                    html.Div(dcc.Link(name, href=link)) for name, link in c.dash.DICT_APPS.items()]
-                )
-            ],
-        c.dash.KEY_INCLUDE_CATEGORIES_IN_SIDEBAR: [
-                ("Categories", dcc.Dropdown(
-                    id="category", options=get_options(categories), multi=True
-                    )
-                )
-            ]
-    }
-
-    elements = []
-
-    # Only add a bloc in sidebar if asked (or if nothing is stated)
-    for key, values in sidebar_raw.items():
-        if (key not in kwa) or (kwa[key]):
-            elements += values
+    elements = [
+        ("Sections", [
+            html.Div(dcc.Link(name, href=link)) for name, link in c.dash.DICT_APPS.items()]
+        )
+    ]
 
     # Finally add extra things in sidebar
     if c.dash.KEY_SIDEBAR in kwa:

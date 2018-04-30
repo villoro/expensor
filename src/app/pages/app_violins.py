@@ -14,13 +14,12 @@ from plots import plots_violins as plots
 LINK = c.dash.LINK_VIOLINS
 
 
-def get_content(app, df_trans_input):
+def get_content(app):
     """
         Creates the page
 
         Args:
             app:            dash app
-            df_trans_input: dataframe with transactions
 
         Returns:
             dict with content:
@@ -28,21 +27,32 @@ def get_content(app, df_trans_input):
     """
 
     content = [
-        dcc.Graph(
-            id="plot_violin_year", config=uiu.PLOT_CONFIG,
-            figure=plots.violin_plot(df_trans_input, c.cols.YEAR)
-        ),
-        dcc.Graph(
-            id="plot_violin_month", config=uiu.PLOT_CONFIG,
-            figure=plots.violin_plot(df_trans_input, c.cols.MONTH)
-        )
+        dcc.Graph(id="plot_violin_year", config=uiu.PLOT_CONFIG),
+        dcc.Graph(id="plot_violin_month", config=uiu.PLOT_CONFIG),
+        uiu.get_dummy_div("violin_aux")
     ]
+
+    sidebar = [("Categories", dcc.Dropdown(id="drop_violin_categ", multi=True))]
+
+
+    @app.callback(Output("drop_violin_categ", "options"),
+                  [Input("global_categories", "children"),
+                   Input("violin_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_categories(categories, aux):
+        """
+            Updates categories dropdown with the actual categories
+        """
+
+        return uiu.get_options(categories)
 
 
     @app.callback(Output("plot_violin_year", "figure"),
-                  [Input("global_df_trans", "children"), Input("category", "value")])
-    #pylint: disable=unused-variable
-    def update_violin_y(df_trans, categories):
+                  [Input("global_df_trans", "children"),
+                   Input("drop_violin_categ", "value"),
+                   Input("violin_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_violin_y(df_trans, categories, aux):
         """
             Updates the violin year plot
 
@@ -58,9 +68,11 @@ def get_content(app, df_trans_input):
 
 
     @app.callback(Output("plot_violin_month", "figure"),
-                  [Input("global_df_trans", "children"), Input("category", "value")])
-    #pylint: disable=unused-variable
-    def update_violin_m(df_trans, categories):
+                  [Input("global_df_trans", "children"),
+                   Input("drop_violin_categ", "value"),
+                   Input("violin_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_violin_m(df_trans, categories, aux):
         """
             Updates the violin year plot
 
@@ -74,4 +86,4 @@ def get_content(app, df_trans_input):
 
         return plots.violin_plot(df, c.cols.MONTH)
 
-    return {c.dash.KEY_BODY: content}
+    return {c.dash.KEY_BODY: content, c.dash.KEY_SIDEBAR: sidebar}

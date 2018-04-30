@@ -14,13 +14,12 @@ from plots import plots_evolution as plots
 LINK = c.dash.LINK_EVOLUTION
 
 
-def get_content(app, df_trans_input):
+def get_content(app):
     """
         Creates the page
 
         Args:
             app:            dash app
-            df_trans_input: dataframe with transactions
 
         Returns:
             dict with content:
@@ -29,25 +28,21 @@ def get_content(app, df_trans_input):
     """
 
     content = [
-        dcc.Graph(
-            id="plot_evol", config=uiu.PLOT_CONFIG,
-            figure=plots.plot_timeserie(df_trans_input)
-        ),
+        dcc.Graph(id="plot_evol", config=uiu.PLOT_CONFIG),
         [
-            dcc.Graph(
-                id="plot_evo_detail", config=uiu.PLOT_CONFIG,
-                figure=plots.plot_timeserie_by_categories(df_trans_input)
-            ),
+            dcc.Graph(id="plot_evo_detail", config=uiu.PLOT_CONFIG),
             dcc.RadioItems(
                 id="radio_evol_type",
                 options=uiu.get_options([c.names.EXPENSES, c.names.INCOMES]),
                 value=c.names.EXPENSES,
                 labelStyle={'display': 'inline-block'}
             )
-        ]
+        ],
+        uiu.get_dummy_div("evo_aux")
     ]
 
     sidebar = [
+        ("Categories", dcc.Dropdown(id="drop_evol_categ", multi=True)),
         ("Group by", dcc.RadioItems(
             id="radio_evol_tw", value="M",
             options=[{"label": "Day", "value": "D"},
@@ -58,12 +53,25 @@ def get_content(app, df_trans_input):
     ]
 
 
+    @app.callback(Output("drop_evol_categ", "options"),
+                  [Input("global_categories", "children"),
+                   Input("evo_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_categories(categories, aux):
+        """
+            Updates categories dropdown with the actual categories
+        """
+
+        return uiu.get_options(categories)
+
+
     @app.callback(Output("plot_evol", "figure"),
                   [Input("global_df_trans", "children"),
-                   Input("category", "value"),
-                   Input("radio_evol_tw", "value")])
-    #pylint: disable=unused-variable
-    def update_timeserie_plot(df_trans, categories, timewindow):
+                   Input("drop_evol_categ", "value"),
+                   Input("radio_evol_tw", "value"),
+                   Input("evo_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_timeserie_plot(df_trans, categories, timewindow, aux):
         """
             Updates the timeserie plot
 
@@ -81,10 +89,10 @@ def get_content(app, df_trans_input):
 
     @app.callback(Output("plot_evo_detail", "figure"),
                   [Input("global_df_trans", "children"),
-                   Input("category", "value"),
+                   Input("drop_evol_categ", "value"),
                    Input("radio_evol_type", "value"),
                    Input("radio_evol_tw", "value")])
-    #pylint: disable=unused-variable
+    #pylint: disable=unused-variable,unused-argument
     def update_ts_by_categories_plot(df_trans, categories, type_trans, timewindow):
         """
             Updates the timeserie by categories plot

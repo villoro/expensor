@@ -4,7 +4,7 @@
 
 LINK_MAIN = "/"
 LINK_UPLOAD = "/upload"
-LINK_EVOLUTION = "/evolutiuon"
+LINK_EVOLUTION = "/evolution"
 LINK_COMPARISON = "/comparison"
 LINK_HEATMAPS = "/heatmaps"
 LINK_VIOLINS = "/violins"
@@ -29,5 +29,3 @@ SIDEBAR = "sidebar"
 
 KEY_BODY = "body"
 KEY_SIDEBAR = "sidebar"
-KEY_INCLUDE_LINKS_IN_SIDEBAR = "include-links"
-KEY_INCLUDE_CATEGORIES_IN_SIDEBAR = "include-categories"

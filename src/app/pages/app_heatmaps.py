@@ -14,13 +14,12 @@ from plots import plots_heatmaps as plots
 LINK = c.dash.LINK_HEATMAPS
 
 
-def get_content(app, df_trans_input):
+def get_content(app):
     """
         Creates the page
 
         Args:
             app:            dash app
-            df_trans_input: dataframe with transactions
 
         Returns:
             dict with content:
@@ -30,27 +29,37 @@ def get_content(app, df_trans_input):
     content = [
         [
             uiu.get_one_column(
-                dcc.Graph(
-                    id="plot_heat_i", config=uiu.PLOT_CONFIG,
-                    figure=plots.get_heatmap(df_trans_input, c.names.INCOMES)
-                ), n_rows=6),
+                dcc.Graph(id="plot_heat_i", config=uiu.PLOT_CONFIG), n_rows=6
+            ),
             uiu.get_one_column(
-                dcc.Graph(
-                    id="plot_heat_e", config=uiu.PLOT_CONFIG,
-                    figure=plots.get_heatmap(df_trans_input, c.names.EXPENSES)
-                ), n_rows=6
+                dcc.Graph(id="plot_heat_e", config=uiu.PLOT_CONFIG), n_rows=6
             )
         ],
-        dcc.Graph(
-            id="plot_heat_distribution", config=uiu.PLOT_CONFIG,
-            figure=plots.dist_plot(df_trans_input)
-        )
+        dcc.Graph(id="plot_heat_distribution", config=uiu.PLOT_CONFIG),
+        uiu.get_dummy_div("pies_aux")
     ]
 
+    sidebar = [("Categories", dcc.Dropdown(id="drop_heat_categ", multi=True))]
+
+
+    @app.callback(Output("drop_heat_categ", "options"),
+                  [Input("global_categories", "children"),
+                   Input("pies_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_categories(categories, aux):
+        """
+            Updates categories dropdown with the actual categories
+        """
+
+        return uiu.get_options(categories)
+
+
     @app.callback(Output("plot_heat_i", "figure"),
-                  [Input("global_df_trans", "children"), Input("category", "value")])
-    #pylint: disable=unused-variable
-    def update_heatmap_i(df_trans, categories):
+                  [Input("global_df_trans", "children"),
+                   Input("drop_heat_categ", "value"),
+                   Input("pies_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_heatmap_i(df_trans, categories, aux):
         """
             Updates the incomes heatmap
 
@@ -66,9 +75,11 @@ def get_content(app, df_trans_input):
 
 
     @app.callback(Output("plot_heat_e", "figure"),
-                  [Input("global_df_trans", "children"), Input("category", "value")])
-    #pylint: disable=unused-variable
-    def update_heatmap_e(df_trans, categories):
+                  [Input("global_df_trans", "children"),
+                   Input("drop_heat_categ", "value"),
+                   Input("pies_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_heatmap_e(df_trans, categories, aux):
         """
             Updates the expenses heatmap
 
@@ -84,9 +95,11 @@ def get_content(app, df_trans_input):
 
 
     @app.callback(Output("plot_heat_distribution", "figure"),
-                  [Input("global_df_trans", "children"), Input("category", "value")])
-    #pylint: disable=unused-variable
-    def update_distplot(df_trans, categories):
+                  [Input("global_df_trans", "children"),
+                   Input("drop_heat_categ", "value"),
+                   Input("pies_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_distplot(df_trans, categories, aux):
         """
             Updates the distribution plot
 
@@ -100,4 +113,4 @@ def get_content(app, df_trans_input):
 
         return plots.dist_plot(df)
 
-    return {c.dash.KEY_BODY: content}
+    return {c.dash.KEY_BODY: content, c.dash.KEY_SIDEBAR: sidebar}

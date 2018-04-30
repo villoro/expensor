@@ -15,11 +15,10 @@ def get_dash_app():
     """
 
     # Create dash app with styles
-    app, df_trans, categories = create_dash_app()
+    app = create_dash_app()
 
     # Add pages with content, sidebar and callbacks
-    pages_json = get_pages(app, df_trans, categories)
-
+    pages_json = get_pages(app)
 
     @app.callback(Output('page-content', 'children'),
                   [Input('url', 'pathname')])

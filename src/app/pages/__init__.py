@@ -9,7 +9,7 @@ import constants as c
 from app import ui_utils as uiu
 
 
-def get_pages(app, dfg, categories):
+def get_pages(app):
     """
         Creates all dash pages
 
@@ -41,11 +41,11 @@ def get_pages(app, dfg, categories):
             m_app = importlib.import_module(app_name, "app.pages")
 
             # Retrive content from the page
-            content = m_app.get_content(app, dfg)
+            content = m_app.get_content(app)
 
             # Construct body and sidebar
             body = uiu.create_body(content["body"])
-            sidebar = uiu.create_sidebar(categories, content)
+            sidebar = uiu.create_sidebar(content)
 
             # Add content to the output dict
             output[m_app.LINK] = {c.dash.KEY_BODY: body, c.dash.KEY_SIDEBAR: sidebar}
