@@ -11,3 +11,6 @@ FILE_DATA = PATH_DATA + "data.csv"
 FILE_DATA_SAMPLE = PATH_DATA_SAMPLE + "data.csv"
 
 FILE_LOG = PATH_DATA + "log.csv"
+
+ERROR_EXTENSION = "File extension must be 'xlsx' or 'csv'"
+ERROR_UNPARSABLE = "Imposible to read the upload file"

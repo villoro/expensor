@@ -2,6 +2,8 @@
     Utilities for pandas dataframes
 """
 
+import pandas as pd
+
 import constants as c
 
 
@@ -38,5 +40,26 @@ def filter_data(df_input, values=None, col_name=c.cols.CATEGORY):
             df = df[df[col_name].isin(values)]
         else:
             df = df[df[col_name] == values]
+
+    return df
+
+
+def fix_df_trans(df):
+    """
+        It does all required transformations in order to use the transaction dataframe
+    """
+
+    # Add time filter columns (store everything as string to ensure JSON compatibility)
+    df[c.cols.DATE] = pd.to_datetime(df[c.cols.DATE])
+    df[c.cols.MONTH_DATE] = pd.to_datetime(df[c.cols.DATE].dt.strftime("%Y-%m-01"))
+    df[c.cols.MONTH] = df[c.cols.DATE].dt.month
+    df[c.cols.YEAR] = df[c.cols.DATE].dt.year
+
+    # Tag expenses/incomes
+    df.loc[df[c.cols.AMOUNT] > 0, c.cols.TYPE] = c.names.INCOMES
+    df[c.cols.TYPE].fillna(c.names.EXPENSES, inplace=True)
+
+    # Amount as positve number
+    df[c.cols.AMOUNT] = df[c.cols.AMOUNT].apply(abs)
 
     return df

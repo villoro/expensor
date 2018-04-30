@@ -14,84 +14,103 @@ from plots import plots_heatmaps as plots
 LINK = c.dash.LINK_HEATMAPS
 
 
-#pylint: disable=unused-argument
-def get_content(app, dfg, categories):
+def get_content(app):
     """
         Creates the page
 
         Args:
-            app:        dash app
-            dfg:        dataframe with all data
-            categories: list of categories avaiables
+            app:            dash app
 
         Returns:
-            content:    body of the page
-            sidebar:    content of the sidebar
+            dict with content:
+                body:       body of the page
     """
 
     content = [
         [
             uiu.get_one_column(
-                dcc.Graph(
-                    id="plot_heat_i", config=uiu.PLOT_CONFIG,
-                    figure=plots.get_heatmap(dfg, c.names.INCOMES)
-                ), n_rows=6),
+                dcc.Graph(id="plot_heat_i", config=uiu.PLOT_CONFIG), n_rows=6
+            ),
             uiu.get_one_column(
-                dcc.Graph(
-                    id="plot_heat_e", config=uiu.PLOT_CONFIG,
-                    figure=plots.get_heatmap(dfg, c.names.EXPENSES)
-                ), n_rows=6
+                dcc.Graph(id="plot_heat_e", config=uiu.PLOT_CONFIG), n_rows=6
             )
         ],
-        dcc.Graph(
-            id="plot_heat_distribution", config=uiu.PLOT_CONFIG,
-            figure=plots.dist_plot(dfg)
-        )
+        dcc.Graph(id="plot_heat_distribution", config=uiu.PLOT_CONFIG),
+        uiu.get_dummy_div("pies_aux")
     ]
 
+    sidebar = [("Categories", dcc.Dropdown(id="drop_heat_categ", multi=True))]
+
+
+    @app.callback(Output("drop_heat_categ", "options"),
+                  [Input("global_categories", "children"),
+                   Input("pies_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_categories(categories, aux):
+        """
+            Updates categories dropdown with the actual categories
+        """
+
+        return uiu.get_options(categories)
+
+
     @app.callback(Output("plot_heat_i", "figure"),
-                  [Input("category", "value")])
-    #pylint: disable=unused-variable
-    def update_heatmap_i(categories):
+                  [Input("global_df_trans", "children"),
+                   Input("drop_heat_categ", "value"),
+                   Input("pies_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_heatmap_i(df_trans, categories, aux):
         """
             Updates the incomes heatmap
 
             Args:
+                df_trans:   transactions dataframe
                 categories: categories to use
         """
 
-        df = u.dfs.filter_data(dfg, categories)
+        df = u.uos.b64_to_df(df_trans)
+        df = u.dfs.filter_data(df, categories)
 
         return plots.get_heatmap(df, c.names.INCOMES)
 
 
     @app.callback(Output("plot_heat_e", "figure"),
-                  [Input("category", "value")])
-    #pylint: disable=unused-variable
-    def update_heatmap_e(categories):
+                  [Input("global_df_trans", "children"),
+                   Input("drop_heat_categ", "value"),
+                   Input("pies_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_heatmap_e(df_trans, categories, aux):
         """
             Updates the expenses heatmap
 
             Args:
+                df_trans:   transactions dataframe
                 categories: categories to use
         """
 
-        df = u.dfs.filter_data(dfg, categories)
+        df = u.uos.b64_to_df(df_trans)
+        df = u.dfs.filter_data(df, categories)
 
         return plots.get_heatmap(df, c.names.EXPENSES)
 
 
     @app.callback(Output("plot_heat_distribution", "figure"),
-                  [Input("category", "value")])
-    #pylint: disable=unused-variable
-    def update_distplot(categories):
+                  [Input("global_df_trans", "children"),
+                   Input("drop_heat_categ", "value"),
+                   Input("pies_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_distplot(df_trans, categories, aux):
         """
             Updates the distribution plot
 
             Args:
+                df_trans:   transactions dataframe
                 categories: categories to use
         """
 
-        return plots.dist_plot(u.dfs.filter_data(dfg, categories))
+        df = u.uos.b64_to_df(df_trans)
+        df = u.dfs.filter_data(df, categories)
 
-    return content, None
+        return plots.dist_plot(df)
+
+    return {c.dash.KEY_BODY: content, c.dash.KEY_SIDEBAR: sidebar}

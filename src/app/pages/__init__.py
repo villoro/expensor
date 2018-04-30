@@ -5,9 +5,7 @@
 import os
 import importlib
 
-import utilities as u
 import constants as c
-
 from app import ui_utils as uiu
 
 
@@ -30,9 +28,6 @@ def get_pages(app):
                 --sidebar
     """
 
-    dfg = u.uos.get_df(c.os.FILE_DATA_SAMPLE)
-    categories = dfg[c.cols.CATEGORY].unique().tolist()
-
     output = {}
     for app_name in os.listdir("app/pages"):
 
@@ -45,15 +40,15 @@ def get_pages(app):
             # Import it programatically
             m_app = importlib.import_module(app_name, "app.pages")
 
-            # Retrive lists with content and sidebar
-            content_raw, sidebar_raw = m_app.get_content(app, dfg, categories)
+            # Retrive content from the page
+            content = m_app.get_content(app)
 
             # Construct body and sidebar
-            content = uiu.create_body(content_raw)
-            sidebar = uiu.create_sidebar(categories, sidebar_raw)
+            body = uiu.create_body(content["body"])
+            sidebar = uiu.create_sidebar(content)
 
             # Add content to the output dict
-            output[m_app.LINK] = {c.dash.CONTENT: content, c.dash.SIDEBAR: sidebar}
+            output[m_app.LINK] = {c.dash.KEY_BODY: body, c.dash.KEY_SIDEBAR: sidebar}
 
     # Clone content of the page that will appear in the root path
     output[c.dash.LINK_MAIN] = output[c.dash.LANDING_APP]

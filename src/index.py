@@ -20,7 +20,6 @@ def get_dash_app():
     # Add pages with content, sidebar and callbacks
     pages_json = get_pages(app)
 
-
     @app.callback(Output('page-content', 'children'),
                   [Input('url', 'pathname')])
     #pylint: disable=unused-variable
@@ -28,7 +27,7 @@ def get_dash_app():
         """Updates content based on current page"""
 
         if pathname in pages_json:
-            return pages_json[pathname][c.dash.CONTENT]
+            return pages_json[pathname][c.dash.KEY_BODY]
         return "404"
 
 
@@ -39,7 +38,7 @@ def get_dash_app():
         """Updates sidebar based on current page"""
 
         if pathname in pages_json:
-            return pages_json[pathname][c.dash.SIDEBAR]
+            return pages_json[pathname][c.dash.KEY_SIDEBAR]
         return "404"
 
     return app

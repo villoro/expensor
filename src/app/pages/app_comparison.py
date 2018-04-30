@@ -14,60 +14,76 @@ from plots import plots_comparison as plots
 LINK = c.dash.LINK_COMPARISON
 
 
-#pylint: disable=unused-argument
-def get_content(app, dfg, categories):
+def get_content(app):
     """
         Creates the page
 
         Args:
-            app:        dash app
-            dfg:        dataframe with all data
-            categories: list of categories avaiables
+            app:            dash app
 
         Returns:
-            content:    body of the page
-            sidebar:    content of the sidebar
+            dict with content:
+                body:       body of the page
     """
 
     content = [
-        dcc.Graph(
-            id="plot_comp_i", config=uiu.PLOT_CONFIG,
-            figure=plots.ts_gradient(dfg, c.names.INCOMES)
-        ),
-        dcc.Graph(
-            id="plot_comp_e", config=uiu.PLOT_CONFIG,
-            figure=plots.ts_gradient(dfg, c.names.EXPENSES)
-        ),
+        dcc.Graph(id="plot_comp_i", config=uiu.PLOT_CONFIG),
+        dcc.Graph(id="plot_comp_e", config=uiu.PLOT_CONFIG),
+        uiu.get_dummy_div("comp_aux")
     ]
 
+    sidebar = [("Categories", dcc.Dropdown(id="drop_comp_categ", multi=True))]
 
-    @app.callback(Output("plot_comp_i", "figure"), [Input("category", "value")])
-    #pylint: disable=unused-variable
-    def update_ts_grad_i(categories):
+
+    @app.callback(Output("drop_comp_categ", "options"),
+                  [Input("global_categories", "children"),
+                   Input("comp_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_categories(categories, aux):
+        """
+            Updates categories dropdown with the actual categories
+        """
+
+        return uiu.get_options(categories)
+
+
+    @app.callback(Output("plot_comp_i", "figure"),
+                  [Input("global_df_trans", "children"),
+                   Input("drop_comp_categ", "value"),
+                   Input("comp_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_ts_grad_i(df_trans, categories, aux):
         """
             Updates the timeserie gradient plot
 
             Args:
+                df_trans:   transactions dataframe
                 categories: categories to use
         """
 
-        df = u.dfs.filter_data(dfg, categories)
+        df = u.uos.b64_to_df(df_trans)
+        df = u.dfs.filter_data(df, categories)
 
         return plots.ts_gradient(df, c.names.INCOMES)
 
 
-    @app.callback(Output("plot_comp_e", "figure"), [Input("category", "value")])
-    #pylint: disable=unused-variable
-    def update_ts_grad_e(categories):
+    @app.callback(Output("plot_comp_e", "figure"),
+                  [Input("global_df_trans", "children"),
+                   Input("drop_comp_categ", "value"),
+                   Input("comp_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_ts_grad_e(df_trans, categories, aux):
         """
             Updates the timeserie gradient plot
 
             Args:
+                df_trans:   transactions dataframe
                 categories: categories to use
         """
 
-        df = u.dfs.filter_data(dfg, categories)
+        df = u.uos.b64_to_df(df_trans)
+        df = u.dfs.filter_data(df, categories)
 
         return plots.ts_gradient(df, c.names.EXPENSES)
 
-    return content, None
+    return {c.dash.KEY_BODY: content, c.dash.KEY_SIDEBAR: sidebar}
