@@ -28,16 +28,18 @@ def get_content(app):
 
     content = [
         dcc.Graph(id="plot_violin_year", config=uiu.PLOT_CONFIG),
-        dcc.Graph(id="plot_violin_month", config=uiu.PLOT_CONFIG)
+        dcc.Graph(id="plot_violin_month", config=uiu.PLOT_CONFIG),
+        uiu.get_dummy_div("violin_aux")
     ]
 
     sidebar = [("Categories", dcc.Dropdown(id="drop_violin_categ", multi=True))]
 
 
     @app.callback(Output("drop_violin_categ", "options"),
-                  [Input("global_categories", "children")])
+                  [Input("global_categories", "children"),
+                   Input("violin_aux", "children")])
     #pylint: disable=unused-variable
-    def update_categories(categories):
+    def update_categories(categories, aux):
         """
             Updates categories dropdown with the actual categories
         """
@@ -46,9 +48,11 @@ def get_content(app):
 
 
     @app.callback(Output("plot_violin_year", "figure"),
-                  [Input("global_df_trans", "children"), Input("drop_violin_categ", "value")])
+                  [Input("global_df_trans", "children"),
+                   Input("drop_violin_categ", "value"),
+                   Input("violin_aux", "children")])
     #pylint: disable=unused-variable
-    def update_violin_y(df_trans, categories):
+    def update_violin_y(df_trans, categories, aux):
         """
             Updates the violin year plot
 
@@ -64,9 +68,11 @@ def get_content(app):
 
 
     @app.callback(Output("plot_violin_month", "figure"),
-                  [Input("global_df_trans", "children"), Input("drop_violin_categ", "value")])
+                  [Input("global_df_trans", "children"),
+                   Input("drop_violin_categ", "value"),
+                   Input("violin_aux", "children")])
     #pylint: disable=unused-variable
-    def update_violin_m(df_trans, categories):
+    def update_violin_m(df_trans, categories, aux):
         """
             Updates the violin year plot
 

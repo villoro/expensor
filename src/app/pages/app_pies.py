@@ -32,16 +32,16 @@ def get_content(app):
 
 
     @app.callback(Output("drop_pie_categ", "options"),
-                  [Input("global_categories", "children")])
+                  [Input("global_categories", "children"), Input("pies_aux", "children")])
     #pylint: disable=unused-variable
-    def update_categories(categories):
+    def update_categories(categories, aux):
         """
             Updates categories dropdown with the actual categories
         """
 
         return uiu.get_options(categories)
 
-    content = []
+    content = [uiu.get_dummy_div("pies_aux")]
 
     for num, default_years in enumerate([years[-1], None]):
 

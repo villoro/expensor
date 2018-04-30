@@ -14,6 +14,11 @@ PLOT_CONFIG = {
 }
 
 
+def get_dummy_div(name):
+
+    return html.Div("Dummy", id=name, style=styles.STYLE_HIDDEN),
+
+
 def get_options(iterable):
     """
         Populates a dash dropdawn from an iterable

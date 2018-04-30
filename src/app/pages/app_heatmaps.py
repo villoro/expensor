@@ -35,16 +35,18 @@ def get_content(app):
                 dcc.Graph(id="plot_heat_e", config=uiu.PLOT_CONFIG), n_rows=6
             )
         ],
-        dcc.Graph(id="plot_heat_distribution", config=uiu.PLOT_CONFIG)
+        dcc.Graph(id="plot_heat_distribution", config=uiu.PLOT_CONFIG),
+        uiu.get_dummy_div("pies_aux")
     ]
 
     sidebar = [("Categories", dcc.Dropdown(id="drop_heat_categ", multi=True))]
 
 
     @app.callback(Output("drop_heat_categ", "options"),
-                  [Input("global_categories", "children")])
+                  [Input("global_categories", "children"),
+                   Input("pies_aux", "children")])
     #pylint: disable=unused-variable
-    def update_categories(categories):
+    def update_categories(categories, aux):
         """
             Updates categories dropdown with the actual categories
         """
@@ -53,9 +55,11 @@ def get_content(app):
 
 
     @app.callback(Output("plot_heat_i", "figure"),
-                  [Input("global_df_trans", "children"), Input("drop_heat_categ", "value")])
+                  [Input("global_df_trans", "children"),
+                   Input("drop_heat_categ", "value"),
+                   Input("pies_aux", "children")])
     #pylint: disable=unused-variable
-    def update_heatmap_i(df_trans, categories):
+    def update_heatmap_i(df_trans, categories, aux):
         """
             Updates the incomes heatmap
 
@@ -71,9 +75,11 @@ def get_content(app):
 
 
     @app.callback(Output("plot_heat_e", "figure"),
-                  [Input("global_df_trans", "children"), Input("drop_heat_categ", "value")])
+                  [Input("global_df_trans", "children"),
+                   Input("drop_heat_categ", "value"),
+                   Input("pies_aux", "children")])
     #pylint: disable=unused-variable
-    def update_heatmap_e(df_trans, categories):
+    def update_heatmap_e(df_trans, categories, aux):
         """
             Updates the expenses heatmap
 
@@ -89,9 +95,10 @@ def get_content(app):
 
 
     @app.callback(Output("plot_heat_distribution", "figure"),
-                  [Input("global_df_trans", "children"), Input("drop_heat_categ", "value")])
-    #pylint: disable=unused-variable
-    def update_distplot(df_trans, categories):
+                  [Input("global_df_trans", "children"),
+                   Input("drop_heat_categ", "value"),
+                   Input("pies_aux", "children")])
+    def update_distplot(df_trans, categories, aux):
         """
             Updates the distribution plot
 

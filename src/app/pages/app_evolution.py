@@ -37,7 +37,8 @@ def get_content(app):
                 value=c.names.EXPENSES,
                 labelStyle={'display': 'inline-block'}
             )
-        ]
+        ],
+        uiu.get_dummy_div("evo_aux")
     ]
 
     sidebar = [
@@ -53,9 +54,10 @@ def get_content(app):
 
 
     @app.callback(Output("drop_evol_categ", "options"),
-                  [Input("global_categories", "children")])
+                  [Input("global_categories", "children"),
+                   Input("evo_aux", "children")])
     #pylint: disable=unused-variable
-    def update_categories(categories):
+    def update_categories(categories, aux):
         """
             Updates categories dropdown with the actual categories
         """
@@ -66,9 +68,10 @@ def get_content(app):
     @app.callback(Output("plot_evol", "figure"),
                   [Input("global_df_trans", "children"),
                    Input("drop_evol_categ", "value"),
-                   Input("radio_evol_tw", "value")])
+                   Input("radio_evol_tw", "value"),
+                   Input("evo_aux", "children")])
     #pylint: disable=unused-variable
-    def update_timeserie_plot(df_trans, categories, timewindow):
+    def update_timeserie_plot(df_trans, categories, timewindow, aux):
         """
             Updates the timeserie plot
 
