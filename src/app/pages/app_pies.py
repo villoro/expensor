@@ -26,10 +26,7 @@ def get_content(app):
                 body:       body of the page
     """
 
-    years = [2017, 2018] # TODO: fix that!
-
     sidebar = [("Categories", dcc.Dropdown(id="drop_pie_categ", multi=True))]
-
 
     @app.callback(Output("drop_pie_categ", "options"),
                   [Input("global_categories", "children"), Input("pies_aux", "children")])
@@ -41,16 +38,28 @@ def get_content(app):
 
         return uiu.get_options(categories)
 
+
+    @app.callback(Output("drop_pie_{}".format(1), "value"),
+                  [Input("global_df_trans", "children"), Input("pies_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_second_dropdown_value(df_trans, aux):
+        """
+            Sets the value of the second dropdown with year to the last year
+        """
+
+        df = u.uos.b64_to_df(df_trans)
+        return max(df[c.cols.YEAR].unique().tolist())
+
+
     content = [uiu.get_dummy_div("pies_aux")]
 
-    for num, default_years in enumerate([years[-1], None]):
+    # Add plots and dropdowns
+    for num in range(2):
 
         content.append(
             [
                 dcc.Dropdown(
                     id="drop_pie_{}".format(num),
-                    options=uiu.get_options(years),
-                    value=default_years,
                     multi=True
                 ),
                 uiu.get_row([
@@ -70,14 +79,25 @@ def get_content(app):
             ],
         )
 
-    for num in range(2):
+        @app.callback(Output("drop_pie_{}".format(num), "options"),
+                      [Input("global_df_trans", "children"), Input("pies_aux", "children")])
+        #pylint: disable=unused-variable,unused-argument
+        def update_dropdowns_years_options(df_trans, aux):
+            """
+                Updates the dropdowns with the years
+            """
+
+            df = u.uos.b64_to_df(df_trans)
+            return uiu.get_options(df[c.cols.YEAR].unique().tolist())
+
 
         @app.callback(Output("plot_pie_{}_{}".format(num, c.names.INCOMES), "figure"),
                       [Input("global_df_trans", "children"),
                        Input("drop_pie_categ", "value"),
-                       Input("drop_pie_{}".format(num), "value")])
-        #pylint: disable=unused-variable
-        def update_pie_incomes(df_trans, categories, years):
+                       Input("drop_pie_{}".format(num), "value"),
+                       Input("pies_aux", "children")])
+        #pylint: disable=unused-variable,unused-argument
+        def update_pie_incomes(df_trans, categories, years, aux):
             """
                 Updates the incomes pie plot
 
@@ -96,9 +116,10 @@ def get_content(app):
         @app.callback(Output("plot_pie_{}_{}".format(num, c.names.EXPENSES), "figure"),
                       [Input("global_df_trans", "children"),
                        Input("drop_pie_categ", "value"),
-                       Input("drop_pie_{}".format(num), "value")])
-        #pylint: disable=unused-variable
-        def update_pie_expenses(df_trans, categories, years):
+                       Input("drop_pie_{}".format(num), "value"),
+                       Input("pies_aux", "children")])
+        #pylint: disable=unused-variable,unused-argument
+        def update_pie_expenses(df_trans, categories, years, aux):
             """
                 Updates the expenses pie plot
 
