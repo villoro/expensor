@@ -162,5 +162,28 @@ def get_content(app):
         df = u.dfs.fix_df_trans(df)
         return u.uos.df_to_b64(df)
 
+    @app.callback(Output("global_categories", "children"),
+                  [],
+                  [State("upload_container", "contents"),
+                   State('upload_container', 'filename')],
+                  [Event("upload_button", "click")])
+    #pylint: disable=unused-variable
+    def update_categories(contents, filename):
+        """
+            Updates the list of categories
+
+            Args:
+                contents:   file uploaded
+                filename:   name of the file uploaded
+        """
+
+        df = check_contents(contents, filename)
+
+        if df is None:
+            return None
+
+        df = u.dfs.fix_df_trans(df)
+        return df[c.cols.CATEGORY].unique().tolist()
+
 
     return {c.dash.KEY_BODY: content}
