@@ -41,6 +41,7 @@ def get_content(app):
     ]
 
     sidebar = [
+        ("Categories", dcc.Dropdown(id="drop_evol_categ", multi=True)),
         ("Group by", dcc.RadioItems(
             id="radio_evol_tw", value="M",
             options=[{"label": "Day", "value": "D"},
@@ -51,9 +52,20 @@ def get_content(app):
     ]
 
 
+    @app.callback(Output("drop_evol_categ", "options"),
+                  [Input("global_categories", "children")])
+    #pylint: disable=unused-variable
+    def update_categories(categories):
+        """
+            Updates categories dropdown with the actual categories
+        """
+
+        return uiu.get_options(categories)
+
+
     @app.callback(Output("plot_evol", "figure"),
                   [Input("global_df_trans", "children"),
-                   Input("category", "value"),
+                   Input("drop_evol_categ", "value"),
                    Input("radio_evol_tw", "value")])
     #pylint: disable=unused-variable
     def update_timeserie_plot(df_trans, categories, timewindow):
@@ -74,7 +86,7 @@ def get_content(app):
 
     @app.callback(Output("plot_evo_detail", "figure"),
                   [Input("global_df_trans", "children"),
-                   Input("category", "value"),
+                   Input("drop_evol_categ", "value"),
                    Input("radio_evol_type", "value"),
                    Input("radio_evol_tw", "value")])
     #pylint: disable=unused-variable

@@ -38,8 +38,22 @@ def get_content(app):
         dcc.Graph(id="plot_heat_distribution", config=uiu.PLOT_CONFIG)
     ]
 
+    sidebar = [("Categories", dcc.Dropdown(id="drop_heat_categ", multi=True))]
+
+
+    @app.callback(Output("drop_heat_categ", "options"),
+                  [Input("global_categories", "children")])
+    #pylint: disable=unused-variable
+    def update_categories(categories):
+        """
+            Updates categories dropdown with the actual categories
+        """
+
+        return uiu.get_options(categories)
+
+
     @app.callback(Output("plot_heat_i", "figure"),
-                  [Input("global_df_trans", "children"), Input("category", "value")])
+                  [Input("global_df_trans", "children"), Input("drop_heat_categ", "value")])
     #pylint: disable=unused-variable
     def update_heatmap_i(df_trans, categories):
         """
@@ -57,7 +71,7 @@ def get_content(app):
 
 
     @app.callback(Output("plot_heat_e", "figure"),
-                  [Input("global_df_trans", "children"), Input("category", "value")])
+                  [Input("global_df_trans", "children"), Input("drop_heat_categ", "value")])
     #pylint: disable=unused-variable
     def update_heatmap_e(df_trans, categories):
         """
@@ -75,7 +89,7 @@ def get_content(app):
 
 
     @app.callback(Output("plot_heat_distribution", "figure"),
-                  [Input("global_df_trans", "children"), Input("category", "value")])
+                  [Input("global_df_trans", "children"), Input("drop_heat_categ", "value")])
     #pylint: disable=unused-variable
     def update_distplot(df_trans, categories):
         """
@@ -91,4 +105,4 @@ def get_content(app):
 
         return plots.dist_plot(df)
 
-    return {c.dash.KEY_BODY: content}
+    return {c.dash.KEY_BODY: content, c.dash.KEY_SIDEBAR: sidebar}

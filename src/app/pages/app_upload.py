@@ -163,4 +163,4 @@ def get_content(app):
         return u.uos.df_to_b64(df)
 
 
-    return {c.dash.KEY_BODY: content, c.dash.KEY_INCLUDE_CATEGORIES_IN_SIDEBAR: False}
+    return {c.dash.KEY_BODY: content}

@@ -44,23 +44,11 @@ def create_sidebar(kwa):
 
         return html.Div(children, style=styles.STYLE_SIDEBAR_ELEM)
 
-    sidebar_raw = {
-        c.dash.KEY_INCLUDE_LINKS_IN_SIDEBAR: [
-                ("Sections", [
-                    html.Div(dcc.Link(name, href=link)) for name, link in c.dash.DICT_APPS.items()]
-                )
-            ],
-        c.dash.KEY_INCLUDE_CATEGORIES_IN_SIDEBAR: [
-                ("Categories", dcc.Dropdown(id="category", multi=True))
-            ]
-    }
-
-    elements = []
-
-    # Only add a bloc in sidebar if asked (or if nothing is stated)
-    for key, values in sidebar_raw.items():
-        if (key not in kwa) or (kwa[key]):
-            elements += values
+    elements = [
+        ("Sections", [
+            html.Div(dcc.Link(name, href=link)) for name, link in c.dash.DICT_APPS.items()]
+        )
+    ]
 
     # Finally add extra things in sidebar
     if c.dash.KEY_SIDEBAR in kwa:
