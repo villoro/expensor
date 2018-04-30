@@ -14,19 +14,17 @@ from plots import plots_heatmaps as plots
 LINK = c.dash.LINK_HEATMAPS
 
 
-#pylint: disable=unused-argument
-def get_content(app, dfg, categories):
+def get_content(app, df_trans_input):
     """
         Creates the page
 
         Args:
-            app:        dash app
-            dfg:        dataframe with all data
-            categories: list of categories avaiables
+            app:            dash app
+            df_trans_input: dataframe with transactions
 
         Returns:
-            content:    body of the page
-            sidebar:    content of the sidebar
+            dict with content:
+                body:       body of the page
     """
 
     content = [
@@ -34,64 +32,72 @@ def get_content(app, dfg, categories):
             uiu.get_one_column(
                 dcc.Graph(
                     id="plot_heat_i", config=uiu.PLOT_CONFIG,
-                    figure=plots.get_heatmap(dfg, c.names.INCOMES)
+                    figure=plots.get_heatmap(df_trans_input, c.names.INCOMES)
                 ), n_rows=6),
             uiu.get_one_column(
                 dcc.Graph(
                     id="plot_heat_e", config=uiu.PLOT_CONFIG,
-                    figure=plots.get_heatmap(dfg, c.names.EXPENSES)
+                    figure=plots.get_heatmap(df_trans_input, c.names.EXPENSES)
                 ), n_rows=6
             )
         ],
         dcc.Graph(
             id="plot_heat_distribution", config=uiu.PLOT_CONFIG,
-            figure=plots.dist_plot(dfg)
+            figure=plots.dist_plot(df_trans_input)
         )
     ]
 
     @app.callback(Output("plot_heat_i", "figure"),
-                  [Input("category", "value")])
+                  [Input("global_df_trans", "children"), Input("category", "value")])
     #pylint: disable=unused-variable
-    def update_heatmap_i(categories):
+    def update_heatmap_i(df_trans, categories):
         """
             Updates the incomes heatmap
 
             Args:
+                df_trans:   transactions dataframe
                 categories: categories to use
         """
 
-        df = u.dfs.filter_data(dfg, categories)
+        df = u.uos.b64_to_df(df_trans)
+        df = u.dfs.filter_data(df, categories)
 
         return plots.get_heatmap(df, c.names.INCOMES)
 
 
     @app.callback(Output("plot_heat_e", "figure"),
-                  [Input("category", "value")])
+                  [Input("global_df_trans", "children"), Input("category", "value")])
     #pylint: disable=unused-variable
-    def update_heatmap_e(categories):
+    def update_heatmap_e(df_trans, categories):
         """
             Updates the expenses heatmap
 
             Args:
+                df_trans:   transactions dataframe
                 categories: categories to use
         """
 
-        df = u.dfs.filter_data(dfg, categories)
+        df = u.uos.b64_to_df(df_trans)
+        df = u.dfs.filter_data(df, categories)
 
         return plots.get_heatmap(df, c.names.EXPENSES)
 
 
     @app.callback(Output("plot_heat_distribution", "figure"),
-                  [Input("category", "value")])
+                  [Input("global_df_trans", "children"), Input("category", "value")])
     #pylint: disable=unused-variable
-    def update_distplot(categories):
+    def update_distplot(df_trans, categories):
         """
             Updates the distribution plot
 
             Args:
+                df_trans:   transactions dataframe
                 categories: categories to use
         """
 
-        return plots.dist_plot(u.dfs.filter_data(dfg, categories))
+        df = u.uos.b64_to_df(df_trans)
+        df = u.dfs.filter_data(df, categories)
 
-    return content, None
+        return plots.dist_plot(df)
+
+    return {c.dash.KEY_BODY: content}

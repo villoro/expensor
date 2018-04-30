@@ -15,10 +15,10 @@ def get_dash_app():
     """
 
     # Create dash app with styles
-    app = create_dash_app()
+    app, df_trans, categories = create_dash_app()
 
     # Add pages with content, sidebar and callbacks
-    pages_json = get_pages(app)
+    pages_json = get_pages(app, df_trans, categories)
 
 
     @app.callback(Output('page-content', 'children'),
@@ -28,7 +28,7 @@ def get_dash_app():
         """Updates content based on current page"""
 
         if pathname in pages_json:
-            return pages_json[pathname][c.dash.CONTENT]
+            return pages_json[pathname][c.dash.KEY_BODY]
         return "404"
 
 
@@ -39,7 +39,7 @@ def get_dash_app():
         """Updates sidebar based on current page"""
 
         if pathname in pages_json:
-            return pages_json[pathname][c.dash.SIDEBAR]
+            return pages_json[pathname][c.dash.KEY_SIDEBAR]
         return "404"
 
     return app

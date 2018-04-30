@@ -3,7 +3,10 @@
 """
 
 import os
+import io
+import base64
 import pandas as pd
+
 import constants as c
 from utilities import ulog
 
@@ -53,24 +56,63 @@ def delete_if_possible(uri):
     return False
 
 
-def get_df(uri):
+def parse_dataframe_uploaded(contents, filename):
     """
-        Retrives a dataframe with data.
+        Tries to parse a dataframe from a file uploaded
+
+        Args:
+            contents:   data uploaded
+            filename:   name of the file uploaded
+
+        Returns:
+            dataframe if possible
     """
 
-    df = pd.read_csv(uri, sep=";", index_col=0)
+    if (not contents) or (contents is None):
+        return None
 
-    # Add time filter columns (store everything as string to ensure JSON compatibility)
-    df[c.cols.DATE] = pd.to_datetime(df[c.cols.DATE])
-    df[c.cols.MONTH_DATE] = pd.to_datetime(df[c.cols.DATE].dt.strftime("%Y-%m-01"))
-    df[c.cols.MONTH] = df[c.cols.DATE].dt.month
-    df[c.cols.YEAR] = df[c.cols.DATE].dt.year
+    _, content_string = contents.split(',')
 
-    # Tag expenses/incomes
-    df.loc[df[c.cols.AMOUNT] > 0, c.cols.TYPE] = c.names.INCOMES
-    df[c.cols.TYPE].fillna(c.names.EXPENSES, inplace=True)
+    # Decode from base64 and get from bytes
+    data = io.BytesIO(base64.b64decode(content_string))
 
-    # Amount as positve number
-    df[c.cols.AMOUNT] = df[c.cols.AMOUNT].apply(abs)
+    extension = filename.split(".")[-1]
 
-    return df
+    # Try to read it as an excel file
+    if extension == "xlsx":
+        try:
+            return pd.read_excel(data)
+        except Exception:
+            return c.os.ERROR_UNPARSABLE
+
+    # Try to read it as a csv
+    elif extension == "csv":
+        try:
+            return pd.read_csv(data)
+        except Exception:
+            return c.os.ERROR_UNPARSABLE
+
+    # For unkown file extension throw an error message
+    else:
+        return c.os.ERROR_EXTENSION
+
+
+def df_to_b64(df):
+    """
+        Transform a pandas dataframe to base64 encoded bytes
+    """
+
+    mbuffer = io.BytesIO()
+    df.to_msgpack(mbuffer)
+    mbuffer.seek(0)
+    b64_string = base64.b64encode(mbuffer.read())
+
+    return b64_string.decode()
+
+
+def b64_to_df(b64_string):
+    """
+        Retrives a pandas dataframes from base64 encoded bytes
+    """
+
+    return pd.read_msgpack(io.BytesIO(base64.b64decode(b64_string)))
