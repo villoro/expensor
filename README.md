@@ -41,10 +41,10 @@ __* Note:__ The app is only tested in **python 3**. It might not work with pytho
 * [Arnau Villoro](villoro.com)
 
 ## License
-The content of this repository is licensed under a [MIT](https://opensource.org/licenses/MIT)
+The content of this repository is licensed under a [MIT](https://opensource.org/licenses/MIT).
 
 ## Nomenclature
-Branches and commits use some prefixes to keep everything better organized
+Branches and commits use some prefixes to keep everything better organized.
 
 ### Branches
 * **f/:** features
