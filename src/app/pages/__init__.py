@@ -29,7 +29,7 @@ def get_pages(app):
     """
 
     output = {}
-    for app_name in os.listdir("app/pages"):
+    for app_name in os.listdir("src/app/pages"):
 
         # Check if it is an app
         if (app_name.startswith("app")) and (app_name.endswith(".py")):
