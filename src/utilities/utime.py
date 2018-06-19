@@ -4,9 +4,6 @@
 
 import time
 from datetime import datetime
-from utilities import ulog
-
-log = ulog.set_logger(__file__)
 
 
 class Timer():
