@@ -8,9 +8,6 @@ import base64
 import pandas as pd
 
 import constants as c
-from utilities import ulog
-
-log = ulog.set_logger(__file__)
 
 
 def check_if_uri_exist(uris):
@@ -34,7 +31,8 @@ def check_if_uri_exist(uris):
             if not os.path.isdir(uri):
                 os.makedirs(uri, exist_ok=True)
 
-                log.info("Path %s doesn't exists. Created automatically", uri)
+                # TODO
+                #log.info("Path %s doesn't exists. Created automatically", uri)
 
 
 def delete_if_possible(uri):
@@ -51,7 +49,9 @@ def delete_if_possible(uri):
             return True
 
         except IOError as e:
-            log.error("Unable to delete.", error=e)
+            pass
+            #TODO
+            #log.error("Unable to delete.", error=e)
 
     return False
 

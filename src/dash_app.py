@@ -6,6 +6,7 @@ import pandas as pd
 from flask import send_from_directory
 from dash import Dash
 
+from static.styles import STYLE_URL
 from app import layout
 import constants as c
 import utilities as u
@@ -26,13 +27,6 @@ def create_dash_app():
     categories = df_trans[c.cols.CATEGORY].unique().tolist()
 
     app.layout = layout.get_layout(df_trans, categories)
-
-
-    @app.server.route('/static/<path:path>')
-    #pylint: disable=unused-variable
-    def static_file(path):
-        """Adds local css to dash """
-        static_folder = os.path.join(os.getcwd(), 'static')
-        return send_from_directory(static_folder, path)
+    app.css.append_css({'external_url': STYLE_URL})
 
     return app
