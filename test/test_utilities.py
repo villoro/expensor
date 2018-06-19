@@ -20,41 +20,6 @@ class Test_utilities(unittest.TestCase):
     dummy_path = "imaginary_path_for_testing/"
 
 
-    def test_log(self):
-        """
-            Test that log works with all possible parameters
-        """
-
-        log = u.ulog.set_logger(__file__,
-                                file_log_level=logging.DEBUG,
-                                console_log_level=logging.DEBUG)
-
-        # Test all logging levels
-        log.critical("Test critical")
-        log.error("Test error")
-        log.warning("Test warning")
-        log.info("Test info")
-        log.debug("Test debug")
-
-        # Test args
-        log.info("Test logging %s", "parsing")
-
-        # Test kwargs
-        log.info("Test time", time=10)
-        try:
-            1/0
-        except Exception as e:
-            log.error("Try errors", error=e)
-            log.error("Try errors %s", "full", time=10, error=e)
-
-        # Test invalid num
-        log.info("Test time", time="a")
-
-        # Log should be in use so not possible to delete
-        log.warning("IMPORTANT MESSAGE: Next line should be an error when trying to delete")
-        self.assertFalse(u.uos.delete_if_possible(c.os.FILE_LOG))
-
-
     def test_palette(self):
         """
             Test palette

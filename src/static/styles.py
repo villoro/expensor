@@ -4,6 +4,8 @@
 
 from utilities.upalette import get_colors
 
+STYLE_URL = "https://raw.githubusercontent.com/villoro/expensor/master/src/static/styles.css"
+
 HEIGHT_HEADER = 75
 HEIGHT_FILTERS = 0
 WIDTH_SIDEBAR = 350
