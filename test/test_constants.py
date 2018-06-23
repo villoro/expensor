@@ -7,7 +7,7 @@ import os
 
 from src import constants as c
 
-class Test_constants(unittest.TestCase):
+class TestConstants(unittest.TestCase):
     """Test constants"""
 
     def test_sample_data(self):

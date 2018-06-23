@@ -3,15 +3,12 @@
 """
 
 import unittest
-import logging
-import pandas as pd
-from datetime import datetime, timedelta
 from os import rmdir
+from datetime import datetime, timedelta
 
 from src import utilities as u
-from src import constants as c
 
-class Test_utilities(unittest.TestCase):
+class TestUtilities(unittest.TestCase):
     """Test utilities"""
 
     dummy_path = "imaginary_path_for_testing/"
