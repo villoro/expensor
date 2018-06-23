@@ -13,7 +13,7 @@ script:
 - pylint --disable=W test
 - cd src
 - pylint --disable=W src
-- cd..
+- cd ..
 
 after_success:
 - codecov
