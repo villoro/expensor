@@ -1,7 +1,7 @@
 """
     Dash app
 """
-import os
+
 import pandas as pd
 from flask import send_from_directory
 from dash import Dash
