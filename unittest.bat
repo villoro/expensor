@@ -3,5 +3,8 @@ nosetests --with-coverage --cover-package=src --cover-erase --cover-inclusive
 pause
 
 :: ------------- Pylint ---------------------------------------------------
-pylint src test
+pylint test
+cd src
+pylint src
+cd..
 pause

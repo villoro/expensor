@@ -10,7 +10,10 @@ install:
 
 script:
 - nosetests --with-coverage --cover-package=src
-- pylint --disable=W src test # Ignore warnings, only critial/errors would be a KO
+- pylint --disable=W test
+- cd src
+- pylint --disable=W src
+- cd..
 
 after_success:
 - codecov
