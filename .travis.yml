@@ -9,7 +9,7 @@ install:
 - pip install pylint==1.8.1
 
 script:
-- nosetests --with-coverage --cover-package=src
+- nosetests --with-coverage --cover-package=src --cover-erase --cover-inclusive
 - pylint --disable=W test
 - cd src
 - pylint --disable=W src
