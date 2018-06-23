@@ -1,4 +1,6 @@
 # Expenses Visualization App (ExpensOR)
+[![Build Status](https://travis-ci.com/villoro/expensor.svg?branch=master)](https://travis-ci.com/villoro/expensor)
+[![codecov](https://codecov.io/gh/villoro/expensor/branch/master/graph/badge.svg)](https://codecov.io/gh/villoro/expensor)
 
 This is a [dash](https://plot.ly/products/dash/) app that allows users to visualitze their expenses and/or incomes.
 
