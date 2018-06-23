@@ -8,11 +8,8 @@ import pandas as pd
 from datetime import datetime, timedelta
 from os import rmdir
 
-import sys
-sys.path.append("../src")
-
-import utilities as u
-import constants as c
+from src import utilities as u
+from src import constants as c
 
 class Test_utilities(unittest.TestCase):
     """Test utilities"""
@@ -59,20 +56,6 @@ class Test_utilities(unittest.TestCase):
         u.uos.check_if_uri_exist(self.dummy_path)
 
         rmdir(self.dummy_path)
-
-
-    def test_get_df(self):
-        """
-            Test get_df
-        """
-
-        df = u.uos.get_df(c.os.FILE_DATA_SAMPLE)
-
-        # At least 10 rows
-        self.assertGreaterEqual(df.shape[0], 10)
-
-        # At least 4 columns
-        self.assertGreaterEqual(df.shape[1], 4)
 
 
 

@@ -3,20 +3,18 @@
 """
 
 import unittest
+import os
 
-import sys
-sys.path.append("../src")
-
-import constants as c
+from src import constants as c
 
 class Test_constants(unittest.TestCase):
     """Test constants"""
 
-    def test_path_data(self):
+    def test_sample_data(self):
         """
             Tests that Path data exists
         """
-        self.assertEqual(c.os.PATH_DATA, "../data/")
+        self.assertTrue(os.path.isfile(c.os.FILE_DATA_SAMPLE))
 
 
 

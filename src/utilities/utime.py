@@ -57,5 +57,4 @@ def wait_until(mdatetime):
             break
 
         else:
-            log.info("Waiting %s seconds", mtime)
             time.sleep(mtime)
