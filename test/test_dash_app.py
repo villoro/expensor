@@ -4,13 +4,10 @@
 
 import unittest
 
-import sys
-sys.path.append("../src")
-
-import dash_app
+from src import dash_app
 
 
-class Test_dash_app(unittest.TestCase):
+class TestDashApp(unittest.TestCase):
     """Test dash_app"""
 
 
