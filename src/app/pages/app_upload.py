@@ -37,21 +37,25 @@ def get_content(app):
     """
 
     content = [
-        dcc.Upload(
-            children=html.Div([
-                'Drag and Drop or ',
-                html.A('Select a File')
-            ]),
-            style=styles.STYLE_UPLOAD_CONTAINER,
-            id="upload_container"
-        ),
         html.Div([
-            html.Div(id="upload_results"),
+            dcc.Upload(
+                children=html.Div([
+                    'Drag and Drop or ',
+                    html.A('Select a File')
+                ]),
+                style=styles.STYLE_UPLOAD_CONTAINER,
+                id="upload_container"
+            ),
             html.Button('Use this file', id='upload_button', style=DICT_SHOW[False]),
+        ]),
+        html.Div([
+            html.Div(id="upload_results_trans"),
+            html.Div(id="upload_results_liquid"),
+            html.Div(id="upload_results_liquid_list"),
         ])
     ]
 
-    @app.callback(Output("upload_results", "children"),
+    @app.callback(Output("upload_results_trans", "children"),
                   [Input("upload_container", "contents"),
                    Input("upload_container", "filename")])
     #pylint: disable=unused-variable
@@ -71,6 +75,37 @@ def get_content(app):
             return CONTENT_UPDATED
 
         df = u.uos.parse_dataframe_uploaded(contents, filename, c.dfs.TRANS)
+
+        # If there has been a reading error, df would be an error message
+        if isinstance(df, str):
+            return df
+
+        return dcc.Graph(
+            id="upload_plot_trans", config=uiu.PLOT_CONFIG,
+            figure=plots.table_transactions(df)
+        )
+
+
+    @app.callback(Output("upload_results_liquid", "children"),
+                  [Input("upload_container", "contents"),
+                   Input("upload_container", "filename")])
+    #pylint: disable=unused-variable
+    def show_df_liquid(contents, filename):
+        """
+            Updates the transaction dataframe
+
+            Args:
+                contents:   file uploaded
+                filename:   name of the file uploaded
+        """
+
+        if (contents is None) or (filename is None):
+            return []
+
+        if contents == CONTENT_UPDATED:
+            return CONTENT_UPDATED
+
+        df = u.uos.parse_dataframe_uploaded(contents, filename, c.dfs.LIQUID)
 
         # If there has been a reading error, df would be an error message
         if isinstance(df, str):
