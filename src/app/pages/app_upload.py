@@ -15,10 +15,10 @@ from plots import plots_upload as plots
 
 LINK = c.dash.LINK_UPLOAD
 
-CONTENT_UPDATED = "File has been updated"
+STYLE_PADDING_VERTICAL = {"margin-top": "{}px".format(styles.PADDING_V)}
 
 DICT_SHOW = {
-    True: {},
+    True: STYLE_PADDING_VERTICAL,
     False: styles.STYLE_HIDDEN,
 }
 
@@ -46,16 +46,16 @@ def get_content(app):
                 style=styles.STYLE_UPLOAD_CONTAINER,
                 id="upload_container"
             ),
-            html.Button('Use this file', id='upload_button', style=DICT_SHOW[False]),
+            html.Button('Use this file', id='upload_button', style=STYLE_PADDING_VERTICAL),
         ]),
-        html.Div([
-            html.Div(id="upload_results_liquid_list"),
-            html.Div(id="upload_results_liquid"),
-            html.Div(id="upload_results_trans"),
-        ])
+        html.Div(id="upload_results", style=DICT_SHOW[True])
     ]
 
-    def get_table(contents, filename, df_name, plot_id):
+
+    @app.callback(Output("upload_results", "children"),
+                  [Input("upload_container", "contents"),
+                   Input("upload_container", "filename")])
+    def get_table(contents, filename):
         """
             Updates the transaction dataframe
 
@@ -65,50 +65,26 @@ def get_content(app):
                 plot_id:    id of the returning plot
         """
         if (contents is None) or (filename is None):
-            return []
+            return html.Img(src=u.uos.get_image(c.os.IMAGE_UPLOAD_TUTORIAL))
 
-        if contents == CONTENT_UPDATED:
-            return CONTENT_UPDATED
+        if contents == c.os.CONTENT_UPDATED:
+            return c.os.CONTENT_UPDATED
 
-        df = u.uos.parse_dataframe_uploaded(contents, filename, df_name)
+        out = []
 
-        # If there has been a reading error, df would be an error message
-        if isinstance(df, str):
-            return df
+        for name in c.dfs.ALL:
+            df = u.uos.parse_dataframe_uploaded(contents, filename, name)
 
-        return dcc.Graph(
-            id=plot_id, config=uiu.PLOT_CONFIG,
-            figure=plots.table_transactions(df, df_name)
-        )
+            # If there has been a reading error, df would be an error message
+            if isinstance(df, str):
+                return df
 
-    @app.callback(Output("upload_results_trans", "children"),
-                  [Input("upload_container", "contents"),
-                   Input("upload_container", "filename")])
-    #pylint: disable=unused-variable
-    def show_df_trans(contents, filename):
-        """ Dummy function to show df trans """
+            out.append(dcc.Graph(
+                id="upload_plot_{}".format(name), config=uiu.PLOT_CONFIG,
+                figure=plots.table_transactions(df, name)
+            ))
 
-        return get_table(contents, filename, c.dfs.TRANS, "upload_plot_trans")
-
-
-    @app.callback(Output("upload_results_liquid", "children"),
-                  [Input("upload_container", "contents"),
-                   Input("upload_container", "filename")])
-    #pylint: disable=unused-variable
-    def show_df_liquid(contents, filename):
-        """ Dummy function to show df liquid """
-
-        return get_table(contents, filename, c.dfs.LIQUID, "upload_plot_liquid")
-
-
-    @app.callback(Output("upload_results_liquid_list", "children"),
-                  [Input("upload_container", "contents"),
-                   Input("upload_container", "filename")])
-    #pylint: disable=unused-variable
-    def show_df_liquid_list(contents, filename):
-        """ Dummy function to show df liquid list """
-
-        return get_table(contents, filename, c.dfs.LIQUID_LIST, "upload_plot_liquid_list")
+        return out
 
 
     def check_contents(contents, filename, df_name):
@@ -120,7 +96,7 @@ def get_content(app):
                 filename:   name of the file updated
         """
 
-        if (contents is None) or (filename is None) or (contents == CONTENT_UPDATED):
+        if (contents is None) or (filename is None) or (contents == c.os.CONTENT_UPDATED):
             return None
 
         df = u.uos.parse_dataframe_uploaded(contents, filename, df_name)
@@ -173,7 +149,7 @@ def get_content(app):
         for name in c.dfs.ALL:
             result &= False if check_contents(contents, filename, name) is None else True
 
-        return CONTENT_UPDATED if result is not None else None
+        return c.os.CONTENT_UPDATED if result is not None else None
 
 
     @app.callback(Output("global_df_trans", "children"),

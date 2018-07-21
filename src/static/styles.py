@@ -82,7 +82,6 @@ STYLE_UPLOAD_CONTAINER = {
     "borderRadius": "5px",
     "textAlign": "center",
     "margin-top": "{}px".format(PADDING_V),
-    "margin-bottom": "{}px".format(PADDING_V),
     "margin-left": "{}px".format(PADDING_H),
     "margin-right": "{}px".format(PADDING_H),
 }

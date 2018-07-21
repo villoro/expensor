@@ -109,3 +109,19 @@ def b64_to_df(b64_string):
     """
 
     return pd.read_msgpack(io.BytesIO(base64.b64decode(b64_string)))
+
+
+def get_image(image_uri):
+    """
+        Loads a local png to be shown in dash
+
+        Args:
+            image_uri:  uri of the image
+
+        Returns:
+            the string to be placed in a html.Img container
+    """
+    with open(image_uri, "rb") as file:
+        encoded = base64.b64encode(file.read())
+
+    return 'data:image/png;base64,{}'.format(encoded.decode())
