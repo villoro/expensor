@@ -111,7 +111,7 @@ def get_content(app):
         return get_table(contents, filename, c.dfs.LIQUID_LIST, "upload_plot_liquid_list")
 
 
-    def check_contents(contents, filename):
+    def check_contents(contents, filename, df_name):
         """
             Check if contents are valid. If they are it returns the dataframe, else return None
 
@@ -123,7 +123,7 @@ def get_content(app):
         if (contents is None) or (filename is None) or (contents == CONTENT_UPDATED):
             return None
 
-        df = u.uos.parse_dataframe_uploaded(contents, filename, c.dfs.TRANS)
+        df = u.uos.parse_dataframe_uploaded(contents, filename, df_name)
 
         # If there has been a reading error, df would be an error message
         if isinstance(df, str):
@@ -145,8 +145,12 @@ def get_content(app):
                 filename:   name of the file uploaded
         """
 
-        result = check_contents(contents, filename)
-        return DICT_SHOW[False if result is None else True]
+        result = True
+
+        for name in c.dfs.ALL:
+            result &= False if check_contents(contents, filename, name) is None else True
+
+        return DICT_SHOW[result]
 
 
     @app.callback(Output("upload_container", "contents"),
@@ -164,7 +168,11 @@ def get_content(app):
                 filename:   name of the file uploaded
         """
 
-        result = check_contents(contents, filename)
+        result = True
+
+        for name in c.dfs.ALL:
+            result &= False if check_contents(contents, filename, name) is None else True
+
         return CONTENT_UPDATED if result is not None else None
 
 
@@ -183,13 +191,14 @@ def get_content(app):
                 filename:   name of the file uploaded
         """
 
-        df = check_contents(contents, filename)
+        df = check_contents(contents, filename, c.dfs.TRANS)
 
         if df is None:
             return None
 
         df = u.dfs.fix_df_trans(df)
         return u.uos.df_to_b64(df)
+
 
     @app.callback(Output("global_categories", "children"),
                   [],
@@ -206,7 +215,7 @@ def get_content(app):
                 filename:   name of the file uploaded
         """
 
-        df = check_contents(contents, filename)
+        df = check_contents(contents, filename, c.dfs.TRANS)
 
         if df is None:
             return None
