@@ -56,7 +56,7 @@ def delete_if_possible(uri):
     return False
 
 
-def parse_dataframe_uploaded(contents, filename):
+def parse_dataframe_uploaded(contents, filename, sheet):
     """
         Tries to parse a dataframe from a file uploaded
 
@@ -81,14 +81,7 @@ def parse_dataframe_uploaded(contents, filename):
     # Try to read it as an excel file
     if extension == "xlsx":
         try:
-            return pd.read_excel(data)
-        except Exception:
-            return c.os.ERROR_UNPARSABLE
-
-    # Try to read it as a csv
-    elif extension == "csv":
-        try:
-            return pd.read_csv(data)
+            return pd.read_excel(data, sheet)
         except Exception:
             return c.os.ERROR_UNPARSABLE
 
@@ -116,3 +109,19 @@ def b64_to_df(b64_string):
     """
 
     return pd.read_msgpack(io.BytesIO(base64.b64decode(b64_string)))
+
+
+def get_image(image_uri):
+    """
+        Loads a local png to be shown in dash
+
+        Args:
+            image_uri:  uri of the image
+
+        Returns:
+            the string to be placed in a html.Img container
+    """
+    with open(image_uri, "rb") as file:
+        encoded = base64.b64encode(file.read())
+
+    return 'data:image/png;base64,{}'.format(encoded.decode())
