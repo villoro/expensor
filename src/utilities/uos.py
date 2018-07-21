@@ -56,7 +56,7 @@ def delete_if_possible(uri):
     return False
 
 
-def parse_dataframe_uploaded(contents, filename):
+def parse_dataframe_uploaded(contents, filename, sheet):
     """
         Tries to parse a dataframe from a file uploaded
 
@@ -81,14 +81,7 @@ def parse_dataframe_uploaded(contents, filename):
     # Try to read it as an excel file
     if extension == "xlsx":
         try:
-            return pd.read_excel(data)
-        except Exception:
-            return c.os.ERROR_UNPARSABLE
-
-    # Try to read it as a csv
-    elif extension == "csv":
-        try:
-            return pd.read_csv(data)
+            return pd.read_excel(data, sheet)
         except Exception:
             return c.os.ERROR_UNPARSABLE
 
