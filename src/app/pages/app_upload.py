@@ -55,6 +55,32 @@ def get_content(app):
         ])
     ]
 
+    def get_table(contents, filename, df_name, plot_id):
+        """
+            Updates the transaction dataframe
+
+            Args:
+                contents:   file uploaded
+                filename:   name of the file uploaded
+                plot_id:    id of the returning plot
+        """
+        if (contents is None) or (filename is None):
+            return []
+
+        if contents == CONTENT_UPDATED:
+            return CONTENT_UPDATED
+
+        df = u.uos.parse_dataframe_uploaded(contents, filename, df_name)
+
+        # If there has been a reading error, df would be an error message
+        if isinstance(df, str):
+            return df
+
+        return dcc.Graph(
+            id=plot_id, config=uiu.PLOT_CONFIG,
+            figure=plots.table_transactions(df, df_name)
+        )
+
     @app.callback(Output("upload_results_trans", "children"),
                   [Input("upload_container", "contents"),
                    Input("upload_container", "filename")])
@@ -68,22 +94,7 @@ def get_content(app):
                 filename:   name of the file uploaded
         """
 
-        if (contents is None) or (filename is None):
-            return []
-
-        if contents == CONTENT_UPDATED:
-            return CONTENT_UPDATED
-
-        df = u.uos.parse_dataframe_uploaded(contents, filename, c.dfs.TRANS)
-
-        # If there has been a reading error, df would be an error message
-        if isinstance(df, str):
-            return df
-
-        return dcc.Graph(
-            id="upload_plot_trans", config=uiu.PLOT_CONFIG,
-            figure=plots.table_transactions(df)
-        )
+        return get_table(contents, filename, c.dfs.TRANS, "upload_plot_trans")
 
 
     @app.callback(Output("upload_results_liquid", "children"),
@@ -99,22 +110,7 @@ def get_content(app):
                 filename:   name of the file uploaded
         """
 
-        if (contents is None) or (filename is None):
-            return []
-
-        if contents == CONTENT_UPDATED:
-            return CONTENT_UPDATED
-
-        df = u.uos.parse_dataframe_uploaded(contents, filename, c.dfs.LIQUID)
-
-        # If there has been a reading error, df would be an error message
-        if isinstance(df, str):
-            return df
-
-        return dcc.Graph(
-            id="upload_plot_trans", config=uiu.PLOT_CONFIG,
-            figure=plots.table_transactions(df)
-        )
+        return get_table(contents, filename, c.dfs.LIQUID, "upload_plot_liquid")
 
 
     def check_contents(contents, filename):
