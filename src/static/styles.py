@@ -4,7 +4,8 @@
 
 from utilities.upalette import get_colors
 
-STYLE_URL = "https://raw.githubusercontent.com/villoro/expensor/master/src/static/styles.css"
+# This file is equivalent to static/styles.css
+STYLE_URL = 'https://codepen.io/villoro/pen/JBEpob.css'
 
 HEIGHT_HEADER = 75
 HEIGHT_FILTERS = 0
@@ -83,6 +84,12 @@ STYLE_UPLOAD_CONTAINER = {
     "margin-top": "{}px".format(PADDING_V),
     "margin-left": "{}px".format(PADDING_H),
     "margin-right": "{}px".format(PADDING_H),
+}
+
+STYLE_UPLOAD_INFO = {
+    "text-align": "left",
+    "margin-left": "{}px".format(20),
+    "margin-right": "{}px".format(20),
 }
 
 STYLE_HIDDEN = {"display":"none"}

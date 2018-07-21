@@ -5,19 +5,17 @@
 import dash_core_components as dcc
 import dash_html_components as html
 
-import utilities as u
+import constants as c
 from static import styles
 
 
-def get_layout(df_trans, categories):
+def get_layout(dfs, categories):
     """
         Creates the dash layout
 
         Args:
-            df_trans:   excel bytes of df_trans
+            dfs:   dict of excel bytes
     """
-
-    df_trans_bytes = u.uos.df_to_b64(df_trans)
 
     return html.Div([
         # Header
@@ -39,6 +37,8 @@ def get_layout(df_trans, categories):
         # Others
         html.Link(rel='stylesheet', href='/static/styles.css'),
         dcc.Location(id='url', refresh=False),
-        html.Div(df_trans_bytes, id="global_df_trans", style=styles.STYLE_HIDDEN),
+        html.Div(dfs[c.dfs.TRANS], id="global_df_trans", style=styles.STYLE_HIDDEN),
+        html.Div(dfs[c.dfs.LIQUID], id="global_df_liquid", style=styles.STYLE_HIDDEN),
+        html.Div(dfs[c.dfs.LIQUID_LIST], id="global_df_liquid_list", style=styles.STYLE_HIDDEN),
         html.Div(categories, id="global_categories", style=styles.STYLE_HIDDEN),
     ])

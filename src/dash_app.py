@@ -3,7 +3,6 @@
 """
 
 import pandas as pd
-from flask import send_from_directory
 from dash import Dash
 
 from static.styles import STYLE_URL
@@ -19,14 +18,18 @@ def create_dash_app():
 
     app = Dash()
     app.config.supress_callback_exceptions = True
-    app.css.config.serve_locally = True
 
     # Load sample data
-    df_trans = pd.read_csv(c.os.FILE_DATA_SAMPLE, sep=";", index_col=0)
-    df_trans = u.dfs.fix_df_trans(df_trans)
-    categories = df_trans[c.cols.CATEGORY].unique().tolist()
+    dfs = {sheet: pd.read_excel(c.os.FILE_DATA_SAMPLE, sheet) for sheet in c.dfs.ALL}
 
-    app.layout = layout.get_layout(df_trans, categories)
+    # Fix trans and get categories
+    dfs[c.dfs.TRANS] = u.dfs.fix_df_trans(dfs[c.dfs.TRANS])
+    categories = dfs[c.dfs.TRANS][c.cols.CATEGORY].unique().tolist()
+
+    # Transformt to b64 in order to store data
+    dfs = {sheet: u.uos.df_to_b64(df) for sheet, df in dfs.items()}
+
+    app.layout = layout.get_layout(dfs, categories)
     app.css.append_css({'external_url': STYLE_URL})
 
     return app
