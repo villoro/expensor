@@ -64,9 +64,20 @@ def get_content(app):
                 filename:   name of the file uploaded
                 plot_id:    id of the returning plot
         """
+        # When there is no data, show tutorial
         if (contents is None) or (filename is None):
-            return html.Img(src=u.uos.get_image(c.os.IMAGE_UPLOAD_TUTORIAL))
+            return html.Div(
+                [
+                    dcc.Markdown(c.upload.INSTRUCTIONS_P1),
+                    html.Img(src=u.uos.get_image(c.os.IMAGE_EXAMPLE_LIQUID_LIST)),
+                    dcc.Markdown(c.upload.INSTRUCTIONS_P2),
+                    html.Img(src=u.uos.get_image(c.os.IMAGE_EXAMPLE_LIQUID)),
+                    dcc.Markdown(c.upload.INSTRUCTIONS_P3),
+                    html.Img(src=u.uos.get_image(c.os.IMAGE_EXAMPLE_TRANS)),
+                    dcc.Markdown(c.upload.INSTRUCTIONS_P4),
+                ], style=styles.STYLE_UPLOAD_INFO)
 
+        # When data is updated, show the message
         if contents == c.os.CONTENT_UPDATED:
             return c.os.CONTENT_UPDATED
 
@@ -75,7 +86,7 @@ def get_content(app):
         for name in c.dfs.ALL:
             df = u.uos.parse_dataframe_uploaded(contents, filename, name)
 
-            # If there has been a reading error, df would be an error message
+            # If there has been a reading error with any df, df would be an error message
             if isinstance(df, str):
                 return df
 
@@ -84,6 +95,7 @@ def get_content(app):
                 figure=plots.table_transactions(df, name)
             ))
 
+        # return a list with a plot for every df read
         return out
 
 

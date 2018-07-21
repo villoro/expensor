@@ -7,7 +7,43 @@ This is a [dash](https://plot.ly/products/dash/) app that allows users to visual
 ![Demo](images/demo.gif)
 
 ## Usage
-Users can upload their on own data which should be an **Excel file (.xlsx)** which should at least have the following columns:
+You can upload your data using an ```Excel file (.xlsx)``` which should at least have 3 sheets:
+* **liquid_list**
+* **liquid_m**
+* **trans_m**
+
+All columns names **MUST** be exactly equal as the examples below. You can use the [sample_data](https://github.com/villoro/expensor/blob/master/sample_data/data.xlsx) file as a template
+
+For all the  dates columns is better to use reversed order (**YYYY/MM/DD**).
+
+### liquid_list
+This sheet should be a list of all accounts where you store liquid. It should have these three columns:
+* **Name:** name of the account
+* **Liquidity level:** this level states how easy it is to get that money (low levels mean easy)
+* **Liquidity name:** name to be used for that level
+
+| Name                  | Liquidity level | Liquidity name       |
+|-----------------------|-----------------|----------------------|
+| Personal bank account | 0               | Liquid               |
+|  Shared bank account  | 0               | Liquid               |
+|      Bank deposit     | 1               | Deposit              |
+| Bank 2 deposit        | 1               | Potencial investment |
+| Robinhood uninvested  | 2               | Potencial investment |
+
+### liquid_m
+In this sheet the program is expecting a **Date** column and one column for each account in the ```liquid_list``` sheet.
+
+| Date    | Total   | Personal bank account | Shared bank account |Bank deposit | Bank 2 deposit | Robinhood uninvested |
+|---------|---------|-----------------------|---------------------|-------------|----------------|----------------------|
+| 01/2017 | 5366,00 | 1438                  |                     |             | 2000           | 1665                 |
+| 02/2017 | 6238,00 | 1341                  | 666                 |             | 2000           | 1779                 |
+| 03/2017 | 5463,00 | 1338                  | 221                 | 1000        | 1000           | 1435                 |
+| 04/2017 | 5850,00 | 1432                  | 440                 | 1500        | 1000           | 1150                 |
+| 05/2017 | 6916,00 | 1571                  | 878                 | 2000        | 1000           | 987                  |
+| 06/2017 | 4216,00 | 1268                  | 690                 | 500         | 500            | 823                  |
+
+### trans_m
+This sheet should at least have the following columns:
 
 | Date       | Amount | Category |
 |------------|--------|----------|
@@ -18,8 +54,6 @@ Users can upload their on own data which should be an **Excel file (.xlsx)** whi
 | 2017/02/01 | 1250   | Salary   |
 
 It is important to notice that **incomes** have **positive** amount while **expenses** are **negative**.
-
-It is better if dates are in reversed order (**YYYY/MM/DD**). In the future user should be able to specify a custom date format.
 
 ## Install
 1. Download the code 
