@@ -55,6 +55,7 @@ def get_content(app):
     @app.callback(Output("upload_results", "children"),
                   [Input("upload_container", "contents"),
                    Input("upload_container", "filename")])
+    #pylint: disable=unused-variable,unused-argument
     def get_table(contents, filename):
         """
             Updates the transaction dataframe

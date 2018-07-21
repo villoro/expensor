@@ -5,6 +5,7 @@
 import plotly.graph_objs as go
 
 import constants as c
+import utilities as u
 
 
 def liquid_plot(df_liq_in, df_list):
@@ -19,16 +20,18 @@ def liquid_plot(df_liq_in, df_list):
             the plotly plot as html-div format
     """
 
-    df_liq = df_liq_in.set_index("Date")
+    df_liq = df_liq_in.set_index(c.cols.DATE)
 
     data = []
-    for level in df_list["Liquidity level"].unique():
-        df_aux = df_list[df_list["Liquidity level"] == level]
-        name = df_aux["Liquidity name"].tolist()[0]
-        
-        df = df_liq[df_aux["Name"].tolist()].sum(axis=1)
-        
-        data.append(go.Bar(x=df.index, y=df, name="{} - {}".format(level, name)))
+    for level in df_list[c.cols.LIQUID_LEVEL].unique():
+        df_aux = df_list[df_list[c.cols.LIQUID_LEVEL] == level]
+        name_liq = df_aux[c.cols.LIQUID_NAME].tolist()[0]
+        name_trace = "{} - {}".format(level, name_liq)
+
+        df = df_liq[df_aux[c.cols.NAME].tolist()].sum(axis=1)
+        color = u.get_colors(("blue", 100 + 200*level))
+
+        data.append(go.Bar(x=df.index, y=df, marker={"color": color}, name=name_trace))
 
     layout = go.Layout(title="Liquid evolution", barmode="stack")
     return go.Figure(data=data, layout=layout)
