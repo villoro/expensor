@@ -3,7 +3,6 @@
 """
 
 import pandas as pd
-from flask import send_from_directory
 from dash import Dash
 
 from static.styles import STYLE_URL
@@ -19,7 +18,6 @@ def create_dash_app():
 
     app = Dash()
     app.config.supress_callback_exceptions = True
-    app.css.config.serve_locally = True
 
     # Load sample data
     df_trans = pd.read_csv(c.os.FILE_DATA_SAMPLE, sep=";", index_col=0)
