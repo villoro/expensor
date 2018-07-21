@@ -32,6 +32,6 @@ def table_transactions(dfg, name, n_rows=50):
     data = go.Table(header=header, cells=cells)
 
     title = "{} preview (showing {} of {} rows)".format(name, n_rows, dfg.shape[0])
-    layout = go.Layout(title=title, height=600)
+    layout = go.Layout(title=title, height=300 + 10*n_rows)
 
     return {"data": [data], "layout": layout}

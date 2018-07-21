@@ -49,9 +49,9 @@ def get_content(app):
             html.Button('Use this file', id='upload_button', style=DICT_SHOW[False]),
         ]),
         html.Div([
-            html.Div(id="upload_results_trans"),
-            html.Div(id="upload_results_liquid"),
             html.Div(id="upload_results_liquid_list"),
+            html.Div(id="upload_results_liquid"),
+            html.Div(id="upload_results_trans"),
         ])
     ]
 
@@ -86,13 +86,7 @@ def get_content(app):
                    Input("upload_container", "filename")])
     #pylint: disable=unused-variable
     def show_df_trans(contents, filename):
-        """
-            Updates the transaction dataframe
-
-            Args:
-                contents:   file uploaded
-                filename:   name of the file uploaded
-        """
+        """ Dummy function to show df trans """
 
         return get_table(contents, filename, c.dfs.TRANS, "upload_plot_trans")
 
@@ -102,15 +96,19 @@ def get_content(app):
                    Input("upload_container", "filename")])
     #pylint: disable=unused-variable
     def show_df_liquid(contents, filename):
-        """
-            Updates the transaction dataframe
-
-            Args:
-                contents:   file uploaded
-                filename:   name of the file uploaded
-        """
+        """ Dummy function to show df liquid """
 
         return get_table(contents, filename, c.dfs.LIQUID, "upload_plot_liquid")
+
+
+    @app.callback(Output("upload_results_liquid_list", "children"),
+                  [Input("upload_container", "contents"),
+                   Input("upload_container", "filename")])
+    #pylint: disable=unused-variable
+    def show_df_liquid_list(contents, filename):
+        """ Dummy function to show df liquid list """
+
+        return get_table(contents, filename, c.dfs.LIQUID_LIST, "upload_plot_liquid_list")
 
 
     def check_contents(contents, filename):
