@@ -6,8 +6,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State, Event
 
-import utilities as u
 import constants as c
+import utilities as u
 from static import styles
 from app import ui_utils as uiu
 from plots import plots_upload as plots
@@ -70,7 +70,7 @@ def get_content(app):
         if contents == CONTENT_UPDATED:
             return CONTENT_UPDATED
 
-        df = u.uos.parse_dataframe_uploaded(contents, filename)
+        df = u.uos.parse_dataframe_uploaded(contents, filename, c.dfs.TRANS)
 
         # If there has been a reading error, df would be an error message
         if isinstance(df, str):
@@ -94,7 +94,7 @@ def get_content(app):
         if (contents is None) or (filename is None) or (contents == CONTENT_UPDATED):
             return None
 
-        df = u.uos.parse_dataframe_uploaded(contents, filename)
+        df = u.uos.parse_dataframe_uploaded(contents, filename, c.dfs.TRANS)
 
         # If there has been a reading error, df would be an error message
         if isinstance(df, str):
