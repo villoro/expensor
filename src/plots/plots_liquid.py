@@ -37,3 +37,25 @@ def liquid_plot(df_liq_in, df_list):
 
     layout = go.Layout(title="Liquid evolution", barmode="stack")
     return go.Figure(data=data, layout=layout)
+
+
+def plot_expenses_vs_liquid(df_liquid_in, df_trans_in, avg_month=12):
+    
+    df_l = df_liquid_in.set_index(c.cols.DATE).copy()
+    df_l = df_l.rolling(avg_month, min_periods=1).mean()
+
+    df_t = u.dfs.group_df_by(df_trans_in[df_trans_in[c.cols.TYPE] == c.names.EXPENSES], "M")
+    df_t = df_t.rolling(avg_month, min_periods=1).mean()
+
+    iter_data = [
+        (df_t, df_t[c.cols.AMOUNT], c.names.EXPENSES, c.colors.EXPENSES),
+        (df_t, 3*df_t[c.cols.AMOUNT], c.names.LIQUID_MIN_REC, c.colors.LIQUID_MIN_REC),
+        (df_t, 6*df_t[c.cols.AMOUNT], c.names.LIQUID_REC, c.colors.LIQUID_REC),
+        (df_l, df_l[c.names.TOTAL], c.names.LIQUID, c.colors.LIQUID),
+    ]
+    
+    data = [go.Scatter(x=df.index, y=y, name=name, marker={"color": color})
+            for df, y, name, color in iter_data]
+
+    layout = go.Layout(title="Liquid vs Expenses")
+    return go.Figure(data=data, layout=layout)
