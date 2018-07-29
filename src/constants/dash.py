@@ -7,7 +7,6 @@ LINK_UPLOAD = "/upload"
 LINK_EVOLUTION = "/evolution"
 LINK_COMPARISON = "/comparison"
 LINK_HEATMAPS = "/heatmaps"
-LINK_VIOLINS = "/violins"
 LINK_PIES = "/pies"
 LINK_LIQUID = "/liquid"
 
@@ -22,8 +21,7 @@ DICT_APPS = {
     "2. Comparison": LINK_COMPARISON,
     "3. Pies": LINK_PIES,
     "4. Heatmaps": LINK_HEATMAPS,
-    "5. Violins": LINK_VIOLINS,
-    "6. Liquid": LINK_LIQUID
+    "5. Liquid": LINK_LIQUID
 }
 
 CONTENT = "content"

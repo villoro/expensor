@@ -8,4 +8,3 @@ from plots import plots_heatmaps
 from plots import plots_liquid
 from plots import plots_pies
 from plots import plots_upload
-from plots import plots_violins
