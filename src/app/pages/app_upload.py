@@ -165,30 +165,6 @@ def get_content(app):
         return c.os.CONTENT_UPDATED if result is not None else None
 
 
-    @app.callback(Output("global_df_trans", "children"),
-                  [],
-                  [State("upload_container", "contents"),
-                   State('upload_container', 'filename')],
-                  [Event("upload_button", "click")])
-    #pylint: disable=unused-variable
-    def update_df_trans(contents, filename):
-        """
-            Updates the transaction dataframe
-
-            Args:
-                contents:   file uploaded
-                filename:   name of the file uploaded
-        """
-
-        df = check_contents(contents, filename, c.dfs.TRANS)
-
-        if df is None:
-            return None
-
-        df = u.dfs.fix_df_trans(df)
-        return u.uos.df_to_b64(df)
-
-
     @app.callback(Output("global_categories", "children"),
                   [],
                   [State("upload_container", "contents"),
@@ -211,6 +187,30 @@ def get_content(app):
 
         df = u.dfs.fix_df_trans(df)
         return df[c.cols.CATEGORY].unique().tolist()
+
+
+    @app.callback(Output("global_df_trans", "children"),
+                  [],
+                  [State("upload_container", "contents"),
+                   State('upload_container', 'filename')],
+                  [Event("upload_button", "click")])
+    #pylint: disable=unused-variable
+    def update_df_trans(contents, filename):
+        """
+            Updates the transaction dataframe
+
+            Args:
+                contents:   file uploaded
+                filename:   name of the file uploaded
+        """
+
+        df = check_contents(contents, filename, c.dfs.TRANS)
+
+        if df is None:
+            return None
+
+        df = u.dfs.fix_df_trans(df)
+        return u.uos.df_to_b64(df)
 
 
     @app.callback(Output("global_df_liquid_list", "children"),
