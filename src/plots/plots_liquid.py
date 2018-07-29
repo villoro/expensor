@@ -10,7 +10,7 @@ import utilities as u
 
 def liquid_plot(df_liq_in, df_list):
     """
-        Creates a pie with expenses or incomes
+        Creates a plot for the liquid evolution
 
         Args:
             df_liq_in:  dataframe with liquid info
@@ -39,8 +39,19 @@ def liquid_plot(df_liq_in, df_list):
     return go.Figure(data=data, layout=layout)
 
 
-def plot_expenses_vs_liquid(df_liquid_in, df_trans_in, avg_month=12):
-    
+def plot_expenses_vs_liquid(df_liquid_in, df_trans_in, avg_month):
+    """
+        Creates a plot to compare liquid and expenses
+
+        Args:
+            df_liq_in:      dataframe with liquid info
+            df_trans_in:    dataframe with transactions
+            avg_month:  month to use in rolling average
+
+        Returns:
+            the plotly plot as html-div format
+    """
+
     df_l = df_liquid_in.set_index(c.cols.DATE).copy()
     df_l = df_l.rolling(avg_month, min_periods=1).mean()
 
@@ -53,7 +64,7 @@ def plot_expenses_vs_liquid(df_liquid_in, df_trans_in, avg_month=12):
         (df_t, 6*df_t[c.cols.AMOUNT], c.names.LIQUID_REC, c.colors.LIQUID_REC),
         (df_l, df_l[c.names.TOTAL], c.names.LIQUID, c.colors.LIQUID),
     ]
-    
+
     data = [go.Scatter(x=df.index, y=y, name=name, marker={"color": color})
             for df, y, name, color in iter_data]
 
