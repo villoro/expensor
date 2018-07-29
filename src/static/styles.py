@@ -92,4 +92,10 @@ STYLE_UPLOAD_INFO = {
     "margin-right": "{}px".format(20),
 }
 
+STYLE_SLIDER_WRAPER = {
+    "margin-bottom": "20px",
+    "margin-left": "50px",
+    "margin-right": "50px",
+}
+
 STYLE_HIDDEN = {"display":"none"}
