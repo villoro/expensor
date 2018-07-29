@@ -36,7 +36,6 @@ def get_content(app):
             )
         ],
         dcc.Graph(id="plot_heat_distribution", config=uiu.PLOT_CONFIG),
-        uiu.get_dummy_div("pies_aux")
     ]
 
     sidebar = [("Categories", dcc.Dropdown(id="drop_heat_categ", multi=True))]
@@ -113,4 +112,8 @@ def get_content(app):
 
         return plots.dist_plot(df)
 
-    return {c.dash.KEY_BODY: content, c.dash.KEY_SIDEBAR: sidebar}
+    return {
+        c.dash.DUMMY_DIV: "pies_aux",
+        c.dash.KEY_BODY: content,
+        c.dash.KEY_SIDEBAR: sidebar
+    }

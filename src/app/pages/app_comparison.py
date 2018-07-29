@@ -29,7 +29,6 @@ def get_content(app):
     content = [
         dcc.Graph(id="plot_comp_i", config=uiu.PLOT_CONFIG),
         dcc.Graph(id="plot_comp_e", config=uiu.PLOT_CONFIG),
-        uiu.get_dummy_div("comp_aux")
     ]
 
     sidebar = [
@@ -97,4 +96,8 @@ def get_content(app):
 
         return plots.ts_gradient(df, c.names.EXPENSES, avg_month)
 
-    return {c.dash.KEY_BODY: content, c.dash.KEY_SIDEBAR: sidebar}
+    return {
+        c.dash.DUMMY_DIV: "comp_aux",
+        c.dash.KEY_BODY: content,
+        c.dash.KEY_SIDEBAR: sidebar
+    }

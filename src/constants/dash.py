@@ -26,6 +26,7 @@ DICT_APPS = {
 
 CONTENT = "content"
 SIDEBAR = "sidebar"
+DUMMY_DIV = "dummy_div"
 
 KEY_BODY = "body"
 KEY_SIDEBAR = "sidebar"
