@@ -43,7 +43,7 @@ def get_content(app):
 
     @app.callback(Output("drop_heat_categ", "options"),
                   [Input("global_categories", "children"),
-                   Input("pies_aux", "children")])
+                   Input("heat_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
     def update_categories(categories, aux):
         """
@@ -56,7 +56,7 @@ def get_content(app):
     @app.callback(Output("plot_heat_i", "figure"),
                   [Input("global_df_trans", "children"),
                    Input("drop_heat_categ", "value"),
-                   Input("pies_aux", "children")])
+                   Input("heat_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
     def update_heatmap_i(df_trans, categories, aux):
         """
@@ -76,7 +76,7 @@ def get_content(app):
     @app.callback(Output("plot_heat_e", "figure"),
                   [Input("global_df_trans", "children"),
                    Input("drop_heat_categ", "value"),
-                   Input("pies_aux", "children")])
+                   Input("heat_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
     def update_heatmap_e(df_trans, categories, aux):
         """
@@ -96,7 +96,7 @@ def get_content(app):
     @app.callback(Output("plot_heat_distribution", "figure"),
                   [Input("global_df_trans", "children"),
                    Input("drop_heat_categ", "value"),
-                   Input("pies_aux", "children")])
+                   Input("heat_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
     def update_distplot(df_trans, categories, aux):
         """
@@ -113,7 +113,7 @@ def get_content(app):
         return plots.dist_plot(df)
 
     return {
-        c.dash.DUMMY_DIV: "pies_aux",
+        c.dash.DUMMY_DIV: "heat_aux",
         c.dash.KEY_BODY: content,
         c.dash.KEY_SIDEBAR: sidebar
     }

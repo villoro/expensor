@@ -44,14 +44,12 @@ def ts_gradient(dfg, type_trans, avg_month):
 
     data = []
 
-    min_year, max_year = min(df.index.year), max(df.index.year)
-
     for year in sorted(set(df.index.year), reverse=False):
 
-        if year == max_year:
+        if year == max(df.index.year):
             index_color = 900
         else:
-            index_color = max(100, 600 - 200*(max_year - year))
+            index_color = max(100, 600 - 200*(max(df.index.year) - year))
 
         color = u.get_colors([(color_name, index_color)])
 
@@ -61,8 +59,8 @@ def ts_gradient(dfg, type_trans, avg_month):
             go.Scatter(
                 x=df_aux.index.month,
                 y=df_aux[c.cols.AMOUNT].values,
-                line={"width": min(0.5*(year - min_year) + 1, max_width)},
-                marker={"color": color, "size": year - min_year + min_size},
+                line={"width": min(0.5*(year - min(df.index.year)) + 1, max_width)},
+                marker={"color": color, "size": year - min(df.index.year) + min_size},
                 name=year
             )
         )
