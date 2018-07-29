@@ -8,13 +8,14 @@ import constants as c
 import utilities as u
 
 
-def ts_gradient(dfg, type_trans):
+def ts_gradient(dfg, type_trans, avg_month):
     """
         Creates a timeseries plot where all years are ploted simultaneously
 
         Args:
             dfg:        dataframe to use
             type_trans: type of transaction [Income/Expense]
+            avg_month:  month to use in rolling average
 
         Returns:
             the plotly plot as html-div format
@@ -25,10 +26,13 @@ def ts_gradient(dfg, type_trans):
     if df.shape[0] == 0:
         return {}
 
+    # Compute rolling average
+    if avg_month > 0:
+        df = df.rolling(avg_month, min_periods=1).mean()
+
     min_size, max_width = 3, 5
 
-    mdict = {c.names.INCOMES: "green", c.names.EXPENSES: "red"}
-    color_name = mdict[type_trans]
+    color_name = {c.names.INCOMES: "green", c.names.EXPENSES: "red"}[type_trans]
 
     data = []
 
@@ -43,10 +47,12 @@ def ts_gradient(dfg, type_trans):
 
         color = u.get_colors([(color_name, index_color)])
 
+        df_aux = df[df.index.year == year]
+
         data.append(
             go.Scatter(
-                x=df.index.month,
-                y=df[df.index.year == year][c.cols.AMOUNT].values,
+                x=df_aux.index.month,
+                y=df_aux[c.cols.AMOUNT].values,
                 line={"width": min(0.5*(year - min_year) + 1, max_width)},
                 marker={"color": color, "size": year - min_year + min_size},
                 name=year

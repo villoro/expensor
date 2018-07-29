@@ -32,7 +32,14 @@ def get_content(app):
         uiu.get_dummy_div("comp_aux")
     ]
 
-    sidebar = [("Categories", dcc.Dropdown(id="drop_comp_categ", multi=True))]
+    sidebar = [
+        ("Categories", dcc.Dropdown(id="drop_comp_categ", multi=True)),
+        ("Rolling Average", dcc.Slider(
+            id="slider_comp_rolling_avg",
+            min=1, max=12, value=1,
+            marks={i: str(i) if i > 1 else "None" for i in range(1, 13)},
+        ))
+    ]
 
 
     @app.callback(Output("drop_comp_categ", "options"),
@@ -50,40 +57,44 @@ def get_content(app):
     @app.callback(Output("plot_comp_i", "figure"),
                   [Input("global_df_trans", "children"),
                    Input("drop_comp_categ", "value"),
+                   Input("slider_comp_rolling_avg", "value"),
                    Input("comp_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
-    def update_ts_grad_i(df_trans, categories, aux):
+    def update_ts_grad_i(df_trans, categories, avg_month, aux):
         """
             Updates the timeserie gradient plot
 
             Args:
                 df_trans:   transactions dataframe
                 categories: categories to use
+                avg_month:  month to use in rolling average
         """
 
         df = u.uos.b64_to_df(df_trans)
         df = u.dfs.filter_data(df, categories)
 
-        return plots.ts_gradient(df, c.names.INCOMES)
+        return plots.ts_gradient(df, c.names.INCOMES, avg_month)
 
 
     @app.callback(Output("plot_comp_e", "figure"),
                   [Input("global_df_trans", "children"),
                    Input("drop_comp_categ", "value"),
+                   Input("slider_comp_rolling_avg", "value"),
                    Input("comp_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
-    def update_ts_grad_e(df_trans, categories, aux):
+    def update_ts_grad_e(df_trans, categories, avg_month, aux):
         """
             Updates the timeserie gradient plot
 
             Args:
                 df_trans:   transactions dataframe
                 categories: categories to use
+                avg_month:  month to use in rolling average
         """
 
         df = u.uos.b64_to_df(df_trans)
         df = u.dfs.filter_data(df, categories)
 
-        return plots.ts_gradient(df, c.names.EXPENSES)
+        return plots.ts_gradient(df, c.names.EXPENSES, avg_month)
 
     return {c.dash.KEY_BODY: content, c.dash.KEY_SIDEBAR: sidebar}
