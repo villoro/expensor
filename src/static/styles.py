@@ -64,7 +64,7 @@ STYLE_BODY = {
 }
 
 STYLE_SIDEBAR_ELEM = {
-    "padding-bottom": "15px",
+    "padding-bottom": "25px",
     "border-bottom": "1px solid {}".format(COLOR_SIDEBAR_SEP)
 }
 
