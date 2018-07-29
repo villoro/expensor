@@ -127,7 +127,7 @@ def get_content(app):
     #pylint: disable=unused-variable
     def allow_update(contents, filename):
         """
-            Updates the transaction dataframe
+            Shows/hide the "use this file" button
 
             Args:
                 contents:   file uploaded
@@ -150,7 +150,7 @@ def get_content(app):
     #pylint: disable=unused-variable
     def clear_table_when_data_updated(contents, filename):
         """
-            Updates the transaction dataframe
+            Clear the upadate container after data has been updated
 
             Args:
                 contents:   file uploaded
@@ -163,6 +163,30 @@ def get_content(app):
             result &= False if check_contents(contents, filename, name) is None else True
 
         return c.os.CONTENT_UPDATED if result is not None else None
+
+
+    @app.callback(Output("global_categories", "children"),
+                  [],
+                  [State("upload_container", "contents"),
+                   State('upload_container', 'filename')],
+                  [Event("upload_button", "click")])
+    #pylint: disable=unused-variable
+    def update_categories(contents, filename):
+        """
+            Updates the list of categories
+
+            Args:
+                contents:   file uploaded
+                filename:   name of the file uploaded
+        """
+
+        df = check_contents(contents, filename, c.dfs.TRANS)
+
+        if df is None:
+            return None
+
+        df = u.dfs.fix_df_trans(df)
+        return df[c.cols.CATEGORY].unique().tolist()
 
 
     @app.callback(Output("global_df_trans", "children"),
@@ -189,28 +213,50 @@ def get_content(app):
         return u.uos.df_to_b64(df)
 
 
-    @app.callback(Output("global_categories", "children"),
+    @app.callback(Output("global_df_liquid_list", "children"),
                   [],
                   [State("upload_container", "contents"),
                    State('upload_container', 'filename')],
                   [Event("upload_button", "click")])
     #pylint: disable=unused-variable
-    def update_categories(contents, filename):
+    def update_df_liquid_list(contents, filename):
         """
-            Updates the list of categories
+            Updates the liquid list dataframe
 
             Args:
                 contents:   file uploaded
                 filename:   name of the file uploaded
         """
 
-        df = check_contents(contents, filename, c.dfs.TRANS)
+        df = check_contents(contents, filename, c.dfs.LIQUID_LIST)
 
         if df is None:
             return None
 
-        df = u.dfs.fix_df_trans(df)
-        return df[c.cols.CATEGORY].unique().tolist()
+        return u.uos.df_to_b64(df)
+
+
+    @app.callback(Output("global_df_liquid", "children"),
+                  [],
+                  [State("upload_container", "contents"),
+                   State('upload_container', 'filename')],
+                  [Event("upload_button", "click")])
+    #pylint: disable=unused-variable
+    def update_df_liquid(contents, filename):
+        """
+            Updates the liquid dataframe
+
+            Args:
+                contents:   file uploaded
+                filename:   name of the file uploaded
+        """
+
+        df = check_contents(contents, filename, c.dfs.LIQUID)
+
+        if df is None:
+            return None
+
+        return u.uos.df_to_b64(df)
 
 
     return {c.dash.KEY_BODY: content}
