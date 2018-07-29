@@ -26,9 +26,23 @@ def get_content(app):
                 body:       body of the page
     """
 
+    radio_opt = uiu.get_options([c.names.INCOMES, c.names.EXPENSES, c.names.EBIT])
+
     content = [
-        dcc.Graph(id="plot_comp_i", config=uiu.PLOT_CONFIG),
-        dcc.Graph(id="plot_comp_e", config=uiu.PLOT_CONFIG),
+        [
+            dcc.Graph(id="plot_comp_i", config=uiu.PLOT_CONFIG),
+            dcc.RadioItems(
+                id="radio_comp_1", options=radio_opt,
+                value=c.names.INCOMES, labelStyle={'display': 'inline-block'}
+            )
+        ],
+        [
+            dcc.Graph(id="plot_comp_e", config=uiu.PLOT_CONFIG),
+            dcc.RadioItems(
+                id="radio_comp_2", options=radio_opt,
+                value=c.names.EXPENSES, labelStyle={'display': 'inline-block'}
+            )
+        ]
     ]
 
     sidebar = [
@@ -57,9 +71,10 @@ def get_content(app):
                   [Input("global_df_trans", "children"),
                    Input("drop_comp_categ", "value"),
                    Input("slider_comp_rolling_avg", "value"),
+                   Input("radio_comp_1", "value"),
                    Input("comp_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
-    def update_ts_grad_i(df_trans, categories, avg_month, aux):
+    def update_ts_grad_1(df_trans, categories, avg_month, type_trans, aux):
         """
             Updates the timeserie gradient plot
 
@@ -72,16 +87,17 @@ def get_content(app):
         df = u.uos.b64_to_df(df_trans)
         df = u.dfs.filter_data(df, categories)
 
-        return plots.ts_gradient(df, c.names.INCOMES, avg_month)
+        return plots.ts_gradient(df, type_trans, avg_month)
 
 
     @app.callback(Output("plot_comp_e", "figure"),
                   [Input("global_df_trans", "children"),
                    Input("drop_comp_categ", "value"),
                    Input("slider_comp_rolling_avg", "value"),
+                   Input("radio_comp_2", "value"),
                    Input("comp_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
-    def update_ts_grad_e(df_trans, categories, avg_month, aux):
+    def update_ts_grad_2(df_trans, categories, avg_month, type_trans, aux):
         """
             Updates the timeserie gradient plot
 
@@ -94,7 +110,7 @@ def get_content(app):
         df = u.uos.b64_to_df(df_trans)
         df = u.dfs.filter_data(df, categories)
 
-        return plots.ts_gradient(df, c.names.EXPENSES, avg_month)
+        return plots.ts_gradient(df, type_trans, avg_month)
 
     return {
         c.dash.DUMMY_DIV: "comp_aux",
