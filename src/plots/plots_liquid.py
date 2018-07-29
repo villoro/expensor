@@ -22,7 +22,12 @@ def liquid_plot(df_liq_in, df_list):
 
     df_liq = df_liq_in.set_index(c.cols.DATE)
 
-    data = []
+    if c.names.TOTAL in df_liq.columns:
+        del df_liq[c.names.TOTAL]
+
+    df_liq[c.names.TOTAL] = df_liq.sum(axis=1)
+
+    data = [go.Scatter(x=df_liq.index, y=df_liq["Total"], marker={"color": "black"}, name="Total")]
     for level in df_list[c.cols.LIQUID_LEVEL].unique():
         df_aux = df_list[df_list[c.cols.LIQUID_LEVEL] == level]
         name_liq = df_aux[c.cols.LIQUID_NAME].tolist()[0]
