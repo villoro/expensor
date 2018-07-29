@@ -235,8 +235,6 @@ def get_content(app):
 
         return u.uos.df_to_b64(df)
 
-    return {c.dash.KEY_BODY: content}
-
 
     @app.callback(Output("global_df_liquid", "children"),
                   [],
