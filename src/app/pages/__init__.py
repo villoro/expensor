@@ -44,7 +44,8 @@ def get_pages(app):
             content = m_app.get_content(app)
 
             # Construct body and sidebar
-            body = uiu.create_body(content["body"])
+            dummy_name = content[c.dash.DUMMY_DIV] if c.dash.DUMMY_DIV in content else None
+            body = uiu.create_body(content[c.dash.KEY_BODY], dummy_name)
             sidebar = uiu.create_sidebar(content)
 
             # Add content to the output dict

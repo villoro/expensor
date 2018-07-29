@@ -10,7 +10,7 @@ import utilities as u
 
 def liquid_plot(df_liq_in, df_list):
     """
-        Creates a pie with expenses or incomes
+        Creates a plot for the liquid evolution
 
         Args:
             df_liq_in:  dataframe with liquid info
@@ -22,12 +22,9 @@ def liquid_plot(df_liq_in, df_list):
 
     df_liq = df_liq_in.set_index(c.cols.DATE)
 
-    if c.names.TOTAL in df_liq.columns:
-        del df_liq[c.names.TOTAL]
+    data = [go.Scatter(x=df_liq.index, y=df_liq[c.names.TOTAL],
+                       marker={"color": "black"}, name=c.names.TOTAL)]
 
-    df_liq[c.names.TOTAL] = df_liq.sum(axis=1)
-
-    data = [go.Scatter(x=df_liq.index, y=df_liq["Total"], marker={"color": "black"}, name="Total")]
     for level in df_list[c.cols.LIQUID_LEVEL].unique():
         df_aux = df_list[df_list[c.cols.LIQUID_LEVEL] == level]
         name_liq = df_aux[c.cols.LIQUID_NAME].tolist()[0]
@@ -39,4 +36,37 @@ def liquid_plot(df_liq_in, df_list):
         data.append(go.Bar(x=df.index, y=df, marker={"color": color}, name=name_trace))
 
     layout = go.Layout(title="Liquid evolution", barmode="stack")
+    return go.Figure(data=data, layout=layout)
+
+
+def plot_expenses_vs_liquid(df_liquid_in, df_trans_in, avg_month):
+    """
+        Creates a plot to compare liquid and expenses
+
+        Args:
+            df_liq_in:      dataframe with liquid info
+            df_trans_in:    dataframe with transactions
+            avg_month:  month to use in rolling average
+
+        Returns:
+            the plotly plot as html-div format
+    """
+
+    df_l = df_liquid_in.set_index(c.cols.DATE).copy()
+    df_l = df_l.rolling(avg_month, min_periods=1).mean()
+
+    df_t = u.dfs.group_df_by(df_trans_in[df_trans_in[c.cols.TYPE] == c.names.EXPENSES], "M")
+    df_t = df_t.rolling(avg_month, min_periods=1).mean()
+
+    iter_data = [
+        (df_t, df_t[c.cols.AMOUNT], c.names.EXPENSES, c.colors.EXPENSES),
+        (df_t, 3*df_t[c.cols.AMOUNT], c.names.LIQUID_MIN_REC, c.colors.LIQUID_MIN_REC),
+        (df_t, 6*df_t[c.cols.AMOUNT], c.names.LIQUID_REC, c.colors.LIQUID_REC),
+        (df_l, df_l[c.names.TOTAL], c.names.LIQUID, c.colors.LIQUID),
+    ]
+
+    data = [go.Scatter(x=df.index, y=y, name=name, marker={"color": color})
+            for df, y, name, color in iter_data]
+
+    layout = go.Layout(title="Liquid vs Expenses")
     return go.Figure(data=data, layout=layout)

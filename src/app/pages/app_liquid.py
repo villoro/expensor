@@ -3,10 +3,12 @@
 """
 
 import dash_core_components as dcc
+import dash_html_components as html
 from dash.dependencies import Input, Output
 
 import utilities as u
 import constants as c
+from static import styles
 from app import ui_utils as uiu
 from plots import plots_liquid as plots
 
@@ -27,27 +29,63 @@ def get_content(app):
     """
 
     content = [
-        dcc.Graph(id="plot_liquid_year", config=uiu.PLOT_CONFIG),
-        uiu.get_dummy_div("liquid_aux")
+        dcc.Graph(id="plot_liquid_evo", config=uiu.PLOT_CONFIG),
+        [
+            dcc.Graph(id="plot_liquid_vs_expenses", config=uiu.PLOT_CONFIG),
+            uiu.get_row([
+                uiu.get_one_column("Months for smoothing using moving average:", n_rows=2),
+                uiu.get_one_column(
+                    html.Div(
+                        dcc.Slider(
+                            id="radio_liq", min=1, max=12, value=12,
+                            marks={i: str(i) if i > 1 else "None" for i in range(1, 13)},
+                        ),
+                        style=styles.STYLE_SLIDER_WRAPER
+                    ), n_rows=10
+                )
+            ])
+        ]
     ]
 
-    @app.callback(Output("plot_liquid_year", "figure"),
+    @app.callback(Output("plot_liquid_evo", "figure"),
                   [Input("global_df_liquid", "children"),
                    Input("global_df_liquid_list", "children"),
                    Input("liquid_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
-    def update_liquid(df_liq_in, df_liq_list_in, aux):
+    def update_liquid(df_liq, df_liq_list, aux):
         """
             Updates the incomes heatmap
 
             Args:
-                df_liq_in:          dataframe with liquid info
-                df_liq_list_in:     dataframe with types of liquids
+                df_liq:         dataframe with liquid info
+                df_liq_list:    dataframe with types of liquids
         """
 
         return plots.liquid_plot(
-            df_liq_in=u.uos.b64_to_df(df_liq_in),
-            df_list=u.uos.b64_to_df(df_liq_list_in)
+            df_liq_in=u.uos.b64_to_df(df_liq),
+            df_list=u.uos.b64_to_df(df_liq_list)
         )
 
-    return {c.dash.KEY_BODY: content}
+    @app.callback(Output("plot_liquid_vs_expenses", "figure"),
+                  [Input("global_df_liquid", "children"),
+                   Input("global_df_trans", "children"),
+                   Input("radio_liq", "value"),
+                   Input("liquid_aux", "children")])
+    #pylint: disable=unused-variable,unused-argument
+    def update_liquid_vs_expenses(df_liq, df_trans, avg_month, aux):
+        """
+            Updates the incomes heatmap
+
+            Args:
+                df_liq:     dataframe with liquid info
+                df_trans:   dataframe with transactions
+                avg_month:  month to use in rolling average
+        """
+
+        return plots.plot_expenses_vs_liquid(
+            df_liquid_in=u.uos.b64_to_df(df_liq),
+            df_trans_in=u.uos.b64_to_df(df_trans),
+            avg_month=avg_month
+        )
+
+    return {c.dash.DUMMY_DIV: "liquid_aux", c.dash.KEY_BODY: content}

@@ -256,6 +256,12 @@ def get_content(app):
         if df is None:
             return None
 
+        # Add total column
+        if c.names.TOTAL in df.columns:
+            del df[c.names.TOTAL]
+
+        df[c.names.TOTAL] = df.sum(axis=1)
+
         return u.uos.df_to_b64(df)
 
 

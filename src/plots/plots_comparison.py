@@ -21,7 +21,15 @@ def ts_gradient(dfg, type_trans, avg_month):
             the plotly plot as html-div format
     """
 
-    df = u.dfs.group_df_by(dfg[dfg[c.cols.TYPE] == type_trans], "M")
+    if type_trans in [c.names.INCOMES, c.names.EXPENSES]:
+        df = dfg[dfg[c.cols.TYPE] == type_trans].copy()
+
+    else:
+        df = dfg.copy()
+        mfilter = df[c.cols.TYPE] == c.names.EXPENSES
+        df.loc[mfilter, c.cols.AMOUNT] = - df.loc[mfilter, c.cols.AMOUNT]
+
+    df = u.dfs.group_df_by(df, "M")
 
     if df.shape[0] == 0:
         return {}
@@ -32,18 +40,16 @@ def ts_gradient(dfg, type_trans, avg_month):
 
     min_size, max_width = 3, 5
 
-    color_name = {c.names.INCOMES: "green", c.names.EXPENSES: "red"}[type_trans]
+    color_name = {c.names.INCOMES: "green", c.names.EXPENSES: "red"}.get(type_trans, "amber")
 
     data = []
 
-    min_year, max_year = min(df.index.year), max(df.index.year)
-
     for year in sorted(set(df.index.year), reverse=False):
 
-        if year == max_year:
+        if year == max(df.index.year):
             index_color = 900
         else:
-            index_color = max(100, 600 - 200*(max_year - year))
+            index_color = max(100, 600 - 200*(max(df.index.year) - year))
 
         color = u.get_colors([(color_name, index_color)])
 
@@ -53,8 +59,8 @@ def ts_gradient(dfg, type_trans, avg_month):
             go.Scatter(
                 x=df_aux.index.month,
                 y=df_aux[c.cols.AMOUNT].values,
-                line={"width": min(0.5*(year - min_year) + 1, max_width)},
-                marker={"color": color, "size": year - min_year + min_size},
+                line={"width": min(0.5*(year - min(df.index.year)) + 1, max_width)},
+                marker={"color": color, "size": year - min(df.index.year) + min_size},
                 name=year
             )
         )

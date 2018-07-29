@@ -69,7 +69,9 @@ def plot_timeserie_by_categories(dfg, type_trans=c.names.EXPENSES, timewindow="M
 
     df = dfg[dfg[c.cols.TYPE] == type_trans].copy()
 
-    data = []
+    df_aux = u.dfs.group_df_by(df, timewindow)
+    data = [go.Scatter(x=df_aux.index, y=df_aux[c.cols.AMOUNT],
+                       marker={"color": "black"}, name=c.names.TOTAL)]
 
     for cat in df[c.cols.CATEGORY].unique():
         df_aux = u.dfs.group_df_by(df[df[c.cols.CATEGORY] == cat], timewindow)
