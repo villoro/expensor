@@ -28,7 +28,6 @@ def get_content(app):
 
     content = [
         dcc.Graph(id="plot_liquid_year", config=uiu.PLOT_CONFIG),
-        uiu.get_dummy_div("liquid_aux")
     ]
 
     @app.callback(Output("plot_liquid_year", "figure"),
@@ -50,4 +49,4 @@ def get_content(app):
             df_list=u.uos.b64_to_df(df_liq_list_in)
         )
 
-    return {c.dash.KEY_BODY: content}
+    return {c.dash.DUMMY_DIV: "liquid_aux", c.dash.KEY_BODY: content}

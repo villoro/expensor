@@ -51,7 +51,7 @@ def get_content(app):
         return max(df[c.cols.YEAR].unique().tolist())
 
 
-    content = [uiu.get_dummy_div("pies_aux")]
+    content = []
 
     # Add plots and dropdowns
     for num in range(2):
@@ -134,4 +134,8 @@ def get_content(app):
 
             return plots.get_pie(df, c.names.EXPENSES, years)
 
-    return {c.dash.KEY_BODY: content, c.dash.KEY_SIDEBAR: sidebar}
+    return {
+        c.dash.DUMMY_DIV: "pies_aux",
+        c.dash.KEY_BODY: content,
+        c.dash.KEY_SIDEBAR: sidebar
+    }

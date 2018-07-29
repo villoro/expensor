@@ -38,7 +38,6 @@ def get_content(app):
                 labelStyle={'display': 'inline-block'}
             )
         ],
-        uiu.get_dummy_div("evo_aux")
     ]
 
     sidebar = [
@@ -109,4 +108,8 @@ def get_content(app):
 
         return plots.plot_timeserie_by_categories(df, type_trans, timewindow)
 
-    return {c.dash.KEY_BODY: content, c.dash.KEY_SIDEBAR: sidebar}
+    return {
+        c.dash.DUMMY_DIV: "evo_aux",
+        c.dash.KEY_BODY: content,
+        c.dash.KEY_SIDEBAR: sidebar
+    }

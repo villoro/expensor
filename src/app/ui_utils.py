@@ -65,7 +65,7 @@ def create_sidebar(kwa):
     return [_get_sidebar_elem(title, data) for title, data in elements]
 
 
-def create_body(datalist):
+def create_body(datalist, dummy_div_name):
     """
         Creates an element for the body
 
@@ -78,7 +78,12 @@ def create_body(datalist):
 
     elem_style = styles.STYLE_DIV_CONTROL_IN_BODY
 
-    return [html.Div(data, className="row", style=elem_style) for data in datalist]
+    out = [html.Div(data, className="row", style=elem_style) for data in datalist]
+
+    if dummy_div_name:
+        return out + [get_dummy_div(dummy_div_name)]
+
+    return out
 
 
 def get_one_column(data, n_rows=12):
