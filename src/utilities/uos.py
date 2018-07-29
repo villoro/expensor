@@ -31,8 +31,7 @@ def check_if_uri_exist(uris):
             if not os.path.isdir(uri):
                 os.makedirs(uri, exist_ok=True)
 
-                # TODO
-                #log.info("Path %s doesn't exists. Created automatically", uri)
+                print("Path %s doesn't exists. Created automatically", uri)
 
 
 def delete_if_possible(uri):
@@ -49,9 +48,7 @@ def delete_if_possible(uri):
             return True
 
         except IOError as e:
-            pass
-            #TODO
-            #log.error("Unable to delete.", error=e)
+            print("Unable to delete.", e)
 
     return False
 
@@ -82,7 +79,8 @@ def parse_dataframe_uploaded(contents, filename, sheet):
     if extension == "xlsx":
         try:
             return pd.read_excel(data, sheet)
-        except Exception:
+
+        except Exception: #pylint: disable=W0703
             return c.os.ERROR_UNPARSABLE
 
     # For unkown file extension throw an error message
