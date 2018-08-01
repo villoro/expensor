@@ -38,7 +38,7 @@ def ts_gradient(dfg, type_trans, avg_month):
     if avg_month > 0:
         df = df.rolling(avg_month, min_periods=1).mean()
 
-    min_size, max_width = 3, 5
+    max_width = 5
 
     color_name = {c.names.INCOMES: "green", c.names.EXPENSES: "red"}.get(type_trans, "amber")
 
@@ -60,10 +60,10 @@ def ts_gradient(dfg, type_trans, avg_month):
                 x=df_aux.index.month,
                 y=df_aux[c.cols.AMOUNT].values,
                 line={"width": min(0.5*(year - min(df.index.year)) + 1, max_width)},
-                marker={"color": color, "size": year - min(df.index.year) + min_size},
-                name=year
+                marker={"color": color},
+                name=year, mode="lines"
             )
         )
 
-    layout = go.Layout(title="Time comparison ({})".format(type_trans))
+    layout = go.Layout(title="Time comparison ({})".format(type_trans), hovermode="closest")
     return go.Figure(data=data, layout=layout)
