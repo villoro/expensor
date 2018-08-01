@@ -30,30 +30,16 @@ def get_content(app):
 
     content = [
         dcc.Graph(id="plot_liquid_evo", config=uiu.PLOT_CONFIG),
-        [
-            dcc.Graph(id="plot_liquid_vs_expenses", config=uiu.PLOT_CONFIG),
-            uiu.get_row([
-                uiu.get_one_column("Months for smoothing using moving average:", n_rows=2),
-                uiu.get_one_column(
-                    html.Div(
-                        dcc.Slider(
-                            id="radio_liq_vs_exp", min=1, max=12, value=12,
-                            marks={i: str(i) if i > 1 else "None" for i in range(1, 13)},
-                        ),
-                        style=styles.STYLE_SLIDER_WRAPER
-                    ), n_rows=10
-                ),
-            ]),
-            # [
-            dcc.Graph(id="plot_liquid_months", config=uiu.PLOT_CONFIG),
-            html.Div(
-                dcc.Slider(
-                    id="radio_liq_months", min=1, max=12, value=12,
-                    marks={i: str(i) if i > 1 else "None" for i in range(1, 13)},
-                ), style=styles.STYLE_SLIDER_WRAPER
-            )
-            # ]
-        ]
+        dcc.Graph(id="plot_liquid_vs_expenses", config=uiu.PLOT_CONFIG),
+        dcc.Graph(id="plot_liquid_months", config=uiu.PLOT_CONFIG),
+    ]
+
+    sidebar = [
+        ("Rolling Average", dcc.Slider(
+            id="slider_liq_rolling_avg",
+            min=1, max=12, value=12,
+            marks={i: str(i) if i > 1 else "None" for i in range(1, 13)},
+        ))
     ]
 
     @app.callback(Output("plot_liquid_evo", "figure"),
@@ -78,7 +64,7 @@ def get_content(app):
     @app.callback(Output("plot_liquid_vs_expenses", "figure"),
                   [Input("global_df_liquid", "children"),
                    Input("global_df_trans", "children"),
-                   Input("radio_liq_vs_exp", "value"),
+                   Input("slider_liq_rolling_avg", "value"),
                    Input("liquid_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
     def update_liquid_vs_expenses(df_liq, df_trans, avg_month, aux):
@@ -100,7 +86,7 @@ def get_content(app):
     @app.callback(Output("plot_liquid_months", "figure"),
                   [Input("global_df_liquid", "children"),
                    Input("global_df_trans", "children"),
-                   Input("radio_liq_months", "value"),
+                   Input("slider_liq_rolling_avg", "value"),
                    Input("liquid_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
     def update_liquid_months(df_liq, df_trans, avg_month, aux):
@@ -119,4 +105,8 @@ def get_content(app):
             avg_month=avg_month
         )
 
-    return {c.dash.DUMMY_DIV: "liquid_aux", c.dash.KEY_BODY: content}
+    return {
+        c.dash.DUMMY_DIV: "liquid_aux",
+        c.dash.KEY_BODY: content,
+        c.dash.KEY_SIDEBAR: sidebar
+    }
