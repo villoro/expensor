@@ -9,7 +9,7 @@ import constants as c
 from static import styles
 
 
-def get_layout(dfs, categories):
+def get_layout(dfs):
     """
         Creates the dash layout
 
@@ -38,7 +38,7 @@ def get_layout(dfs, categories):
         html.Link(rel='stylesheet', href='/static/styles.css'),
         dcc.Location(id='url', refresh=False),
         html.Div(dfs[c.dfs.TRANS], id="global_df_trans", style=styles.STYLE_HIDDEN),
+        html.Div(dfs[c.dfs.CATEG], id="global_categories", style=styles.STYLE_HIDDEN),
         html.Div(dfs[c.dfs.LIQUID], id="global_df_liquid", style=styles.STYLE_HIDDEN),
         html.Div(dfs[c.dfs.LIQUID_LIST], id="global_df_liquid_list", style=styles.STYLE_HIDDEN),
-        html.Div(categories, id="global_categories", style=styles.STYLE_HIDDEN),
     ])

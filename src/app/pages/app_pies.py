@@ -31,12 +31,14 @@ def get_content(app):
     @app.callback(Output("drop_pie_categ", "options"),
                   [Input("global_categories", "children"), Input("pies_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
-    def update_categories(categories, aux):
+    def update_categories(df_categ, aux):
         """
             Updates categories dropdown with the actual categories
         """
 
-        return uiu.get_options(categories)
+        df = u.uos.b64_to_df(df_categ)
+
+        return uiu.get_options(df[c.cols.NAME].unique())
 
 
     @app.callback(Output("drop_pie_{}".format(1), "value"),

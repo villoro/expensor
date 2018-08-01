@@ -14,3 +14,7 @@ TYPE = "Type"
 NAME = "Name"
 LIQUID_NAME = "Liquidity name"
 LIQUID_LEVEL = "Liquidity level"
+
+COLOR_NAME = "Color Name"
+COLOR_INDEX = "Color Index"
+FIXED = "Fixed"
