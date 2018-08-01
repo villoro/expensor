@@ -92,10 +92,17 @@ STYLE_UPLOAD_INFO = {
     "margin-right": "{}px".format(20),
 }
 
-STYLE_SLIDER_WRAPER = {
-    "margin-bottom": "20px",
-    "margin-left": "50px",
-    "margin-right": "50px",
-}
-
 STYLE_HIDDEN = {"display":"none"}
+
+
+def get_style_wraper(margin_h=10, margin_v=10):
+    """
+        Gets a style dict with margins
+    """
+
+    return {
+        "margin-top": "{}px".format(margin_v),
+        "margin-bottom": "{}px".format(margin_v),
+        "margin-left": "{}px".format(margin_h),
+        "margin-right": "{}px".format(margin_h),
+    }

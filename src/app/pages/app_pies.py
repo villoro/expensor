@@ -3,10 +3,12 @@
 """
 
 import dash_core_components as dcc
+import dash_html_components as html
 from dash.dependencies import Input, Output
 
 import utilities as u
 import constants as c
+from static import styles
 from app import ui_utils as uiu
 from plots import plots_pies as plots
 
@@ -60,9 +62,11 @@ def get_content(app):
 
         content.append(
             [
-                dcc.Dropdown(
-                    id="drop_pie_{}".format(num),
-                    multi=True
+                html.Div(
+                    dcc.Dropdown(
+                        id="drop_pie_{}".format(num),
+                        multi=True
+                    ), style=styles.get_style_wraper(10)
                 ),
                 uiu.get_row([
                     uiu.get_one_column(
