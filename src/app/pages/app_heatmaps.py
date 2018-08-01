@@ -45,12 +45,14 @@ def get_content(app):
                   [Input("global_categories", "children"),
                    Input("heat_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
-    def update_categories(categories, aux):
+    def update_categories(df_categ, aux):
         """
             Updates categories dropdown with the actual categories
         """
 
-        return uiu.get_options(categories)
+        df = u.uos.b64_to_df(df_categ)
+
+        return uiu.get_options(df[c.cols.NAME].unique())
 
 
     @app.callback(Output("plot_heat_i", "figure"),

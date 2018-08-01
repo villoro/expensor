@@ -22,14 +22,13 @@ def create_dash_app():
     # Load sample data
     dfs = {sheet: pd.read_excel(c.os.FILE_DATA_SAMPLE, sheet) for sheet in c.dfs.ALL}
 
-    # Fix trans and get categories
+    # Fix transactions
     dfs[c.dfs.TRANS] = u.dfs.fix_df_trans(dfs[c.dfs.TRANS])
-    categories = dfs[c.dfs.TRANS][c.cols.CATEGORY].unique().tolist()
 
     # Transformt to b64 in order to store data
     dfs = {sheet: u.uos.df_to_b64(df) for sheet, df in dfs.items()}
 
-    app.layout = layout.get_layout(dfs, categories)
+    app.layout = layout.get_layout(dfs)
     app.css.append_css({'external_url': STYLE_URL})
 
     return app

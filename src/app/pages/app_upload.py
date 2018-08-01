@@ -180,13 +180,12 @@ def get_content(app):
                 filename:   name of the file uploaded
         """
 
-        df = check_contents(contents, filename, c.dfs.TRANS)
+        df = check_contents(contents, filename, c.dfs.CATEG)
 
         if df is None:
             return None
 
-        df = u.dfs.fix_df_trans(df)
-        return df[c.cols.CATEGORY].unique().tolist()
+        return u.uos.df_to_b64(df)
 
 
     @app.callback(Output("global_df_trans", "children"),

@@ -3,10 +3,12 @@
 """
 
 import dash_core_components as dcc
+import dash_html_components as html
 from dash.dependencies import Input, Output
 
 import utilities as u
 import constants as c
+from static import styles
 from app import ui_utils as uiu
 from plots import plots_pies as plots
 
@@ -31,12 +33,14 @@ def get_content(app):
     @app.callback(Output("drop_pie_categ", "options"),
                   [Input("global_categories", "children"), Input("pies_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
-    def update_categories(categories, aux):
+    def update_categories(df_categ, aux):
         """
             Updates categories dropdown with the actual categories
         """
 
-        return uiu.get_options(categories)
+        df = u.uos.b64_to_df(df_categ)
+
+        return uiu.get_options(df[c.cols.NAME].unique())
 
 
     @app.callback(Output("drop_pie_{}".format(1), "value"),
@@ -58,9 +62,11 @@ def get_content(app):
 
         content.append(
             [
-                dcc.Dropdown(
-                    id="drop_pie_{}".format(num),
-                    multi=True
+                html.Div(
+                    dcc.Dropdown(
+                        id="drop_pie_{}".format(num),
+                        multi=True
+                    ), style=styles.get_style_wraper(10)
                 ),
                 uiu.get_row([
                     uiu.get_one_column(
@@ -93,46 +99,52 @@ def get_content(app):
 
         @app.callback(Output("plot_pie_{}_{}".format(num, c.names.INCOMES), "figure"),
                       [Input("global_df_trans", "children"),
+                       Input("global_categories", "children"),
                        Input("drop_pie_categ", "value"),
                        Input("drop_pie_{}".format(num), "value"),
                        Input("pies_aux", "children")])
         #pylint: disable=unused-variable,unused-argument
-        def update_pie_incomes(df_trans, categories, years, aux):
+        def update_pie_incomes(df_trans, df_categ, categories, years, aux):
             """
                 Updates the incomes pie plot
 
                 Args:
                     df_trans:   transactions dataframe
+                    df_categ:   categories dataframe
                     categories: categories to use
                     years:      years to include in pie
             """
 
             df = u.uos.b64_to_df(df_trans)
             df = u.dfs.filter_data(df, categories)
+            df_cat = u.uos.b64_to_df(df_categ)
 
-            return plots.get_pie(df, c.names.INCOMES, years)
+            return plots.get_pie(df, df_cat, c.names.INCOMES, years)
 
 
         @app.callback(Output("plot_pie_{}_{}".format(num, c.names.EXPENSES), "figure"),
                       [Input("global_df_trans", "children"),
+                       Input("global_categories", "children"),
                        Input("drop_pie_categ", "value"),
                        Input("drop_pie_{}".format(num), "value"),
                        Input("pies_aux", "children")])
         #pylint: disable=unused-variable,unused-argument
-        def update_pie_expenses(df_trans, categories, years, aux):
+        def update_pie_expenses(df_trans, df_categ, categories, years, aux):
             """
                 Updates the expenses pie plot
 
                 Args:
                     df_trans:   transactions dataframe
+                    df_categ:   categories dataframe
                     categories: categories to use
                     years:      years to include in pie
             """
 
             df = u.uos.b64_to_df(df_trans)
             df = u.dfs.filter_data(df, categories)
+            df_cat = u.uos.b64_to_df(df_categ)
 
-            return plots.get_pie(df, c.names.EXPENSES, years)
+            return plots.get_pie(df, df_cat, c.names.EXPENSES, years)
 
     return {
         c.dash.DUMMY_DIV: "pies_aux",

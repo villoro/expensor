@@ -56,12 +56,14 @@ def get_content(app):
                   [Input("global_categories", "children"),
                    Input("evo_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
-    def update_categories(categories, aux):
+    def update_categories(df_categ, aux):
         """
             Updates categories dropdown with the actual categories
         """
 
-        return uiu.get_options(categories)
+        df = u.uos.b64_to_df(df_categ)
+
+        return uiu.get_options(df[c.cols.NAME].unique())
 
 
     @app.callback(Output("plot_evol", "figure"),
@@ -88,16 +90,18 @@ def get_content(app):
 
     @app.callback(Output("plot_evo_detail", "figure"),
                   [Input("global_df_trans", "children"),
+                   Input("global_categories", "children"),
                    Input("drop_evol_categ", "value"),
                    Input("radio_evol_type", "value"),
                    Input("radio_evol_tw", "value")])
     #pylint: disable=unused-variable,unused-argument
-    def update_ts_by_categories_plot(df_trans, categories, type_trans, timewindow):
+    def update_ts_by_categories_plot(df_trans, df_categ, categories, type_trans, timewindow):
         """
             Updates the timeserie by categories plot
 
             Args:
                 df_trans:   transactions dataframe
+                df_categ:   categories dataframe
                 categories: categories to use
                 type_trans: type of transacions [Expenses/Inc]
                 timewindow: timewindow to use for grouping
@@ -105,8 +109,9 @@ def get_content(app):
 
         df = u.uos.b64_to_df(df_trans)
         df = u.dfs.filter_data(df, categories)
+        df_cat = u.uos.b64_to_df(df_categ)
 
-        return plots.plot_timeserie_by_categories(df, type_trans, timewindow)
+        return plots.plot_timeserie_by_categories(df, df_cat, type_trans, timewindow)
 
     return {
         c.dash.DUMMY_DIV: "evo_aux",
