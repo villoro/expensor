@@ -109,7 +109,6 @@ def get_content(app):
 
         df = u.uos.b64_to_df(df_trans)
         df = u.dfs.filter_data(df, categories)
-
         df_cat = u.uos.b64_to_df(df_categ)
 
         return plots.plot_timeserie_by_categories(df, df_cat, type_trans, timewindow)

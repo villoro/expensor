@@ -95,46 +95,52 @@ def get_content(app):
 
         @app.callback(Output("plot_pie_{}_{}".format(num, c.names.INCOMES), "figure"),
                       [Input("global_df_trans", "children"),
+                       Input("global_categories", "children"),
                        Input("drop_pie_categ", "value"),
                        Input("drop_pie_{}".format(num), "value"),
                        Input("pies_aux", "children")])
         #pylint: disable=unused-variable,unused-argument
-        def update_pie_incomes(df_trans, categories, years, aux):
+        def update_pie_incomes(df_trans, df_categ, categories, years, aux):
             """
                 Updates the incomes pie plot
 
                 Args:
                     df_trans:   transactions dataframe
+                    df_categ:   categories dataframe
                     categories: categories to use
                     years:      years to include in pie
             """
 
             df = u.uos.b64_to_df(df_trans)
             df = u.dfs.filter_data(df, categories)
+            df_cat = u.uos.b64_to_df(df_categ)
 
-            return plots.get_pie(df, c.names.INCOMES, years)
+            return plots.get_pie(df, df_cat, c.names.INCOMES, years)
 
 
         @app.callback(Output("plot_pie_{}_{}".format(num, c.names.EXPENSES), "figure"),
                       [Input("global_df_trans", "children"),
+                       Input("global_categories", "children"),
                        Input("drop_pie_categ", "value"),
                        Input("drop_pie_{}".format(num), "value"),
                        Input("pies_aux", "children")])
         #pylint: disable=unused-variable,unused-argument
-        def update_pie_expenses(df_trans, categories, years, aux):
+        def update_pie_expenses(df_trans, df_categ, categories, years, aux):
             """
                 Updates the expenses pie plot
 
                 Args:
                     df_trans:   transactions dataframe
+                    df_categ:   categories dataframe
                     categories: categories to use
                     years:      years to include in pie
             """
 
             df = u.uos.b64_to_df(df_trans)
             df = u.dfs.filter_data(df, categories)
+            df_cat = u.uos.b64_to_df(df_categ)
 
-            return plots.get_pie(df, c.names.EXPENSES, years)
+            return plots.get_pie(df, df_cat, c.names.EXPENSES, years)
 
     return {
         c.dash.DUMMY_DIV: "pies_aux",

@@ -60,6 +60,7 @@ def plot_timeserie_by_categories(dfg, df_categ, type_trans=c.names.EXPENSES, tim
 
         Args:
             dfg:        dataframe with info
+            df_categ:   categories dataframe
             type_trans: type of transaction [Income/Expense]
             timewindow: temporal grouping
 
@@ -85,8 +86,8 @@ def plot_timeserie_by_categories(dfg, df_categ, type_trans=c.names.EXPENSES, tim
         df_aux = u.dfs.group_df_by(df[df[c.cols.CATEGORY] == cat], timewindow)
         data.append(go.Bar(
             x=df_aux.index, y=df_aux[c.cols.AMOUNT],
-            marker={"color": color}, name=cat)
-        )
+            marker={"color": color}, name=cat
+        ))
 
     layout = go.Layout(title="Evolution by category", barmode='stack')
     return go.Figure(data=data, layout=layout)
