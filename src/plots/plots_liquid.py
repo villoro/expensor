@@ -53,7 +53,6 @@ def plot_expenses_vs_liquid(df_liquid_in, df_trans_in, avg_month):
     """
 
     df_l = df_liquid_in.set_index(c.cols.DATE).copy()
-    df_l = df_l.rolling(avg_month, min_periods=1).mean()
 
     df_t = u.dfs.group_df_by(df_trans_in[df_trans_in[c.cols.TYPE] == c.names.EXPENSES], "M")
     df_t = df_t.rolling(avg_month, min_periods=1).mean()
@@ -69,4 +68,30 @@ def plot_expenses_vs_liquid(df_liquid_in, df_trans_in, avg_month):
             for df, y, name, color in iter_data]
 
     layout = go.Layout(title="Liquid vs Expenses")
+    return go.Figure(data=data, layout=layout)
+
+
+def plot_months(df_liquid_in, df_trans_in, avg_month):
+    """
+        Creates a plot to compare liquid and expenses
+
+        Args:
+            df_liq_in:      dataframe with liquid info
+            df_trans_in:    dataframe with transactions
+            avg_month:  month to use in rolling average
+
+        Returns:
+            the plotly plot as html-div format
+    """
+
+    df_l = df_liquid_in.set_index(c.cols.DATE).copy()
+
+    df_t = u.dfs.group_df_by(df_trans_in[df_trans_in[c.cols.TYPE] == c.names.EXPENSES], "M")
+    df_t = df_t.rolling(avg_month, min_periods=1).mean()
+
+    serie = df_l[c.names.TOTAL]/df_t[c.cols.AMOUNT]
+
+    data = [go.Scatter(x=serie.index, y=serie)]
+
+    layout = go.Layout(title="Survival months with current liquid")
     return go.Figure(data=data, layout=layout)
