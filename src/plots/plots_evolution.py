@@ -31,7 +31,7 @@ def plot_timeserie(dfg, timewindow="M"):
             go.Scatter(
                 x=df.index, y=df[c.cols.AMOUNT],
                 marker={"color": color},
-                name=name
+                name=name, mode="lines"
             )
         )
 
@@ -46,7 +46,7 @@ def plot_timeserie(dfg, timewindow="M"):
         go.Scatter(
             x=df.index, y=df[c.cols.AMOUNT],
             marker={"color": c.colors.EBIT},
-            name=c.names.EBIT
+            name=c.names.EBIT, mode="lines"
         )
     )
 
