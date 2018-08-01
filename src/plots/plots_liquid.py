@@ -8,6 +8,9 @@ import constants as c
 import utilities as u
 
 
+MONTHS_MIN = 3
+MONTHS_REC = 6
+
 def liquid_plot(df_liq_in, df_list):
     """
         Creates a plot for the liquid evolution
@@ -59,12 +62,12 @@ def plot_expenses_vs_liquid(df_liquid_in, df_trans_in, avg_month):
 
     iter_data = [
         (df_t, df_t[c.cols.AMOUNT], c.names.EXPENSES, c.colors.EXPENSES),
-        (df_t, 3*df_t[c.cols.AMOUNT], c.names.LIQUID_MIN_REC, c.colors.LIQUID_MIN_REC),
-        (df_t, 6*df_t[c.cols.AMOUNT], c.names.LIQUID_REC, c.colors.LIQUID_REC),
+        (df_t, MONTHS_MIN*df_t[c.cols.AMOUNT], c.names.LIQUID_MIN_REC, c.colors.LIQUID_MIN_REC),
+        (df_t, MONTHS_REC*df_t[c.cols.AMOUNT], c.names.LIQUID_REC, c.colors.LIQUID_REC),
         (df_l, df_l[c.names.TOTAL], c.names.LIQUID, c.colors.LIQUID),
     ]
 
-    data = [go.Scatter(x=df.index, y=y, name=name, marker={"color": color})
+    data = [go.Scatter(x=df.index, y=y, name=name, marker={"color": color}, mode="lines")
             for df, y, name, color in iter_data]
 
     layout = go.Layout(title="Liquid vs Expenses")
@@ -91,7 +94,14 @@ def plot_months(df_liquid_in, df_trans_in, avg_month):
 
     serie = df_l[c.names.TOTAL]/df_t[c.cols.AMOUNT]
 
-    data = [go.Scatter(x=serie.index, y=serie)]
+    iter_data = [
+        (serie, "Months", c.colors.LIQUID),
+        ([MONTHS_MIN]*len(serie), "Minimum months of liquid", c.colors.LIQUID_MIN_REC),
+        ([MONTHS_REC]*len(serie), "Recommended months of liquid", c.colors.LIQUID_REC),
+    ]
+
+    data = [go.Scatter(x=serie.index, y=y, name=name, marker={"color": color}, mode="lines")
+            for y, name, color in iter_data]
 
     layout = go.Layout(title="Survival months with current liquid")
     return go.Figure(data=data, layout=layout)
