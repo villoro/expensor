@@ -56,6 +56,7 @@ def plot_expenses_vs_liquid(df_liquid_in, df_trans_in, avg_month):
     """
 
     df_l = df_liquid_in.set_index(c.cols.DATE).copy()
+    df_l = df_l.rolling(avg_month, min_periods=1).mean()
 
     df_t = u.dfs.group_df_by(df_trans_in[df_trans_in[c.cols.TYPE] == c.names.EXPENSES], "M")
     df_t = df_t.rolling(avg_month, min_periods=1).mean()
@@ -88,6 +89,7 @@ def plot_months(df_liquid_in, df_trans_in, avg_month):
     """
 
     df_l = df_liquid_in.set_index(c.cols.DATE).copy()
+    df_l = df_l.rolling(avg_month, min_periods=1).mean()
 
     df_t = u.dfs.group_df_by(df_trans_in[df_trans_in[c.cols.TYPE] == c.names.EXPENSES], "M")
     df_t = df_t.rolling(avg_month, min_periods=1).mean()
