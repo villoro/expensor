@@ -4,17 +4,50 @@
 
 This is a [dash](https://plot.ly/products/dash/) app that allows users to visualitze their expenses and/or incomes.
 
+It is possible to see a live demo here: [expensor_heroku](https://expensorpy.herokuapp.com/)
+
 ![Demo](images/demo.gif)
 
 ## Usage
-You can upload your data using an ```Excel file (.xlsx)``` which should at least have 3 sheets:
-* **liquid_list**
-* **liquid_m**
-* **trans_m**
+You can upload your data using an ```Excel file (.xlsx)``` which should at least have 4 sheets:
+* **trans_m:** all transactions made
+* **trans_categ:** categories present in the transactions
+* **liquid_list:** accounts where money is stored
+* **liquid_m:** list with money avaiable in every account through every month
 
 All columns names **MUST** be exactly equal as the examples below. You can use the [sample_data](https://github.com/villoro/expensor/blob/master/sample_data/data.xlsx) file as a template
 
-For all the  dates columns is better to use reversed order (**YYYY/MM/DD**).
+For all the dates columns is better to use reversed order (**YYYY/MM/DD**).
+
+### trans_m
+This sheet should at least have the following columns:
+
+| Date       | Amount | Category |
+|------------|--------|----------|
+| 2017/01/01 | -500   | Rent     |
+| 2017/02/01 | -500   | Rent     |
+| 2017/03/01 | -500   | Rent     |
+| 2017/01/01 | 1150   | Salary   |
+| 2017/02/01 | 1250   | Salary   |
+
+It is important to notice that **incomes** have **positive** amount while **expenses** are **negative**.
+
+### trans_categ
+This sheet should be a list of all categories present in the transactions table. It needs those columns:
+* **Name:** name of the category
+* **Type:** _Expenses_ / _Incomes_
+* **Color name:** name of the color
+* **Color Index:** index of the color
+
+| Name      | Type     | Color Name | Color Index | Fixed |
+|-----------|----------|------------|-------------|-------|
+|    Rent   | Expenses | yellow     | 300         | true  |
+|   Bills   | Expenses | orange     | 300         | true  |
+|    Food   | Expenses | light blue | 200         | true  |
+| Transport | Expenses | light blue | 500         | true  |
+| Health    | Expenses | green      | 300         | true  |
+
+The names and index used for colors can be found here [Android Colors](https://material.io/design/color/the-color-system.html#tools-for-picking-colors).
 
 ### liquid_list
 This sheet should be a list of all accounts where you store liquid. It should have these three columns:
@@ -42,18 +75,6 @@ In this sheet the program is expecting a **Date** column and one column for each
 | 05/2017 | 6916,00 | 1571                  | 878                 | 2000        | 1000           | 987                  |
 | 06/2017 | 4216,00 | 1268                  | 690                 | 500         | 500            | 823                  |
 
-### trans_m
-This sheet should at least have the following columns:
-
-| Date       | Amount | Category |
-|------------|--------|----------|
-| 2017/01/01 | -500   | Rent     |
-| 2017/02/01 | -500   | Rent     |
-| 2017/03/01 | -500   | Rent     |
-| 2017/01/01 | 1150   | Salary   |
-| 2017/02/01 | 1250   | Salary   |
-
-It is important to notice that **incomes** have **positive** amount while **expenses** are **negative**.
 
 ## Install
 1. Download the code 
