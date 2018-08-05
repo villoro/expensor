@@ -9,7 +9,7 @@ It is possible to see a live demo here: [expensor_heroku](https://expensorpy.her
 ![Demo](images/demo.gif)
 
 ## Usage
-You can upload your data using an ```Excel file (.xlsx)``` which should at least have 3 sheets:
+You can upload your data using an ```Excel file (.xlsx)``` which should at least have 4 sheets:
 * **trans_m:** all transactions made
 * **trans_categ:** categories present in the transactions
 * **liquid_list:** accounts where money is stored

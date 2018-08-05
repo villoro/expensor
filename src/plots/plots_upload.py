@@ -7,7 +7,7 @@ import plotly.graph_objs as go
 import constants as c
 
 
-def table_transactions(dfg, name, n_rows=50):
+def plot_table(dfg, name, n_rows=50, header=False):
     """
         Creates a table with transactions
 
@@ -31,7 +31,12 @@ def table_transactions(dfg, name, n_rows=50):
 
     data = go.Table(header=header, cells=cells)
 
-    title = "{} preview (showing {} of {} rows)".format(name, n_rows, dfg.shape[0])
-    layout = go.Layout(title=title, height=300 + 10*n_rows)
+    if not header:
+        title = "{} preview (showing {} of {} rows)".format(name, n_rows, dfg.shape[0])
+        layout = go.Layout(title=title, height=300 + 10*n_rows)
+
+    else:
+        layout = go.Layout(height=150,
+                           margin=go.Margin(l=0, r=0, b=0, t=0))
 
     return {"data": [data], "layout": layout}

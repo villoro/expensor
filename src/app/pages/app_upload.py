@@ -2,6 +2,7 @@
     Dash app
 """
 
+import pandas as pd
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State, Event
@@ -51,7 +52,6 @@ def get_content(app):
         html.Div(id="upload_results", style=DICT_SHOW[True])
     ]
 
-
     @app.callback(Output("upload_results", "children"),
                   [Input("upload_container", "contents"),
                    Input("upload_container", "filename")])
@@ -67,16 +67,20 @@ def get_content(app):
         """
         # When there is no data, show tutorial
         if (contents is None) or (filename is None):
-            return html.Div(
-                [
-                    dcc.Markdown(c.upload.INSTRUCTIONS_P1),
-                    html.Img(src=u.uos.get_image(c.os.IMAGE_EXAMPLE_LIQUID_LIST)),
-                    dcc.Markdown(c.upload.INSTRUCTIONS_P2),
-                    html.Img(src=u.uos.get_image(c.os.IMAGE_EXAMPLE_LIQUID)),
-                    dcc.Markdown(c.upload.INSTRUCTIONS_P3),
-                    html.Img(src=u.uos.get_image(c.os.IMAGE_EXAMPLE_TRANS)),
-                    dcc.Markdown(c.upload.INSTRUCTIONS_P4),
-                ], style=styles.STYLE_UPLOAD_INFO)
+
+            dfs = {sheet: pd.read_excel(c.os.FILE_DATA_SAMPLE, sheet) for sheet in c.dfs.ALL}
+
+            data = []
+            for instruc, name in zip(c.upload.INSTRUCTIONS_ALL, c.dfs.ALL):
+                data += [
+                    dcc.Markdown(instruc),
+                    dcc.Graph(
+                        id="upload_plot_demo_{}".format(name), config=uiu.PLOT_CONFIG,
+                        figure=plots.plot_table(dfs[name], name, n_rows=5, header=True)
+                    )
+                ]
+
+            return html.Div(data, style=styles.STYLE_UPLOAD_INFO)
 
         # When data is updated, show the message
         if contents == c.os.CONTENT_UPDATED:
@@ -93,7 +97,7 @@ def get_content(app):
 
             out.append(dcc.Graph(
                 id="upload_plot_{}".format(name), config=uiu.PLOT_CONFIG,
-                figure=plots.table_transactions(df, name)
+                figure=plots.plot_table(df, name)
             ))
 
         # return a list with a plot for every df read
