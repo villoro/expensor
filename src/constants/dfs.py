@@ -7,4 +7,4 @@ LIQUID = "liquid_m"
 LIQUID_LIST = "liquid_list"
 CATEG = "trans_categ"
 
-ALL = [LIQUID_LIST, LIQUID, TRANS, CATEG]
+ALL = [TRANS, CATEG, LIQUID_LIST, LIQUID]

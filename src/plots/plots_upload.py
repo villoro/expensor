@@ -7,12 +7,14 @@ import plotly.graph_objs as go
 import constants as c
 
 
-def table_transactions(dfg, name, n_rows=50):
+def plot_table(dfg, name, n_rows=50, with_header=True):
     """
         Creates a table with transactions
 
         Args:
-            dfg:        dataframe to use
+            dfg:            dataframe to use
+            n_rows:         number of rows to show
+            with_header:    display titles and use a big table
 
         Returns:
             the plotly plot as html-div format
@@ -31,7 +33,12 @@ def table_transactions(dfg, name, n_rows=50):
 
     data = go.Table(header=header, cells=cells)
 
-    title = "{} preview (showing {} of {} rows)".format(name, n_rows, dfg.shape[0])
-    layout = go.Layout(title=title, height=300 + 10*n_rows)
+    if with_header:
+        title = "{} preview (showing {} of {} rows)".format(name, n_rows, dfg.shape[0])
+        layout = go.Layout(title=title, height=300 + 10*n_rows)
+
+    else:
+        layout = go.Layout(height=150,
+                           margin=go.Margin(l=0, r=0, b=0, t=0))
 
     return {"data": [data], "layout": layout}
