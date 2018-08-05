@@ -9,7 +9,7 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-import constants as c
+import src.constants as c
 
 SELENIUM_PATH_IN_TRAVIS = '/home/travis/selenium/chromedriver'
 
