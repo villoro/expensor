@@ -76,7 +76,7 @@ def get_content(app):
                     dcc.Markdown(instruc),
                     dcc.Graph(
                         id="upload_plot_demo_{}".format(name), config=uiu.PLOT_CONFIG,
-                        figure=plots.plot_table(dfs[name], name, n_rows=5, header=True)
+                        figure=plots.plot_table(dfs[name], name, n_rows=5, with_header=True)
                     )
                 ]
 
