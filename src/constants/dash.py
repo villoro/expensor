@@ -2,6 +2,8 @@
     OS related constants
 """
 
+LINK_ROOT = "http://localhost:8050"
+
 LINK_MAIN = "/"
 LINK_UPLOAD = "/upload"
 LINK_EVOLUTION = "/evolution"

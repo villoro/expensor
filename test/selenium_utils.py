@@ -9,6 +9,8 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
+import constants as c
+
 SELENIUM_PATH_IN_TRAVIS = '/home/travis/selenium/chromedriver'
 
 def get_chrome_webdriver(headless, driver_path=None):
@@ -40,6 +42,27 @@ def get_chrome_webdriver(headless, driver_path=None):
     return webdriver.Chrome()
 
 
+
+def wait_until_loaded(driver, max_retries=30):
+    """
+        It will wait until the dash page is loaded
+
+        Args:
+            max_retries:    number of retries (of 1 second)
+
+        Returns:
+            True if it was able to load the page
+    """
+
+    for _ in range(max_retries):
+        sleep(1)
+
+        if 'Updating...' not in driver.title:
+            return True
+
+    return False
+
+
 def open_dash(headless=False):
     """
         Starts a chrome web driver and opens the dash app. Then it waits until the app is loaded
@@ -59,13 +82,8 @@ def open_dash(headless=False):
         driver = get_chrome_webdriver(headless)
 
     # Open dash app
-    driver.get("http://localhost:8050/")
+    driver.get(c.dash.LINK_ROOT)
 
-    # Wait until dash is opened
-    for _ in range(30):
-        sleep(1)
-
-        if 'Updating...' not in driver.title:
-            break
+    wait_until_loaded(driver)
 
     return driver
