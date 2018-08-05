@@ -12,3 +12,4 @@ __pycache__
 coverage.xml
 nosetests.xml
 pylint.xml
+*.exe
