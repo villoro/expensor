@@ -40,6 +40,6 @@ def plot_table(dfg, name, n_rows=50, with_header=True):
 
     else:
         layout = go.Layout(height=150,
-                           margin=go.Margin(l=0, r=0, b=0, t=0))
+                           margin=go.layout.Margin(l=0, r=0, b=0, t=0))
 
     return {"data": [data], "layout": layout}
