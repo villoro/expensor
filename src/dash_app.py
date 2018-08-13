@@ -18,16 +18,10 @@ def create_dash_app():
     app = Dash("auth")
     app.config.supress_callback_exceptions = True
 
-    # Load sample data
-    dfs = {sheet: pd.read_excel(c.io.FILE_DATA_SAMPLE, sheet) for sheet in c.dfs.ALL}
-
-    # Fix transactions
-    dfs[c.dfs.TRANS] = u.dfs.fix_df_trans(dfs[c.dfs.TRANS])
-
-    # Transformt to b64 in order to store data
-    dfs = {sheet: u.uos.df_to_b64(df) for sheet, df in dfs.items()}
+    # Load, fix and transform to b64 the transactions dataframe
+    df = u.dfs.fix_df_trans(pd.read_excel(c.io.FILE_DATA_SAMPLE))
 
     app.title = c.names.TITLE
-    app.layout = layout.get_layout(dfs)
+    app.layout = layout.get_layout(df)
 
-    return app
+    return app, df

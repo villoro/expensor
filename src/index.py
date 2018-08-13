@@ -11,11 +11,11 @@ import constants as c
 
 
 # Create dash app with styles
-APP = create_dash_app()
+APP, DFG = create_dash_app()
 SERVER = APP.server
 
 # Add pages with content, sidebar and callbacks
-PAGES = get_pages(APP)
+PAGES = get_pages(APP, DFG)
 
 @APP.callback(Output('page-content', 'children'),
               [Input('url', 'pathname')])

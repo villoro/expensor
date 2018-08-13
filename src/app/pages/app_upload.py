@@ -191,7 +191,7 @@ def get_content(app):
         return u.uos.df_to_b64(df)
 
 
-    @app.callback(Output("global_df_trans", "children"),
+    @app.callback(Output("global_df", "children"),
                   [],
                   [State("upload_container", "contents"),
                    State('upload_container', 'filename')],

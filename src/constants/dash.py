@@ -10,9 +10,8 @@ LINK_EVOLUTION = "/evolution"
 LINK_COMPARISON = "/comparison"
 LINK_HEATMAPS = "/heatmaps"
 LINK_PIES = "/pies"
-LINK_LIQUID = "/liquid"
 
-LANDING_APP = LINK_UPLOAD
+LANDING_APP = LINK_COMPARISON
 
 NUM_DICT = {
     1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six",
@@ -20,7 +19,7 @@ NUM_DICT = {
 }
 
 LINKS_ALL = [
-    LINK_UPLOAD, LINK_EVOLUTION, LINK_COMPARISON, LINK_PIES, LINK_HEATMAPS, LINK_LIQUID
+    LINK_UPLOAD, LINK_EVOLUTION, LINK_COMPARISON, LINK_PIES, LINK_HEATMAPS
 ]
 
 DICT_APPS = {"{}. {}".format(i + 1, x[1:].title()): x for i, x in enumerate(LINKS_ALL)}

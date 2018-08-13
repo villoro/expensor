@@ -14,7 +14,7 @@ from plots import plots_evolution as plots
 LINK = c.dash.LINK_EVOLUTION
 
 
-def get_content(app):
+def get_content(app, dfg):
     """
         Creates the page
 
@@ -41,7 +41,10 @@ def get_content(app):
     ]
 
     sidebar = [
-        ("Categories", dcc.Dropdown(id="drop_evol_categ", multi=True)),
+        ("Categories", dcc.Dropdown(
+            id="drop_evol_categ", multi=True,
+            options=uiu.get_options(dfg[c.cols.CATEGORY].unique())
+        )),
         ("Group by", dcc.RadioItems(
             id="radio_evol_tw", value="M",
             options=[{"label": "Day", "value": "D"},
@@ -52,66 +55,44 @@ def get_content(app):
     ]
 
 
-    @app.callback(Output("drop_evol_categ", "options"),
-                  [Input("global_categories", "children"),
-                   Input("evo_aux", "children")])
-    #pylint: disable=unused-variable,unused-argument
-    def update_categories(df_categ, aux):
-        """
-            Updates categories dropdown with the actual categories
-        """
-
-        df = u.uos.b64_to_df(df_categ)
-
-        return uiu.get_options(df[c.cols.NAME].unique())
-
-
     @app.callback(Output("plot_evol", "figure"),
-                  [Input("global_df_trans", "children"),
+                  [Input("global_df", "children"),
                    Input("drop_evol_categ", "value"),
                    Input("radio_evol_tw", "value"),
                    Input("evo_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
-    def update_timeserie_plot(df_trans, categories, timewindow, aux):
+    def update_timeserie_plot(df_in, categories, timewindow, aux):
         """
             Updates the timeserie plot
 
             Args:
-                df_trans:   transactions dataframe
+                df_in:      transactions dataframe
                 categories:	categories to use
                 timewindow:	timewindow to use for grouping
         """
 
-        df = u.uos.b64_to_df(df_trans)
-        df = u.dfs.filter_data(df, categories)
-
+        df = u.dfs.filter_data(u.uos.b64_to_df(df_in), categories)
         return plots.plot_timeserie(df, timewindow)
 
 
     @app.callback(Output("plot_evo_detail", "figure"),
-                  [Input("global_df_trans", "children"),
-                   Input("global_categories", "children"),
+                  [Input("global_df", "children"),
                    Input("drop_evol_categ", "value"),
                    Input("radio_evol_type", "value"),
                    Input("radio_evol_tw", "value")])
     #pylint: disable=unused-variable,unused-argument
-    def update_ts_by_categories_plot(df_trans, df_categ, categories, type_trans, timewindow):
+    def update_ts_by_categories_plot(df_in, categories, type_trans, timewindow):
         """
             Updates the timeserie by categories plot
 
             Args:
-                df_trans:   transactions dataframe
-                df_categ:   categories dataframe
                 categories: categories to use
                 type_trans: type of transacions [Expenses/Inc]
                 timewindow: timewindow to use for grouping
         """
 
-        df = u.uos.b64_to_df(df_trans)
-        df = u.dfs.filter_data(df, categories)
-        df_cat = u.uos.b64_to_df(df_categ)
-
-        return plots.plot_timeserie_by_categories(df, df_cat, type_trans, timewindow)
+        df = u.dfs.filter_data(u.uos.b64_to_df(df_in), categories)
+        return plots.plot_timeserie_by_categories(df, type_trans, timewindow)
 
     return {
         c.dash.DUMMY_DIV: "evo_aux",

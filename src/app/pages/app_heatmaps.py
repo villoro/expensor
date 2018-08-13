@@ -14,7 +14,7 @@ from plots import plots_heatmaps as plots
 LINK = c.dash.LINK_HEATMAPS
 
 
-def get_content(app):
+def get_content(app, dfg):
     """
         Creates the page
 
@@ -38,80 +38,62 @@ def get_content(app):
         dcc.Graph(id="plot_heat_distribution", config=uiu.PLOT_CONFIG),
     ]
 
-    sidebar = [("Categories", dcc.Dropdown(id="drop_heat_categ", multi=True))]
-
-
-    @app.callback(Output("drop_heat_categ", "options"),
-                  [Input("global_categories", "children"),
-                   Input("heat_aux", "children")])
-    #pylint: disable=unused-variable,unused-argument
-    def update_categories(df_categ, aux):
-        """
-            Updates categories dropdown with the actual categories
-        """
-
-        df = u.uos.b64_to_df(df_categ)
-
-        return uiu.get_options(df[c.cols.NAME].unique())
+    sidebar = [
+        ("Categories", dcc.Dropdown(
+            id="drop_heat_categ", multi=True,
+            options=uiu.get_options(dfg[c.cols.CATEGORY].unique())
+        ))
+    ]
 
 
     @app.callback(Output("plot_heat_i", "figure"),
-                  [Input("global_df_trans", "children"),
+                  [Input("global_df", "children"),
                    Input("drop_heat_categ", "value"),
                    Input("heat_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
-    def update_heatmap_i(df_trans, categories, aux):
+    def update_heatmap_i(df_in, categories, aux):
         """
             Updates the incomes heatmap
 
             Args:
-                df_trans:   transactions dataframe
+                df_in:      transactions dataframe
                 categories: categories to use
         """
-
-        df = u.uos.b64_to_df(df_trans)
-        df = u.dfs.filter_data(df, categories)
-
+        df = u.dfs.filter_data(u.uos.b64_to_df(df_in), categories)
         return plots.get_heatmap(df, c.names.INCOMES)
 
 
     @app.callback(Output("plot_heat_e", "figure"),
-                  [Input("global_df_trans", "children"),
+                  [Input("global_df", "children"),
                    Input("drop_heat_categ", "value"),
                    Input("heat_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
-    def update_heatmap_e(df_trans, categories, aux):
+    def update_heatmap_e(df_in, categories, aux):
         """
             Updates the expenses heatmap
 
             Args:
-                df_trans:   transactions dataframe
+                df_in:      transactions dataframe
                 categories: categories to use
         """
-
-        df = u.uos.b64_to_df(df_trans)
-        df = u.dfs.filter_data(df, categories)
-
+        df = u.dfs.filter_data(u.uos.b64_to_df(df_in), categories)
         return plots.get_heatmap(df, c.names.EXPENSES)
 
 
     @app.callback(Output("plot_heat_distribution", "figure"),
-                  [Input("global_df_trans", "children"),
+                  [Input("global_df", "children"),
                    Input("drop_heat_categ", "value"),
                    Input("heat_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
-    def update_distplot(df_trans, categories, aux):
+    def update_distplot(df_in, categories, aux):
         """
             Updates the distribution plot
 
             Args:
-                df_trans:   transactions dataframe
+                df_in:      transactions dataframe
                 categories: categories to use
         """
-
-        df = u.uos.b64_to_df(df_trans)
-        df = u.dfs.filter_data(df, categories)
-
+        df = u.dfs.filter_data(u.uos.b64_to_df(df_in), categories)
         return plots.dist_plot(df)
 
     return {

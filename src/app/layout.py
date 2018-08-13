@@ -6,9 +6,10 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 import constants as c
+from utilities.uos import df_to_b64
 
 
-def get_layout(dfs):
+def get_layout(df):
     """
         Creates the dash layout
 
@@ -34,9 +35,6 @@ def get_layout(dfs):
         # Others
         dcc.Location(id='url', refresh=False),
 
-        # Hidden divs with data
-        html.Div(dfs[c.dfs.TRANS], id="global_df_trans", style=c.styles.STYLE_HIDDEN),
-        html.Div(dfs[c.dfs.CATEG], id="global_categories", style=c.styles.STYLE_HIDDEN),
-        html.Div(dfs[c.dfs.LIQUID], id="global_df_liquid", style=c.styles.STYLE_HIDDEN),
-        html.Div(dfs[c.dfs.LIQUID_LIST], id="global_df_liquid_list", style=c.styles.STYLE_HIDDEN),
+        # Hidden div with data
+        html.Div(df_to_b64(df), id="global_df", style=c.styles.STYLE_HIDDEN),
     ])
