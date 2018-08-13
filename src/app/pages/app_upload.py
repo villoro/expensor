@@ -70,11 +70,12 @@ def get_content(app, dfg):
             df = pd.read_excel(c.io.FILE_DATA_SAMPLE)
 
             data = [
-                dcc.Markdown(""),
+                dcc.Markdown(c.upload.INSTRUCTIONS_1),
                 dcc.Graph(
                     id="upload_plot_demo", config=uiu.PLOT_CONFIG,
                     figure=plots.plot_table(df, n_rows=5, with_header=False)
-                )
+                ),
+                dcc.Markdown(c.upload.INSTRUCTIONS_2)
             ]
 
             return html.Div(data, style=c.styles.STYLE_UPLOAD_INFO)
