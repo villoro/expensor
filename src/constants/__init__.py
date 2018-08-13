@@ -8,6 +8,5 @@ from constants import io
 from constants import colors
 from constants import names
 from constants import dash
-from constants import dfs
 from constants import upload
 from constants import styles

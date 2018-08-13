@@ -82,14 +82,6 @@ class TestApp(unittest.TestCase):
         self.check_one_page(c.dash.LINK_PIES, body_elem + sidebar_elem)
 
 
-    def test_page_liquid(self):
-        """ Test the content of page liquid """
-
-        body_elem = ["plot_liquid_evo", "plot_liquid_vs_expenses", "plot_liquid_months"]
-        #sidebar_elem = ["slider_liq_rolling_avg"]
-        self.check_one_page(c.dash.LINK_LIQUID, body_elem)# + sidebar_elem)
-
-
 
 if __name__ == '__main__':
     unittest.main()
