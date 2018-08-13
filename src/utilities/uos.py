@@ -81,11 +81,11 @@ def parse_dataframe_uploaded(contents, filename, sheet):
             return pd.read_excel(data, sheet)
 
         except Exception: #pylint: disable=W0703
-            return c.os.ERROR_UNPARSABLE
+            return c.io.ERROR_UNPARSABLE
 
     # For unkown file extension throw an error message
     else:
-        return c.os.ERROR_EXTENSION
+        return c.io.ERROR_EXTENSION
 
 
 def df_to_b64(df):

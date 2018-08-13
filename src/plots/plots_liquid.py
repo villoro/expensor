@@ -56,10 +56,10 @@ def plot_expenses_vs_liquid(df_liquid_in, df_trans_in, avg_month):
     """
 
     df_l = df_liquid_in.set_index(c.cols.DATE).copy()
-    df_l = df_l.rolling(avg_month, min_periods=1).mean()
+    df_l = df_l.rolling(avg_month, min_periods=1).mean().apply(lambda x: round(x, 2))
 
     df_t = u.dfs.group_df_by(df_trans_in[df_trans_in[c.cols.TYPE] == c.names.EXPENSES], "M")
-    df_t = df_t.rolling(avg_month, min_periods=1).mean()
+    df_t = df_t.rolling(avg_month, min_periods=1).mean().apply(lambda x: round(x, 2))
 
     iter_data = [
         (df_t, df_t[c.cols.AMOUNT], c.names.EXPENSES, c.colors.EXPENSES),
@@ -89,10 +89,10 @@ def plot_months(df_liquid_in, df_trans_in, avg_month):
     """
 
     df_l = df_liquid_in.set_index(c.cols.DATE).copy()
-    df_l = df_l.rolling(avg_month, min_periods=1).mean()
+    df_l = df_l.rolling(avg_month, min_periods=1).mean().apply(lambda x: round(x, 2))
 
     df_t = u.dfs.group_df_by(df_trans_in[df_trans_in[c.cols.TYPE] == c.names.EXPENSES], "M")
-    df_t = df_t.rolling(avg_month, min_periods=1).mean()
+    df_t = df_t.rolling(avg_month, min_periods=1).mean().apply(lambda x: round(x, 2))
 
     serie = df_l[c.names.TOTAL]/df_t[c.cols.AMOUNT]
 

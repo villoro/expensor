@@ -9,18 +9,17 @@ from dash.dependencies import Input, Output, State, Event
 
 import constants as c
 import utilities as u
-from static import styles
 from app import ui_utils as uiu
 from plots import plots_upload as plots
 
 
 LINK = c.dash.LINK_UPLOAD
 
-STYLE_PADDING_VERTICAL = {"margin-top": "{}px".format(styles.PADDING_V)}
+STYLE_PADDING_VERTICAL = {"margin-top": "{}px".format(c.styles.PADDING_V)}
 
 DICT_SHOW = {
     True: STYLE_PADDING_VERTICAL,
-    False: styles.STYLE_HIDDEN,
+    False: c.styles.STYLE_HIDDEN,
 }
 
 
@@ -44,7 +43,7 @@ def get_content(app):
                     'Drag and Drop or ',
                     html.A('Select a File')
                 ]),
-                style=styles.STYLE_UPLOAD_CONTAINER,
+                style=c.styles.STYLE_UPLOAD_CONTAINER,
                 id="upload_container"
             ),
             html.Button('Use this file', id='upload_button', style=STYLE_PADDING_VERTICAL),
@@ -68,7 +67,7 @@ def get_content(app):
         # When there is no data, show tutorial
         if (contents is None) or (filename is None):
 
-            dfs = {sheet: pd.read_excel(c.os.FILE_DATA_SAMPLE, sheet) for sheet in c.dfs.ALL}
+            dfs = {sheet: pd.read_excel(c.io.FILE_DATA_SAMPLE, sheet) for sheet in c.dfs.ALL}
 
             data = []
             for instruc, name in zip(c.upload.INSTRUCTIONS_ALL, c.dfs.ALL):
@@ -80,11 +79,11 @@ def get_content(app):
                     )
                 ]
 
-            return html.Div(data, style=styles.STYLE_UPLOAD_INFO)
+            return html.Div(data, style=c.styles.STYLE_UPLOAD_INFO)
 
         # When data is updated, show the message
-        if contents == c.os.CONTENT_UPDATED:
-            return c.os.CONTENT_UPDATED
+        if contents == c.io.CONTENT_UPDATED:
+            return c.io.CONTENT_UPDATED
 
         out = []
 
@@ -113,7 +112,7 @@ def get_content(app):
                 filename:   name of the file updated
         """
 
-        if (contents is None) or (filename is None) or (contents == c.os.CONTENT_UPDATED):
+        if (contents is None) or (filename is None) or (contents == c.io.CONTENT_UPDATED):
             return None
 
         df = u.uos.parse_dataframe_uploaded(contents, filename, df_name)
@@ -166,7 +165,7 @@ def get_content(app):
         for name in c.dfs.ALL:
             result &= False if check_contents(contents, filename, name) is None else True
 
-        return c.os.CONTENT_UPDATED if result is not None else None
+        return c.io.CONTENT_UPDATED if result is not None else None
 
 
     @app.callback(Output("global_categories", "children"),

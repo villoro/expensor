@@ -15,6 +15,7 @@ def get_pie(dfg, df_categ, type_trans, years=None):
             dfg:        dataframe to use
             df_categ:   categories dataframe
             type_trans: type of transaction [Income/Expense]
+            years:      years to include in the plot
 
         Returns:
             the plotly plot as html-div format
