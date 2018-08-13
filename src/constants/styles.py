@@ -4,9 +4,6 @@
 
 from utilities.upalette import get_colors
 
-# This file is equivalent to static/styles.css
-STYLE_URL = 'https://codepen.io/villoro/pen/JBEpob.css'
-
 HEIGHT_HEADER = 75
 HEIGHT_FILTERS = 0
 WIDTH_SIDEBAR = 350

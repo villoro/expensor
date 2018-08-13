@@ -5,7 +5,6 @@
 import dash_core_components as dcc
 import dash_html_components as html
 
-from static import styles
 import constants as c
 
 PLOT_CONFIG = {
@@ -19,7 +18,7 @@ def get_dummy_div(name, value="Dummy"):
         Creates a dummy div that will be used to draw plots when a page is loaded
         using the callbacks in the page
     """
-    return html.Div(value, id=name, style=styles.STYLE_HIDDEN)
+    return html.Div(value, id=name, style=c.styles.STYLE_HIDDEN)
 
 
 def get_options(iterable):
@@ -50,7 +49,7 @@ def create_sidebar(kwa):
         aux = html.H6(title + ":")
         children = [aux] + data if isinstance(data, list) else [aux, data]
 
-        return html.Div(children, style=styles.STYLE_SIDEBAR_ELEM)
+        return html.Div(children, style=c.styles.STYLE_SIDEBAR_ELEM)
 
     elements = [
         ("Sections", [
@@ -76,7 +75,7 @@ def create_body(datalist, dummy_div_name):
             html div with the element
     """
 
-    elem_style = styles.STYLE_DIV_CONTROL_IN_BODY
+    elem_style = c.styles.STYLE_DIV_CONTROL_IN_BODY
 
     out = [html.Div(data, className="row", style=elem_style) for data in datalist]
 

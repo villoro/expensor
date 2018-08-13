@@ -12,7 +12,7 @@ class TestApp(unittest.TestCase):
 
     def test_title(self):
         """ Test that the app is able to load """
-        self.assertEqual("Dash", self.driver.title)
+        self.assertEqual(c.names.TITLE, self.driver.title)
 
 
     def test_pages(self):

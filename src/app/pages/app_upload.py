@@ -9,18 +9,17 @@ from dash.dependencies import Input, Output, State, Event
 
 import constants as c
 import utilities as u
-from static import styles
 from app import ui_utils as uiu
 from plots import plots_upload as plots
 
 
 LINK = c.dash.LINK_UPLOAD
 
-STYLE_PADDING_VERTICAL = {"margin-top": "{}px".format(styles.PADDING_V)}
+STYLE_PADDING_VERTICAL = {"margin-top": "{}px".format(c.styles.PADDING_V)}
 
 DICT_SHOW = {
     True: STYLE_PADDING_VERTICAL,
-    False: styles.STYLE_HIDDEN,
+    False: c.styles.STYLE_HIDDEN,
 }
 
 
@@ -44,7 +43,7 @@ def get_content(app):
                     'Drag and Drop or ',
                     html.A('Select a File')
                 ]),
-                style=styles.STYLE_UPLOAD_CONTAINER,
+                style=c.styles.STYLE_UPLOAD_CONTAINER,
                 id="upload_container"
             ),
             html.Button('Use this file', id='upload_button', style=STYLE_PADDING_VERTICAL),
@@ -80,7 +79,7 @@ def get_content(app):
                     )
                 ]
 
-            return html.Div(data, style=styles.STYLE_UPLOAD_INFO)
+            return html.Div(data, style=c.styles.STYLE_UPLOAD_INFO)
 
         # When data is updated, show the message
         if contents == c.os.CONTENT_UPDATED:
