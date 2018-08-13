@@ -53,7 +53,7 @@ def delete_if_possible(uri):
     return False
 
 
-def parse_dataframe_uploaded(contents, filename, sheet):
+def parse_dataframe_uploaded(contents, filename):
     """
         Tries to parse a dataframe from a file uploaded
 
@@ -78,7 +78,7 @@ def parse_dataframe_uploaded(contents, filename, sheet):
     # Try to read it as an excel file
     if extension == "xlsx":
         try:
-            return pd.read_excel(data, sheet)
+            return pd.read_excel(data)
 
         except Exception: #pylint: disable=W0703
             return c.io.ERROR_UNPARSABLE

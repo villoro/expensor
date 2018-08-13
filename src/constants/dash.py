@@ -11,7 +11,7 @@ LINK_COMPARISON = "/comparison"
 LINK_HEATMAPS = "/heatmaps"
 LINK_PIES = "/pies"
 
-LANDING_APP = LINK_COMPARISON
+LANDING_APP = LINK_UPLOAD
 
 NUM_DICT = {
     1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six",
