@@ -67,7 +67,7 @@ def get_content(app):
         # When there is no data, show tutorial
         if (contents is None) or (filename is None):
 
-            dfs = {sheet: pd.read_excel(c.os.FILE_DATA_SAMPLE, sheet) for sheet in c.dfs.ALL}
+            dfs = {sheet: pd.read_excel(c.io.FILE_DATA_SAMPLE, sheet) for sheet in c.dfs.ALL}
 
             data = []
             for instruc, name in zip(c.upload.INSTRUCTIONS_ALL, c.dfs.ALL):
@@ -82,8 +82,8 @@ def get_content(app):
             return html.Div(data, style=c.styles.STYLE_UPLOAD_INFO)
 
         # When data is updated, show the message
-        if contents == c.os.CONTENT_UPDATED:
-            return c.os.CONTENT_UPDATED
+        if contents == c.io.CONTENT_UPDATED:
+            return c.io.CONTENT_UPDATED
 
         out = []
 
@@ -112,7 +112,7 @@ def get_content(app):
                 filename:   name of the file updated
         """
 
-        if (contents is None) or (filename is None) or (contents == c.os.CONTENT_UPDATED):
+        if (contents is None) or (filename is None) or (contents == c.io.CONTENT_UPDATED):
             return None
 
         df = u.uos.parse_dataframe_uploaded(contents, filename, df_name)
@@ -165,7 +165,7 @@ def get_content(app):
         for name in c.dfs.ALL:
             result &= False if check_contents(contents, filename, name) is None else True
 
-        return c.os.CONTENT_UPDATED if result is not None else None
+        return c.io.CONTENT_UPDATED if result is not None else None
 
 
     @app.callback(Output("global_categories", "children"),

@@ -19,7 +19,7 @@ def create_dash_app():
     app.config.supress_callback_exceptions = True
 
     # Load sample data
-    dfs = {sheet: pd.read_excel(c.os.FILE_DATA_SAMPLE, sheet) for sheet in c.dfs.ALL}
+    dfs = {sheet: pd.read_excel(c.io.FILE_DATA_SAMPLE, sheet) for sheet in c.dfs.ALL}
 
     # Fix transactions
     dfs[c.dfs.TRANS] = u.dfs.fix_df_trans(dfs[c.dfs.TRANS])

@@ -13,6 +13,7 @@ def plot_table(dfg, name, n_rows=50, with_header=True):
 
         Args:
             dfg:            dataframe to use
+            name:           name of the table to show
             n_rows:         number of rows to show
             with_header:    display titles and use a big table
 
