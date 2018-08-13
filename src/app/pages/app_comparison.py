@@ -14,7 +14,7 @@ from plots import plots_comparison as plots
 LINK = c.dash.LINK_COMPARISON
 
 
-def get_content(app):
+def get_content(app, dfg):
     """
         Creates the page
 
@@ -46,7 +46,10 @@ def get_content(app):
     ]
 
     sidebar = [
-        ("Categories", dcc.Dropdown(id="drop_comp_categ", multi=True)),
+        ("Categories", dcc.Dropdown(
+            id="drop_comp_categ", multi=True,
+            options=uiu.get_options(dfg[c.cols.CATEGORY].unique())
+        )),
         ("Rolling Average", dcc.Slider(
             id="slider_comp_rolling_avg",
             min=1, max=12, value=1,
@@ -55,61 +58,47 @@ def get_content(app):
     ]
 
 
-    @app.callback(Output("drop_comp_categ", "options"),
-                  [Input("global_categories", "children"),
-                   Input("comp_aux", "children")])
-    #pylint: disable=unused-variable,unused-argument
-    def update_categories(df_categ, aux):
-        """
-            Updates categories dropdown with the actual categories
-        """
-
-        df = u.uos.b64_to_df(df_categ)
-
-        return uiu.get_options(df[c.cols.NAME].unique())
-
-
     @app.callback(Output("plot_comp_i", "figure"),
-                  [Input("global_df_trans", "children"),
+                  [Input("global_df", "children"),
                    Input("drop_comp_categ", "value"),
                    Input("slider_comp_rolling_avg", "value"),
                    Input("radio_comp_1", "value"),
                    Input("comp_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
-    def update_ts_grad_1(df_trans, categories, avg_month, type_trans, aux):
+    def update_ts_grad_1(df_in, categories, avg_month, type_trans, aux):
         """
             Updates the timeserie gradient plot
 
             Args:
-                df_trans:   transactions dataframe
+                df_in:      transactions dataframe
                 categories: categories to use
                 avg_month:  month to use in rolling average
         """
 
-        df = u.uos.b64_to_df(df_trans)
+        df = u.uos.b64_to_df(df_in)
         df = u.dfs.filter_data(df, categories)
 
         return plots.ts_gradient(df, type_trans, avg_month)
 
 
     @app.callback(Output("plot_comp_e", "figure"),
-                  [Input("global_df_trans", "children"),
+                  [Input("global_df", "children"),
                    Input("drop_comp_categ", "value"),
                    Input("slider_comp_rolling_avg", "value"),
                    Input("radio_comp_2", "value"),
                    Input("comp_aux", "children")])
     #pylint: disable=unused-variable,unused-argument
-    def update_ts_grad_2(df_trans, categories, avg_month, type_trans, aux):
+    def update_ts_grad_2(df_in, categories, avg_month, type_trans, aux):
         """
             Updates the timeserie gradient plot
 
             Args:
-                df_trans:   transactions dataframe
+                df_in:      transactions dataframe
                 categories: categories to use
                 avg_month:  month to use in rolling average
         """
 
-        df = u.uos.b64_to_df(df_trans)
+        df = u.uos.b64_to_df(df_in)
         df = u.dfs.filter_data(df, categories)
 
         return plots.ts_gradient(df, type_trans, avg_month)

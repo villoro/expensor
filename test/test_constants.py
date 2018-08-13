@@ -14,7 +14,7 @@ class TestConstants(unittest.TestCase):
         """
             Tests that Path data exists
         """
-        self.assertTrue(os.path.isfile(c.os.FILE_DATA_SAMPLE))
+        self.assertTrue(os.path.isfile(c.io.FILE_DATA_SAMPLE))
 
 
 

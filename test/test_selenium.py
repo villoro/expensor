@@ -12,7 +12,7 @@ class TestApp(unittest.TestCase):
 
     def test_title(self):
         """ Test that the app is able to load """
-        self.assertEqual("Dash", self.driver.title)
+        self.assertEqual(c.names.TITLE, self.driver.title)
 
 
     def test_pages(self):
@@ -80,14 +80,6 @@ class TestApp(unittest.TestCase):
         body_elem = ["drop_pie_1"] # "drop_pie_2", "plot_pie_1", "plot_pie_2"
         sidebar_elem = ["drop_pie_categ"]
         self.check_one_page(c.dash.LINK_PIES, body_elem + sidebar_elem)
-
-
-    def test_page_liquid(self):
-        """ Test the content of page liquid """
-
-        body_elem = ["plot_liquid_evo", "plot_liquid_vs_expenses", "plot_liquid_months"]
-        #sidebar_elem = ["slider_liq_rolling_avg"]
-        self.check_one_page(c.dash.LINK_LIQUID, body_elem)# + sidebar_elem)
 
 
 
