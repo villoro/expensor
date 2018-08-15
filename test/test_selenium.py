@@ -44,6 +44,12 @@ class TestApp(unittest.TestCase):
             self.driver.find_element_by_id(elem)
 
 
+    def test_page_upload(self):
+        """ Test the content of page upload """
+
+        self._check_one_page(c.dash.LINK_UPLOAD, ["upload_button", "upload_results"])
+
+
     def test_page_evolution(self):
         """ Test the content of page evolution """
 
