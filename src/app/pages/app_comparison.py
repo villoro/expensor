@@ -30,14 +30,14 @@ def get_content(app, dfg):
 
     content = [
         [
-            dcc.Graph(id="plot_comp_i", config=uiu.PLOT_CONFIG),
+            dcc.Graph(id="plot_comp_1", config=uiu.PLOT_CONFIG),
             dcc.RadioItems(
                 id="radio_comp_1", options=radio_opt,
                 value=c.names.INCOMES, labelStyle={'display': 'inline-block'}
             )
         ],
         [
-            dcc.Graph(id="plot_comp_e", config=uiu.PLOT_CONFIG),
+            dcc.Graph(id="plot_comp_2", config=uiu.PLOT_CONFIG),
             dcc.RadioItems(
                 id="radio_comp_2", options=radio_opt,
                 value=c.names.EXPENSES, labelStyle={'display': 'inline-block'}
@@ -58,7 +58,7 @@ def get_content(app, dfg):
     ]
 
 
-    @app.callback(Output("plot_comp_i", "figure"),
+    @app.callback(Output("plot_comp_1", "figure"),
                   [Input("global_df", "children"),
                    Input("drop_comp_categ", "value"),
                    Input("slider_comp_rolling_avg", "value"),
@@ -81,7 +81,7 @@ def get_content(app, dfg):
         return plots.ts_gradient(df, type_trans, avg_month)
 
 
-    @app.callback(Output("plot_comp_e", "figure"),
+    @app.callback(Output("plot_comp_2", "figure"),
                   [Input("global_df", "children"),
                    Input("drop_comp_categ", "value"),
                    Input("slider_comp_rolling_avg", "value"),
