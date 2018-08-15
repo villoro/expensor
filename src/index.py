@@ -17,7 +17,7 @@ SERVER = APP.server
 # Add pages with content, sidebar and callbacks
 PAGES = get_pages(APP, DFG)
 
-@APP.callback(Output('page-content', 'children'),
+@APP.callback(Output('body', 'children'),
               [Input('url', 'pathname')])
 #pylint: disable=unused-variable
 def display_content(pathname):
