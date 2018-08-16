@@ -32,14 +32,13 @@ You can use the [sample_data](https://github.com/villoro/expensor/blob/master/sa
 2. Install requirements
 
     ```pip install -r requirements.txt```
-    
+
 3. Run the app
 
     ```
-    cd src
-    python index.py
+    python src/index.py
     ```
-    
+
 __* Note:__ The app is only tested in **python 3**. It might not work with python 2. 
 
 ## Authors
