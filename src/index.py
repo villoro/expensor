@@ -11,11 +11,12 @@ import constants as c
 
 
 # Create dash app with styles
-APP, DFG = create_dash_app()
+APP = create_dash_app()
 SERVER = APP.server
 
 # Add pages with content, sidebar and callbacks
-PAGES = get_pages(APP, DFG)
+PAGES = get_pages(APP)
+
 
 @APP.callback(Output('body', 'children'),
               [Input('url', 'pathname')])
@@ -24,7 +25,7 @@ def display_content(pathname):
     """Updates content based on current page"""
 
     if pathname in PAGES:
-        return PAGES[pathname][c.dash.KEY_BODY]
+        return PAGES[pathname].get_body_html()
     return "404"
 
 
@@ -35,7 +36,7 @@ def display_sidebar(pathname):
     """Updates sidebar based on current page"""
 
     if pathname in PAGES:
-        return PAGES[pathname][c.dash.KEY_SIDEBAR]
+        return PAGES[pathname].get_filters()
     return "404"
 
 

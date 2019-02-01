@@ -6,10 +6,9 @@ import os
 import importlib
 
 import constants as c
-import ui_utils as uiu
 
 
-def get_pages(app, dfg):
+def get_pages(app):
     """
         Creates all dash pages
 
@@ -17,15 +16,7 @@ def get_pages(app, dfg):
             app:        dash app
 
         Returns:
-            Pages as a json with the next structure
-
-            --page_link_1
-                --conent
-                --sidebar
-
-            --page_link_n
-                --content
-                --sidebar
+            dict with pages
     """
 
     output = {}
@@ -35,23 +26,15 @@ def get_pages(app, dfg):
         if (app_name.startswith("app")) and (app_name.endswith(".py")):
 
             # Fix app name
-            app_name = ".{}".format(app_name.split(".")[0])
+            page_name = ".{}".format(page_name.split(".")[0])
 
             # Import it programatically
-            m_app = importlib.import_module(app_name, "pages")
-
-            # Retrive content from the page
-            content = m_app.get_content(app, dfg)
-
-            # Construct body and sidebar
-            dummy_name = content[c.dash.DUMMY_DIV] if c.dash.DUMMY_DIV in content else None
-            body = uiu.create_body(content[c.dash.KEY_BODY], dummy_name)
-            sidebar = uiu.create_sidebar(content)
+            m_page = importlib.import_module(page_name, "pages").Page(app)
 
             # Add content to the output dict
-            output[m_app.LINK] = {c.dash.KEY_BODY: body, c.dash.KEY_SIDEBAR: sidebar}
+            output[m_page.link] = m_page
 
     # Clone content of the page that will appear in the root path
-    output[c.dash.LINK_MAIN] = output[c.dash.LANDING_APP]
+    #output[c.dash.LINK_MAIN] = output[c.dash.LANDING_APP]
 
     return output
