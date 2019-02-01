@@ -20,10 +20,10 @@ def get_pages(app):
     """
 
     output = {}
-    for app_name in os.listdir("src/pages"):
+    for page_name in os.listdir("src/pages"):
 
-        # Check if it is an app
-        if (app_name.startswith("app")) and (app_name.endswith(".py")):
+        # Check if it is a page
+        if (page_name.startswith("page")) and (page_name.endswith(".py")):
 
             # Fix app name
             page_name = ".{}".format(page_name.split(".")[0])
