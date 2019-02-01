@@ -7,7 +7,6 @@ from dash_bootstrap_components.themes import BOOTSTRAP
 
 import layout
 import constants as c
-import utilities as u
 
 
 def create_dash_app():

@@ -29,11 +29,7 @@ class Page(lay.AppPage):
 
 
     def __init__(self, app):
-        super().__init__([
-            c.dash.INPUT_CATEGORIES,
-            c.dash.INPUT_SMOOTHING,
-            c.dash.INPUT_TIMEWINDOW
-        ])
+        super().__init__([])
 
         @app.callback(Output("upload_results", "children"),
                       [Input("upload_container", "contents"),
