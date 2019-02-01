@@ -192,3 +192,10 @@ def card(data, **kwa):
         className="w3-center",
         style=padding(),
     )
+
+def get_dummy_div(name, value="Dummy"):
+    """
+        Creates a dummy div that will be used to draw plots when a page is loaded
+        using the callbacks in the page
+    """
+    return html.Div(value, id=name, style=c.styles.STYLE_HIDDEN)
