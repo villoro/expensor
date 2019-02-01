@@ -7,18 +7,19 @@ from abc import ABC, abstractmethod
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
+import pandas as pd # TODO: delete that import
 
 import constants as c
-import utilities as u # TODO: improve that
 from utilities.uos import df_to_b64
+from utilities.dfs import fix_df_trans # TODO: delete that import
 
 DEFAULT_PADDING = 9
 
 
 
 # TODO: Move that part...
-import pandas as pd
-DF = u.dfs.fix_df_trans(pd.read_excel(c.io.FILE_DATA_SAMPLE))
+#DF = u.dfs.fix_df_trans(pd.read_excel(c.io.FILE_DATA_SAMPLE))
+DF = fix_df_trans(pd.read_excel(c.io.FILE_DATA_SAMPLE))
 
 
 def padding(value=DEFAULT_PADDING):

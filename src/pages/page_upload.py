@@ -172,4 +172,3 @@ class Page(lay.AppPage):
             ]),
             html.Div(id="upload_results", style=DICT_SHOW[True])
         ]
-
