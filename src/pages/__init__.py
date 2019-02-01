@@ -35,6 +35,6 @@ def get_pages(app):
             output[m_page.link] = m_page
 
     # Clone content of the page that will appear in the root path
-    #output[c.dash.LINK_MAIN] = output[c.dash.LANDING_APP]
+    output[c.dash.LINK_MAIN] = output[c.dash.LANDING_APP]
 
     return output
