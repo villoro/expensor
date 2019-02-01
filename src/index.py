@@ -4,7 +4,7 @@
 
 from dash.dependencies import Input, Output
 
-from app.pages import get_pages
+from pages import get_pages
 from dash_app import create_dash_app
 
 import constants as c

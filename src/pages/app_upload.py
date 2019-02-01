@@ -9,7 +9,7 @@ from dash.dependencies import Input, Output, State, Event
 
 import constants as c
 import utilities as u
-from app import ui_utils as uiu
+import ui_utils as uiu
 from plots import plots_upload as plots
 
 

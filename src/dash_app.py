@@ -5,7 +5,7 @@
 import pandas as pd
 from dash import Dash
 
-from app import layout
+import layout
 import constants as c
 import utilities as u
 

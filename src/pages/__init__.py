@@ -6,7 +6,7 @@ import os
 import importlib
 
 import constants as c
-from app import ui_utils as uiu
+import ui_utils as uiu
 
 
 def get_pages(app, dfg):
@@ -29,7 +29,7 @@ def get_pages(app, dfg):
     """
 
     output = {}
-    for app_name in os.listdir("src/app/pages"):
+    for app_name in os.listdir("src/pages"):
 
         # Check if it is an app
         if (app_name.startswith("app")) and (app_name.endswith(".py")):
@@ -38,7 +38,7 @@ def get_pages(app, dfg):
             app_name = ".{}".format(app_name.split(".")[0])
 
             # Import it programatically
-            m_app = importlib.import_module(app_name, "app.pages")
+            m_app = importlib.import_module(app_name, "pages")
 
             # Retrive content from the page
             content = m_app.get_content(app, dfg)
