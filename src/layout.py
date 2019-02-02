@@ -194,9 +194,9 @@ def card(data, **kwa):
         style=padding(),
     )
 
-def get_dummy_div(name, value="Dummy"):
+def get_dummy_div(name):
     """
-        Creates a dummy div that will be used to draw plots when a page is loaded
+        Creates a dummy Store that will be used to draw plots when a page is loaded
         using the callbacks in the page
     """
-    return html.Div(value, id=name, style=c.styles.STYLE_HIDDEN)
+    return dcc.Store(id=name)
