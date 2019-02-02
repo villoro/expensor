@@ -2,7 +2,7 @@
     Styles for dash
 """
 
-from utilities.upalette import get_colors
+from v_palette import get_colors
 
 HEIGHT_HEADER = 75
 HEIGHT_FILTERS = 0

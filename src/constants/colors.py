@@ -2,7 +2,7 @@
     Some colors
 """
 
-from utilities.upalette import get_colors
+from v_palette import get_colors
 
 
 EXPENSES = get_colors(("red", 500))
