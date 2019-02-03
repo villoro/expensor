@@ -7,6 +7,9 @@ import pandas as pd
 import constants as c
 
 
+DF_SAMPLE = pd.read_excel(c.io.FILE_DATA_SAMPLE)
+
+
 def group_df_by(df, timewindow):
     """
         Groups a dataframe by the given timewindow

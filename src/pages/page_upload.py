@@ -3,6 +3,7 @@
 """
 
 import pandas as pd
+import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State, Event
@@ -12,13 +13,6 @@ import utilities as u
 import layout as lay
 from plots import plots_upload as plots
 
-
-STYLE_PADDING_VERTICAL = {"margin-top": "{}px".format(c.styles.PADDING_V)}
-
-DICT_SHOW = {
-    True: STYLE_PADDING_VERTICAL,
-    False: c.styles.STYLE_HIDDEN,
-}
 
 class Page(lay.AppPage):
     """ Page Evolution """
@@ -31,140 +25,167 @@ class Page(lay.AppPage):
     def __init__(self, app):
         super().__init__([])
 
-        @app.callback(Output("upload_results", "children"),
+
+        @app.callback(Output("upload_plot_preview", "figure"),
                       [Input("upload_container", "contents"),
-                       Input("upload_container", "filename")])
-        #pylint: disable=unused-variable,unused-argument
-        def get_table(contents, filename):
+                       Input("upload_container", "filename"),
+                       Input("upload_message", "children")])
+
+        #pylint: disable=unused-variable
+        def update_plot_preview(contents, filename, error_text):
             """
-                Updates the transaction dataframe
+                Shows or deletes the rror message
 
                 Args:
                     contents:   file uploaded
                     filename:   name of the file uploaded
-                    plot_id:    id of the returning plot
+                    error_text: text of error message
             """
-            # When there is no data, show tutorial
-            if (contents is None) or (filename is None):
 
-                df = pd.read_excel(c.io.FILE_DATA_SAMPLE)
+            print(f"Error '{error_text}'")
 
-                data = [
-                    dcc.Markdown(c.upload.INSTRUCTIONS_1),
-                    dcc.Graph(
-                        id="upload_plot_demo", config=c.dash.PLOT_CONFIG,
-                        figure=plots.plot_table(df, n_rows=5, with_header=False)
-                    ),
-                    dcc.Markdown(c.upload.INSTRUCTIONS_2)
-                ]
+            # If there is an error, no plot
+            if isinstance(error_text, str):
+                print("ouch")
+                return None
 
-                return html.Div(data, style=c.styles.STYLE_UPLOAD_INFO)
-
-            # When data is updated, show the message
-            if contents == c.io.CONTENT_UPDATED:
-                return c.io.CONTENT_UPDATED
-
-
-            df = u.uos.parse_dataframe_uploaded(contents, filename)
-
-            # If there has been a reading error with any df, df would be an error message
-            if isinstance(df, str):
-                return df
-
-            # Return the plot
-            return dcc.Graph(
-                id="upload_plot", config=c.dash.PLOT_CONFIG,
-                figure=plots.plot_table(df)
+            # No error, preview plot
+            return plots.plot_table(
+                u.uos.parse_dataframe_uploaded(contents, filename)
             )
 
 
-        def check_contents(contents, filename):
-            """
-                Check if contents are valid. If they are it returns the dataframe, else return None
-
-                Args:
-                    contents:   contents uploaded
-                    filename:   name of the file updated
-            """
-
-            if (contents is None) or (filename is None) or (contents == c.io.CONTENT_UPDATED):
-                return None
-
-            df = u.uos.parse_dataframe_uploaded(contents, filename)
-
-            # If there has been a reading error, df would be an error message
-            if isinstance(df, str):
-                return None
-
-            return df
-
-
-        @app.callback(Output("upload_button", "style"),
+        @app.callback(Output("upload_message", "children"),
                       [Input("upload_container", "contents"),
                        Input("upload_container", "filename")])
         #pylint: disable=unused-variable
-        def allow_update(contents, filename):
+        def update_message(contents, filename):
             """
-                Shows/hide the "use this file" button
+                Shows or deletes the rror message
 
                 Args:
                     contents:   file uploaded
                     filename:   name of the file uploaded
             """
-            return DICT_SHOW[check_contents(contents, filename) is not None]
+            out = u.uos.parse_dataframe_uploaded(contents, filename)
+
+            if isinstance(out, str):
+                return out
+
+            return False
 
 
-        @app.callback(Output("upload_container", "contents"),
-                      [],
-                      [State("upload_container", "contents"),
-                       State('upload_container', 'filename')],
-                      [Event("upload_button", "click")])
+        @app.callback(Output("upload_colapse_message", "is_open"),
+                      [Input("upload_message", "children")])
         #pylint: disable=unused-variable
-        def clear_table_when_data_updated(contents, filename):
+        def show_message(error_text):
             """
-                Clear the upadate container after data has been updated
+                Shows/hide the error message
+
+                Args:
+                    error_text: text of error message
+            """
+
+            return bool(error_text)
+
+
+        @app.callback(Output("upload_colapse_preview", "is_open"),
+                      [Input("upload_container", "contents"),
+                       Input("upload_container", "filename")])
+        #pylint: disable=unused-variable
+        def show_preview(contents, filename):
+            """
+                Shows/hide the preview of the dataframe loaded
 
                 Args:
                     contents:   file uploaded
                     filename:   name of the file uploaded
             """
-            return c.io.CONTENT_UPDATED if check_contents(contents, filename) is not None else None
+
+            out = u.uos.parse_dataframe_uploaded(contents, filename)
+
+            if isinstance(out, str) or out is None:
+                return False
+
+            return True
 
 
         @app.callback(Output("global_df", "children"),
                       [],
                       [State("upload_container", "contents"),
-                       State('upload_container', 'filename')],
+                       State("upload_container", "filename"),
+                       State("upload_colapse_preview", "is_open")],
                       [Event("upload_button", "click")])
         #pylint: disable=unused-variable
-        def update_df_trans(contents, filename):
+        def update_df_trans(contents, filename, file_ok):
             """
                 Updates the transaction dataframe
 
                 Args:
                     contents:   file uploaded
                     filename:   name of the file uploaded
+                    file_ok:    bool checking if file is uploadable
             """
 
-            df = check_contents(contents, filename)
-
-            if df is None:
+            if not file_ok:
                 return None
 
+            df = u.uos.parse_dataframe_uploaded(contents, filename)
+
             return u.uos.df_to_b64(u.dfs.fix_df_trans(df))
+
 
     def get_body(self):
         return [
             html.Div([
-                dcc.Upload(
-                    children=html.Div([
-                        'Drag and Drop or ',
-                        html.A('Select a File')
-                    ]),
-                    style=c.styles.STYLE_UPLOAD_CONTAINER,
-                    id="upload_container"
+                # Upload widget
+                lay.card(
+                    dcc.Upload(
+                        children=html.Div([
+                            'Drag and Drop or ',
+                            html.A('Select a File')
+                        ]),
+                        style=c.styles.STYLE_UPLOAD_CONTAINER,
+                        id="upload_container"
+                    )
                 ),
-                html.Button('Use this file', id='upload_button', style=STYLE_PADDING_VERTICAL),
+                # Table preview and upload button
+                dbc.Collapse(
+                    lay.card(
+                        [
+                            dcc.Graph(id="upload_plot_preview", config=c.dash.PLOT_CONFIG),
+                            html.Button('Use this file', id='upload_button'),
+                        ],
+                    ),
+                    id="upload_colapse_preview",
+                    is_open=False,
+                ),
+                # Table preview and upload button
+                dbc.Collapse(
+                    lay.card(
+                        html.Div(id="upload_message")
+                    ),
+                    id="upload_colapse_message",
+                    is_open=False,
+                ),
+                # Instruccions
+                lay.card(
+                    html.Div(
+                        [
+                            dcc.Markdown(
+                                c.upload.INSTRUCTIONS_1,
+                            ),
+                            dcc.Graph(
+                                id="upload_plot_demo", config=c.dash.PLOT_CONFIG,
+                                figure=plots.plot_table(
+                                    u.dfs.DF_SAMPLE, n_rows=5, with_header=False
+                                )
+                            ),
+                            dcc.Markdown(c.upload.INSTRUCTIONS_2)
+                        ],
+                        style=c.styles.STYLE_INSTRUCTIONS,
+                    ),
+                ),
             ]),
-            html.Div(id="upload_results", style=DICT_SHOW[True])
+            html.Div(id="upload_results")
         ]
