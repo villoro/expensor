@@ -30,7 +30,6 @@ class Page(lay.AppPage):
                       [Input("upload_container", "contents"),
                        Input("upload_container", "filename"),
                        Input("upload_message", "children")])
-
         #pylint: disable=unused-variable
         def update_plot_preview(contents, filename, error_text):
             """
@@ -42,17 +41,13 @@ class Page(lay.AppPage):
                     error_text: text of error message
             """
 
-            print(f"Error '{error_text}'")
+            out = u.uos.parse_dataframe_uploaded(contents, filename)
 
-            # If there is an error, no plot
-            if isinstance(error_text, str):
-                print("ouch")
+            if isinstance(out, str):
                 return None
 
             # No error, preview plot
-            return plots.plot_table(
-                u.uos.parse_dataframe_uploaded(contents, filename)
-            )
+            return plots.plot_table(out)
 
 
         @app.callback(Output("upload_message", "children"),
@@ -160,10 +155,11 @@ class Page(lay.AppPage):
                     id="upload_colapse_preview",
                     is_open=False,
                 ),
-                # Table preview and upload button
+                # Error message
                 dbc.Collapse(
                     lay.card(
-                        html.Div(id="upload_message")
+                        html.Div(id="upload_message"),
+                        color="danger"
                     ),
                     id="upload_colapse_message",
                     is_open=False,
