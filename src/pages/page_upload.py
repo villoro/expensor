@@ -85,6 +85,18 @@ class Page(lay.AppPage):
 
             return False
 
+        @app.callback(Output("upload_colapse_success_message", "is_open"),
+                      [],
+                      [],
+                      [Event("upload_button", "click")])
+        #pylint: disable=unused-variable
+        def show_success_message():
+            """
+                Shows/hide the success message
+            """
+
+            return True
+
 
         @app.callback(Output("upload_colapse_preview", "is_open"),
                       [Input("upload_container", "contents"),
@@ -146,17 +158,6 @@ class Page(lay.AppPage):
                         id="upload_container"
                     )
                 ),
-                # Table preview and upload button
-                dbc.Collapse(
-                    lay.card(
-                        [
-                            dcc.Graph(id="upload_plot_preview", config=c.dash.PLOT_CONFIG),
-                            html.Button('Use this file', id='upload_button'),
-                        ],
-                    ),
-                    id="upload_colapse_preview",
-                    is_open=False,
-                ),
                 # Error message
                 dbc.Collapse(
                     lay.card(
@@ -173,6 +174,17 @@ class Page(lay.AppPage):
                         color="success"
                     ),
                     id="upload_colapse_success_message",
+                    is_open=False,
+                ),
+                # Table preview and upload button
+                dbc.Collapse(
+                    lay.card(
+                        [
+                            html.Button('Use this file', id='upload_button'),
+                            dcc.Graph(id="upload_plot_preview", config=c.dash.PLOT_CONFIG),
+                        ],
+                    ),
+                    id="upload_colapse_preview",
                     is_open=False,
                 ),
                 # Instruccions
