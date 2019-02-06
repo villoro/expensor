@@ -13,9 +13,9 @@ STYLE_UPLOAD_CONTAINER = {
 STYLE_HIDDEN = {"display":"none"}
 
 STYLE_INSTRUCTIONS = {
-	"text-align": "left",
-	"margin-top": f"{10}px",
-	"margin-left": f"{20}px",
+    "text-align": "left",
+    "margin-top": f"{10}px",
+    "margin-left": f"{20}px",
     "margin-right": f"{20}px",
 
 }
