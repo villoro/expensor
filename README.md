@@ -42,7 +42,7 @@ You can use the [sample_data](https://github.com/villoro/expensor/blob/master/sa
 __* Note:__ The app is only tested in **python 3**. It might not work with python 2. 
 
 ## Authors
-* [Arnau Villoro](villoro.com)
+* [Arnau Villoro](https://villoro.com)
 
 ## License
 The content of this repository is licensed under a [MIT](https://opensource.org/licenses/MIT).

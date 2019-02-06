@@ -16,9 +16,7 @@ class TestDashApp(unittest.TestCase):
             Test the creation of dash app
         """
 
-        app, _ = dash_app.create_dash_app()
-
-        self.assertEqual(app.url_base_pathname, "/")
+        app = dash_app.create_dash_app()
 
         self.assertTrue(app.config['supress_callback_exceptions'])
 
