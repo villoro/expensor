@@ -28,33 +28,31 @@ class Page(lay.AppPage):
 
         @app.callback(Output("upload_plot_preview", "figure"),
                       [Input("upload_container", "contents"),
-                       Input("upload_container", "filename"),
-                       Input("upload_message", "children")])
+                       Input("upload_container", "filename")])
         #pylint: disable=unused-variable
-        def update_plot_preview(contents, filename, error_text):
+        def update_plot_preview(contents, filename):
             """
                 Shows or deletes the rror message
 
                 Args:
                     contents:   file uploaded
                     filename:   name of the file uploaded
-                    error_text: text of error message
             """
 
             out = u.uos.parse_dataframe_uploaded(contents, filename)
 
             if isinstance(out, str):
-                return None
+                return {}
 
             # No error, preview plot
             return plots.plot_table(out)
 
 
-        @app.callback(Output("upload_message", "children"),
+        @app.callback(Output("upload_error_message", "children"),
                       [Input("upload_container", "contents"),
                        Input("upload_container", "filename")])
         #pylint: disable=unused-variable
-        def update_message(contents, filename):
+        def update_error_message(contents, filename):
             """
                 Shows or deletes the rror message
 
@@ -70,10 +68,11 @@ class Page(lay.AppPage):
             return False
 
 
-        @app.callback(Output("upload_colapse_message", "is_open"),
-                      [Input("upload_message", "children")])
+        @app.callback(Output("upload_colapse_error_message", "is_open"),
+                      [Input("upload_container", "contents"),
+                       Input("upload_container", "filename")])
         #pylint: disable=unused-variable
-        def show_message(error_text):
+        def show_error_message(contents, filename):
             """
                 Shows/hide the error message
 
@@ -81,7 +80,10 @@ class Page(lay.AppPage):
                     error_text: text of error message
             """
 
-            return bool(error_text)
+            if isinstance(u.uos.parse_dataframe_uploaded(contents, filename), str):
+                return True
+
+            return False
 
 
         @app.callback(Output("upload_colapse_preview", "is_open"),
@@ -158,10 +160,19 @@ class Page(lay.AppPage):
                 # Error message
                 dbc.Collapse(
                     lay.card(
-                        html.Div(id="upload_message"),
+                        html.Div(id="upload_error_message"),
                         color="danger"
                     ),
-                    id="upload_colapse_message",
+                    id="upload_colapse_error_message",
+                    is_open=False,
+                ),
+                # Success message
+                dbc.Collapse(
+                    lay.card(
+                        html.Div(c.io.CONTENT_UPDATED),
+                        color="success"
+                    ),
+                    id="upload_colapse_success_message",
                     is_open=False,
                 ),
                 # Instruccions
