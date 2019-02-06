@@ -3,8 +3,10 @@
 """
 
 import pandas as pd
+import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_table as dt
 from dash.dependencies import Input, Output, State, Event
 
 import constants as c
@@ -13,158 +15,234 @@ import layout as lay
 from plots import plots_upload as plots
 
 
-STYLE_PADDING_VERTICAL = {"margin-top": "{}px".format(c.styles.PADDING_V)}
-
-DICT_SHOW = {
-    True: STYLE_PADDING_VERTICAL,
-    False: c.styles.STYLE_HIDDEN,
-}
-
 class Page(lay.AppPage):
     """ Page Evolution """
 
     link = c.dash.LINK_UPLOAD
     def_type = c.names.EXPENSES
     def_tw = "M"
+    rows_preview = 20
+
+    style_table = {
+        "style_header": c.styles.STYLE_TABLE_HEADER,
+        "style_cell": c.styles.STYLE_TABLE_CELL,
+    }
 
 
     def __init__(self, app):
         super().__init__([])
 
-        @app.callback(Output("upload_results", "children"),
-                      [Input("upload_container", "contents"),
-                       Input("upload_container", "filename")])
-        #pylint: disable=unused-variable,unused-argument
-        def get_table(contents, filename):
-            """
-                Updates the transaction dataframe
 
-                Args:
-                    contents:   file uploaded
-                    filename:   name of the file uploaded
-                    plot_id:    id of the returning plot
-            """
-            # When there is no data, show tutorial
-            if (contents is None) or (filename is None):
-
-                df = pd.read_excel(c.io.FILE_DATA_SAMPLE)
-
-                data = [
-                    dcc.Markdown(c.upload.INSTRUCTIONS_1),
-                    dcc.Graph(
-                        id="upload_plot_demo", config=c.dash.PLOT_CONFIG,
-                        figure=plots.plot_table(df, n_rows=5, with_header=False)
-                    ),
-                    dcc.Markdown(c.upload.INSTRUCTIONS_2)
-                ]
-
-                return html.Div(data, style=c.styles.STYLE_UPLOAD_INFO)
-
-            # When data is updated, show the message
-            if contents == c.io.CONTENT_UPDATED:
-                return c.io.CONTENT_UPDATED
-
-
-            df = u.uos.parse_dataframe_uploaded(contents, filename)
-
-            # If there has been a reading error with any df, df would be an error message
-            if isinstance(df, str):
-                return df
-
-            # Return the plot
-            return dcc.Graph(
-                id="upload_plot", config=c.dash.PLOT_CONFIG,
-                figure=plots.plot_table(df)
-            )
-
-
-        def check_contents(contents, filename):
-            """
-                Check if contents are valid. If they are it returns the dataframe, else return None
-
-                Args:
-                    contents:   contents uploaded
-                    filename:   name of the file updated
-            """
-
-            if (contents is None) or (filename is None) or (contents == c.io.CONTENT_UPDATED):
-                return None
-
-            df = u.uos.parse_dataframe_uploaded(contents, filename)
-
-            # If there has been a reading error, df would be an error message
-            if isinstance(df, str):
-                return None
-
-            return df
-
-
-        @app.callback(Output("upload_button", "style"),
+        @app.callback(Output("upload_table_previw", "columns"),
                       [Input("upload_container", "contents"),
                        Input("upload_container", "filename")])
         #pylint: disable=unused-variable
-        def allow_update(contents, filename):
+        def update_table_columns(contents, filename):
             """
-                Shows/hide the "use this file" button
+                Update preview columns
 
                 Args:
                     contents:   file uploaded
                     filename:   name of the file uploaded
             """
-            return DICT_SHOW[check_contents(contents, filename) is not None]
+
+            df = u.uos.parse_dataframe_uploaded(contents, filename)
+
+            if isinstance(df, str):
+                return []
+
+            return [{"name": i, "id": i} for i in df.columns]
 
 
-        @app.callback(Output("upload_container", "contents"),
+        @app.callback(Output("upload_table_previw", "data"),
+                      [Input("upload_container", "contents"),
+                       Input("upload_container", "filename")])
+        #pylint: disable=unused-variable
+        def update_table_content(contents, filename):
+            """
+                Update preview columns
+
+                Args:
+                    contents:   file uploaded
+                    filename:   name of the file uploaded
+            """
+
+            df = u.uos.parse_dataframe_uploaded(contents, filename)
+
+            if isinstance(df, str):
+                return {}
+
+            return df.head(self.rows_preview).to_dict("rows")
+
+
+        @app.callback(Output("upload_error_message", "children"),
+                      [Input("upload_container", "contents"),
+                       Input("upload_container", "filename")])
+        #pylint: disable=unused-variable
+        def update_error_message(contents, filename):
+            """
+                Shows or deletes the rror message
+
+                Args:
+                    contents:   file uploaded
+                    filename:   name of the file uploaded
+            """
+            out = u.uos.parse_dataframe_uploaded(contents, filename)
+
+            if isinstance(out, str):
+                return out
+
+            return False
+
+
+        @app.callback(Output("upload_colapse_error_message", "is_open"),
+                      [Input("upload_container", "contents"),
+                       Input("upload_container", "filename")])
+        #pylint: disable=unused-variable
+        def show_error_message(contents, filename):
+            """
+                Shows/hide the error message
+
+                Args:
+                    error_text: text of error message
+            """
+
+            if isinstance(u.uos.parse_dataframe_uploaded(contents, filename), str):
+                return True
+
+            return False
+
+        @app.callback(Output("upload_colapse_success_message", "is_open"),
                       [],
-                      [State("upload_container", "contents"),
-                       State('upload_container', 'filename')],
+                      [],
                       [Event("upload_button", "click")])
         #pylint: disable=unused-variable
-        def clear_table_when_data_updated(contents, filename):
+        def show_success_message():
             """
-                Clear the upadate container after data has been updated
+                Shows/hide the success message
+            """
+
+            return True
+
+
+        @app.callback(Output("upload_colapse_preview", "is_open"),
+                      [Input("upload_container", "contents"),
+                       Input("upload_container", "filename")])
+        #pylint: disable=unused-variable
+        def show_preview(contents, filename):
+            """
+                Shows/hide the preview of the dataframe loaded
 
                 Args:
                     contents:   file uploaded
                     filename:   name of the file uploaded
             """
-            return c.io.CONTENT_UPDATED if check_contents(contents, filename) is not None else None
+
+            out = u.uos.parse_dataframe_uploaded(contents, filename)
+
+            if isinstance(out, str) or out is None:
+                return False
+
+            return True
 
 
         @app.callback(Output("global_df", "children"),
                       [],
                       [State("upload_container", "contents"),
-                       State('upload_container', 'filename')],
+                       State("upload_container", "filename"),
+                       State("upload_colapse_preview", "is_open")],
                       [Event("upload_button", "click")])
         #pylint: disable=unused-variable
-        def update_df_trans(contents, filename):
+        def update_df_trans(contents, filename, file_ok):
             """
                 Updates the transaction dataframe
 
                 Args:
                     contents:   file uploaded
                     filename:   name of the file uploaded
+                    file_ok:    bool checking if file is uploadable
             """
 
-            df = check_contents(contents, filename)
-
-            if df is None:
+            if not file_ok:
                 return None
 
+            df = u.uos.parse_dataframe_uploaded(contents, filename)
+
             return u.uos.df_to_b64(u.dfs.fix_df_trans(df))
+
 
     def get_body(self):
         return [
             html.Div([
-                dcc.Upload(
-                    children=html.Div([
-                        'Drag and Drop or ',
-                        html.A('Select a File')
-                    ]),
-                    style=c.styles.STYLE_UPLOAD_CONTAINER,
-                    id="upload_container"
+                # Upload widget
+                lay.card(
+                    dcc.Upload(
+                        children=html.Div([
+                            "Drag and Drop or ",
+                            html.A("Select a File")
+                        ]),
+                        style=c.styles.STYLE_UPLOAD_CONTAINER,
+                        id="upload_container"
+                    )
                 ),
-                html.Button('Use this file', id='upload_button', style=STYLE_PADDING_VERTICAL),
+                # Error message
+                dbc.Collapse(
+                    lay.card(
+                        html.Div(id="upload_error_message"),
+                        color="danger"
+                    ),
+                    id="upload_colapse_error_message",
+                    is_open=False,
+                ),
+                # Success message
+                dbc.Collapse(
+                    lay.card(
+                        html.Div(c.io.CONTENT_UPDATED),
+                        color="success"
+                    ),
+                    id="upload_colapse_success_message",
+                    is_open=False,
+                ),
+                # Table preview and upload button
+                dbc.Collapse(
+                    lay.card(
+                        [
+                            lay.two_columns([
+                                html.H4(f"Previewing first {self.rows_preview} rows"),
+                                dbc.Button("Use this file", id="upload_button"),
+                            ]),
+                            html.Div(
+                                dt.DataTable(
+                                    id="upload_table_previw",
+                                    **self.style_table
+                                ),
+                                style=c.styles.STYLE_INSTRUCTIONS,
+                            )
+                        ],
+                    ),
+                    id="upload_colapse_preview",
+                    is_open=False,
+                ),
+                # Instruccions
+                lay.card(
+                    html.Div(
+                        [
+                            dcc.Markdown(
+                                c.upload.INSTRUCTIONS_1,
+                            ),
+                            html.Div(
+                                dt.DataTable(
+                                    columns=[{"name": i, "id": i} for i in u.dfs.DF_SAMPLE.columns],
+                                    data=u.dfs.DF_SAMPLE.head(5).to_dict("rows"),
+                                    **self.style_table
+                                ),
+                                style=c.styles.STYLE_TABLE,
+                            ),
+                            dcc.Markdown(c.upload.INSTRUCTIONS_2)
+                        ],
+                        style=c.styles.STYLE_INSTRUCTIONS,
+                    ),
+                ),
             ]),
-            html.Div(id="upload_results", style=DICT_SHOW[True])
+            html.Div(id="upload_results")
         ]

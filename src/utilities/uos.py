@@ -31,7 +31,7 @@ def check_if_uri_exist(uris):
             if not os.path.isdir(uri):
                 os.makedirs(uri, exist_ok=True)
 
-                print("Path %s doesn't exists. Created automatically", uri)
+                print(f"Path {uri} doesn't exists. Created automatically")
 
 
 def delete_if_possible(uri):
@@ -122,4 +122,4 @@ def get_image(image_uri):
     with open(image_uri, "rb") as file:
         encoded = base64.b64encode(file.read())
 
-    return 'data:image/png;base64,{}'.format(encoded.decode())
+    return f"data:image/png;base64,{encoded.decode()}"
