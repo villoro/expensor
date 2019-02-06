@@ -6,6 +6,7 @@ import pandas as pd
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_table as dt
 from dash.dependencies import Input, Output, State, Event
 
 import constants as c
@@ -20,32 +21,58 @@ class Page(lay.AppPage):
     link = c.dash.LINK_UPLOAD
     def_type = c.names.EXPENSES
     def_tw = "M"
+    rows_preview = 20
+
+    style_table = {
+        "style_header": c.styles.STYLE_TABLE_HEADER,
+        "style_cell": c.styles.STYLE_TABLE_CELL,
+    }
 
 
     def __init__(self, app):
         super().__init__([])
 
 
-        @app.callback(Output("upload_plot_preview", "figure"),
+        @app.callback(Output("upload_table_previw", "columns"),
                       [Input("upload_container", "contents"),
                        Input("upload_container", "filename")])
         #pylint: disable=unused-variable
-        def update_plot_preview(contents, filename):
+        def update_table_columns(contents, filename):
             """
-                Shows or deletes the rror message
+                Update preview columns
 
                 Args:
                     contents:   file uploaded
                     filename:   name of the file uploaded
             """
 
-            out = u.uos.parse_dataframe_uploaded(contents, filename)
+            df = u.uos.parse_dataframe_uploaded(contents, filename)
 
-            if isinstance(out, str):
+            if isinstance(df, str):
+                return []
+
+            return [{"name": i, "id": i} for i in df.columns]
+
+
+        @app.callback(Output("upload_table_previw", "data"),
+                      [Input("upload_container", "contents"),
+                       Input("upload_container", "filename")])
+        #pylint: disable=unused-variable
+        def update_table_content(contents, filename):
+            """
+                Update preview columns
+
+                Args:
+                    contents:   file uploaded
+                    filename:   name of the file uploaded
+            """
+
+            df = u.uos.parse_dataframe_uploaded(contents, filename)
+
+            if isinstance(df, str):
                 return {}
 
-            # No error, preview plot
-            return plots.plot_table(out)
+            return df.head(self.rows_preview).to_dict("rows")
 
 
         @app.callback(Output("upload_error_message", "children"),
@@ -151,8 +178,8 @@ class Page(lay.AppPage):
                 lay.card(
                     dcc.Upload(
                         children=html.Div([
-                            'Drag and Drop or ',
-                            html.A('Select a File')
+                            "Drag and Drop or ",
+                            html.A("Select a File")
                         ]),
                         style=c.styles.STYLE_UPLOAD_CONTAINER,
                         id="upload_container"
@@ -180,8 +207,17 @@ class Page(lay.AppPage):
                 dbc.Collapse(
                     lay.card(
                         [
-                            html.Button('Use this file', id='upload_button'),
-                            dcc.Graph(id="upload_plot_preview", config=c.dash.PLOT_CONFIG),
+                            lay.two_columns([
+                                html.H4(f"Previewing first {self.rows_preview} rows"),
+                                dbc.Button("Use this file", id="upload_button"),
+                            ]),
+                            html.Div(
+                                dt.DataTable(
+                                    id="upload_table_previw",
+                                    **self.style_table
+                                ),
+                                style=c.styles.STYLE_INSTRUCTIONS,
+                            )
                         ],
                     ),
                     id="upload_colapse_preview",
@@ -194,11 +230,13 @@ class Page(lay.AppPage):
                             dcc.Markdown(
                                 c.upload.INSTRUCTIONS_1,
                             ),
-                            dcc.Graph(
-                                id="upload_plot_demo", config=c.dash.PLOT_CONFIG,
-                                figure=plots.plot_table(
-                                    u.dfs.DF_SAMPLE, n_rows=5, with_header=False
-                                )
+                            html.Div(
+                                dt.DataTable(
+                                    columns=[{"name": i, "id": i} for i in u.dfs.DF_SAMPLE.columns],
+                                    data=u.dfs.DF_SAMPLE.head(5).to_dict("rows"),
+                                    **self.style_table
+                                ),
+                                style=c.styles.STYLE_TABLE,
                             ),
                             dcc.Markdown(c.upload.INSTRUCTIONS_2)
                         ],

@@ -19,3 +19,17 @@ STYLE_INSTRUCTIONS = {
     "margin-right": f"{20}px",
 
 }
+
+STYLE_TABLE = {
+    "margin-top": f"{20}px",
+    "margin-bottom": f"{10}px",
+}
+
+STYLE_TABLE_HEADER = {
+    "backgroundColor": "white",
+    "fontWeight": "bold"
+}
+
+STYLE_TABLE_CELL = {
+    "textAlign": "center",
+}
