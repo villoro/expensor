@@ -19,20 +19,19 @@ class Page(lay.AppPage):
     def_type = c.names.EXPENSES
     def_tw = "M"
 
-
     def __init__(self, app):
-        super().__init__([
-            c.dash.INPUT_CATEGORIES,
-            c.dash.INPUT_SMOOTHING,
-            c.dash.INPUT_TIMEWINDOW
-        ])
+        super().__init__([c.dash.INPUT_CATEGORIES, c.dash.INPUT_SMOOTHING, c.dash.INPUT_TIMEWINDOW])
 
-        @app.callback(Output("plot_evol", "figure"),
-                      [Input("global_df", "children"),
-                       Input("input_categories", "value"),
-                       Input("input_timewindow", "value"),
-                       Input("evo_aux", "children")])
-        #pylint: disable=unused-variable,unused-argument
+        @app.callback(
+            Output("plot_evol", "figure"),
+            [
+                Input("global_df", "children"),
+                Input("input_categories", "value"),
+                Input("input_timewindow", "value"),
+                Input("evo_aux", "children"),
+            ],
+        )
+        # pylint: disable=unused-variable,unused-argument
         def update_timeserie_plot(df_in, categories, timewindow, aux):
             """
                 Updates the timeserie plot
@@ -46,13 +45,16 @@ class Page(lay.AppPage):
             df = u.dfs.filter_data(u.uos.b64_to_df(df_in), categories)
             return plots.plot_timeserie(df, timewindow)
 
-
-        @app.callback(Output("plot_evo_detail", "figure"),
-                      [Input("global_df", "children"),
-                       Input("input_categories", "value"),
-                       Input("radio_evol_type", "value"),
-                       Input("input_timewindow", "value")])
-        #pylint: disable=unused-variable,unused-argument
+        @app.callback(
+            Output("plot_evo_detail", "figure"),
+            [
+                Input("global_df", "children"),
+                Input("input_categories", "value"),
+                Input("radio_evol_type", "value"),
+                Input("input_timewindow", "value"),
+            ],
+        )
+        # pylint: disable=unused-variable,unused-argument
         def update_ts_by_categories_plot(df_in, categories, type_trans, timewindow):
             """
                 Updates the timeserie by categories plot
@@ -66,20 +68,19 @@ class Page(lay.AppPage):
             df = u.dfs.filter_data(u.uos.b64_to_df(df_in), categories)
             return plots.plot_timeserie_by_categories(df, type_trans, timewindow)
 
-
     def get_body(self):
         return [
+            lay.card(dcc.Graph(id="plot_evol", config=c.dash.PLOT_CONFIG)),
             lay.card(
-                dcc.Graph(id="plot_evol", config=c.dash.PLOT_CONFIG)
+                [
+                    dcc.Graph(id="plot_evo_detail", config=c.dash.PLOT_CONFIG),
+                    dbc.RadioItems(
+                        id="radio_evol_type",
+                        options=lay.get_options([c.names.EXPENSES, c.names.INCOMES]),
+                        value=self.def_type,
+                        inline=True,
+                    ),
+                ]
             ),
-            lay.card([
-                dcc.Graph(id="plot_evo_detail", config=c.dash.PLOT_CONFIG),
-                dbc.RadioItems(
-                    id="radio_evol_type",
-                    options=lay.get_options([c.names.EXPENSES, c.names.INCOMES]),
-                    value=self.def_type,
-                    inline=True
-                )
-            ]),
-            lay.get_dummy_div("evo_aux")
+            lay.get_dummy_div("evo_aux"),
         ]

@@ -10,26 +10,17 @@ STYLE_UPLOAD_CONTAINER = {
     "borderRadius": "5px",
 }
 
-STYLE_HIDDEN = {"display":"none"}
+STYLE_HIDDEN = {"display": "none"}
 
 STYLE_INSTRUCTIONS = {
     "text-align": "left",
     "margin-top": f"{10}px",
     "margin-left": f"{20}px",
     "margin-right": f"{20}px",
-
 }
 
-STYLE_TABLE = {
-    "margin-top": f"{20}px",
-    "margin-bottom": f"{10}px",
-}
+STYLE_TABLE = {"margin-top": f"{20}px", "margin-bottom": f"{10}px"}
 
-STYLE_TABLE_HEADER = {
-    "backgroundColor": "white",
-    "fontWeight": "bold"
-}
+STYLE_TABLE_HEADER = {"backgroundColor": "white", "fontWeight": "bold"}
 
-STYLE_TABLE_CELL = {
-    "textAlign": "center",
-}
+STYLE_TABLE_CELL = {"textAlign": "center"}

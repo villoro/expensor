@@ -28,15 +28,14 @@ class Page(lay.AppPage):
         "style_cell": c.styles.STYLE_TABLE_CELL,
     }
 
-
     def __init__(self, app):
         super().__init__([])
 
-
-        @app.callback(Output("upload_table_previw", "columns"),
-                      [Input("upload_container", "contents"),
-                       Input("upload_container", "filename")])
-        #pylint: disable=unused-variable
+        @app.callback(
+            Output("upload_table_previw", "columns"),
+            [Input("upload_container", "contents"), Input("upload_container", "filename")],
+        )
+        # pylint: disable=unused-variable
         def update_table_columns(contents, filename):
             """
                 Update preview columns
@@ -53,11 +52,11 @@ class Page(lay.AppPage):
 
             return [{"name": i, "id": i} for i in df.columns]
 
-
-        @app.callback(Output("upload_table_previw", "data"),
-                      [Input("upload_container", "contents"),
-                       Input("upload_container", "filename")])
-        #pylint: disable=unused-variable
+        @app.callback(
+            Output("upload_table_previw", "data"),
+            [Input("upload_container", "contents"), Input("upload_container", "filename")],
+        )
+        # pylint: disable=unused-variable
         def update_table_content(contents, filename):
             """
                 Update preview columns
@@ -74,11 +73,11 @@ class Page(lay.AppPage):
 
             return df.head(self.rows_preview).to_dict("rows")
 
-
-        @app.callback(Output("upload_error_message", "children"),
-                      [Input("upload_container", "contents"),
-                       Input("upload_container", "filename")])
-        #pylint: disable=unused-variable
+        @app.callback(
+            Output("upload_error_message", "children"),
+            [Input("upload_container", "contents"), Input("upload_container", "filename")],
+        )
+        # pylint: disable=unused-variable
         def update_error_message(contents, filename):
             """
                 Shows or deletes the rror message
@@ -94,11 +93,11 @@ class Page(lay.AppPage):
 
             return False
 
-
-        @app.callback(Output("upload_colapse_error_message", "is_open"),
-                      [Input("upload_container", "contents"),
-                       Input("upload_container", "filename")])
-        #pylint: disable=unused-variable
+        @app.callback(
+            Output("upload_colapse_error_message", "is_open"),
+            [Input("upload_container", "contents"), Input("upload_container", "filename")],
+        )
+        # pylint: disable=unused-variable
         def show_error_message(contents, filename):
             """
                 Shows/hide the error message
@@ -112,11 +111,13 @@ class Page(lay.AppPage):
 
             return False
 
-        @app.callback(Output("upload_colapse_success_message", "is_open"),
-                      [],
-                      [],
-                      [Event("upload_button", "click")])
-        #pylint: disable=unused-variable
+        @app.callback(
+            Output("upload_colapse_success_message", "is_open"),
+            [],
+            [],
+            [Event("upload_button", "click")],
+        )
+        # pylint: disable=unused-variable
         def show_success_message():
             """
                 Shows/hide the success message
@@ -124,11 +125,11 @@ class Page(lay.AppPage):
 
             return True
 
-
-        @app.callback(Output("upload_colapse_preview", "is_open"),
-                      [Input("upload_container", "contents"),
-                       Input("upload_container", "filename")])
-        #pylint: disable=unused-variable
+        @app.callback(
+            Output("upload_colapse_preview", "is_open"),
+            [Input("upload_container", "contents"), Input("upload_container", "filename")],
+        )
+        # pylint: disable=unused-variable
         def show_preview(contents, filename):
             """
                 Shows/hide the preview of the dataframe loaded
@@ -145,14 +146,17 @@ class Page(lay.AppPage):
 
             return True
 
-
-        @app.callback(Output("global_df", "children"),
-                      [],
-                      [State("upload_container", "contents"),
-                       State("upload_container", "filename"),
-                       State("upload_colapse_preview", "is_open")],
-                      [Event("upload_button", "click")])
-        #pylint: disable=unused-variable
+        @app.callback(
+            Output("global_df", "children"),
+            [],
+            [
+                State("upload_container", "contents"),
+                State("upload_container", "filename"),
+                State("upload_colapse_preview", "is_open"),
+            ],
+            [Event("upload_button", "click")],
+        )
+        # pylint: disable=unused-variable
         def update_df_trans(contents, filename, file_ok):
             """
                 Updates the transaction dataframe
@@ -170,79 +174,70 @@ class Page(lay.AppPage):
 
             return u.uos.df_to_b64(u.dfs.fix_df_trans(df))
 
-
     def get_body(self):
         return [
-            html.Div([
-                # Upload widget
-                lay.card(
-                    dcc.Upload(
-                        children=html.Div([
-                            "Drag and Drop or ",
-                            html.A("Select a File")
-                        ]),
-                        style=c.styles.STYLE_UPLOAD_CONTAINER,
-                        id="upload_container"
-                    )
-                ),
-                # Error message
-                dbc.Collapse(
+            html.Div(
+                [
+                    # Upload widget
                     lay.card(
-                        html.Div(id="upload_error_message"),
-                        color="danger"
+                        dcc.Upload(
+                            children=html.Div(["Drag and Drop or ", html.A("Select a File")]),
+                            style=c.styles.STYLE_UPLOAD_CONTAINER,
+                            id="upload_container",
+                        )
                     ),
-                    id="upload_colapse_error_message",
-                    is_open=False,
-                ),
-                # Success message
-                dbc.Collapse(
-                    lay.card(
-                        html.Div(c.io.CONTENT_UPDATED),
-                        color="success"
+                    # Error message
+                    dbc.Collapse(
+                        lay.card(html.Div(id="upload_error_message"), color="danger"),
+                        id="upload_colapse_error_message",
+                        is_open=False,
                     ),
-                    id="upload_colapse_success_message",
-                    is_open=False,
-                ),
-                # Table preview and upload button
-                dbc.Collapse(
-                    lay.card(
-                        [
-                            lay.two_columns([
-                                html.H4(f"Previewing first {self.rows_preview} rows"),
-                                dbc.Button("Use this file", id="upload_button"),
-                            ]),
-                            html.Div(
-                                dt.DataTable(
-                                    id="upload_table_previw",
-                                    **self.style_table
+                    # Success message
+                    dbc.Collapse(
+                        lay.card(html.Div(c.io.CONTENT_UPDATED), color="success"),
+                        id="upload_colapse_success_message",
+                        is_open=False,
+                    ),
+                    # Table preview and upload button
+                    dbc.Collapse(
+                        lay.card(
+                            [
+                                lay.two_columns(
+                                    [
+                                        html.H4(f"Previewing first {self.rows_preview} rows"),
+                                        dbc.Button("Use this file", id="upload_button"),
+                                    ]
                                 ),
-                                style=c.styles.STYLE_INSTRUCTIONS,
-                            )
-                        ],
-                    ),
-                    id="upload_colapse_preview",
-                    is_open=False,
-                ),
-                # Instruccions
-                lay.card(
-                    html.Div(
-                        [
-                            dcc.Markdown(
-                                c.upload.INSTRUCTIONS_1,
-                            ),
-                            html.Div(
-                                dt.DataTable(
-                                    columns=[{"name": i, "id": i} for i in u.dfs.DF_SAMPLE.columns],
-                                    data=u.dfs.DF_SAMPLE.head(5).to_dict("rows"),
-                                    **self.style_table
+                                html.Div(
+                                    dt.DataTable(id="upload_table_previw", **self.style_table),
+                                    style=c.styles.STYLE_INSTRUCTIONS,
                                 ),
-                                style=c.styles.STYLE_TABLE,
-                            ),
-                            dcc.Markdown(c.upload.INSTRUCTIONS_2)
-                        ],
-                        style=c.styles.STYLE_INSTRUCTIONS,
+                            ]
+                        ),
+                        id="upload_colapse_preview",
+                        is_open=False,
                     ),
-                ),
-            ]),
-            html.Div(id="upload_results")
+                    # Instruccions
+                    lay.card(
+                        html.Div(
+                            [
+                                dcc.Markdown(c.upload.INSTRUCTIONS_1),
+                                html.Div(
+                                    dt.DataTable(
+                                        columns=[
+                                            {"name": i, "id": i} for i in u.dfs.DF_SAMPLE.columns
+                                        ],
+                                        data=u.dfs.DF_SAMPLE.head(5).to_dict("rows"),
+                                        **self.style_table,
+                                    ),
+                                    style=c.styles.STYLE_TABLE,
+                                ),
+                                dcc.Markdown(c.upload.INSTRUCTIONS_2),
+                            ],
+                            style=c.styles.STYLE_INSTRUCTIONS,
+                        )
+                    ),
+                ]
+            ),
+            html.Div(id="upload_results"),
         ]

@@ -16,9 +16,8 @@ SERVER = APP.server
 PAGES = get_pages(APP)
 
 
-@APP.callback(Output('body', 'children'),
-              [Input('url', 'pathname')])
-#pylint: disable=unused-variable
+@APP.callback(Output("body", "children"), [Input("url", "pathname")])
+# pylint: disable=unused-variable
 def display_content(pathname):
     """Updates content based on current page"""
 
@@ -27,9 +26,8 @@ def display_content(pathname):
     return "404"
 
 
-@APP.callback(Output('filters', 'children'),
-              [Input('url', 'pathname')])
-#pylint: disable=unused-variable
+@APP.callback(Output("filters", "children"), [Input("url", "pathname")])
+# pylint: disable=unused-variable
 def display_filters(pathname):
     """ Updates content based on current page """
 
@@ -51,5 +49,5 @@ def toggle_filters(count, is_open):
     return is_open
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     APP.run_server(debug=True)

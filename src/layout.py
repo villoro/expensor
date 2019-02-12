@@ -7,18 +7,17 @@ from abc import ABC, abstractmethod
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-import pandas as pd # TODO: delete that import
+import pandas as pd  # TODO: delete that import
 
 import constants as c
 from utilities.uos import df_to_b64
-from utilities.dfs import fix_df_trans # TODO: delete that import
+from utilities.dfs import fix_df_trans  # TODO: delete that import
 
 DEFAULT_PADDING = 9
 
 
-
 # TODO: Move that part...
-#DF = u.dfs.fix_df_trans(pd.read_excel(c.io.FILE_DATA_SAMPLE))
+# DF = u.dfs.fix_df_trans(pd.read_excel(c.io.FILE_DATA_SAMPLE))
 DF = fix_df_trans(pd.read_excel(c.io.FILE_DATA_SAMPLE))
 
 
@@ -37,31 +36,22 @@ def get_options(iterable):
 FILTERS = {
     c.dash.INPUT_SMOOTHING: (
         "Smoothing:",
-        dbc.Input(
-            id='input_smoothing',
-            type='number',
-            value=c.dash.DEFAULT_SMOOTHING,
-        ),
+        dbc.Input(id="input_smoothing", type="number", value=c.dash.DEFAULT_SMOOTHING),
     ),
     c.dash.INPUT_TIMEWINDOW: (
         "Grouping:",
         dcc.Dropdown(
             id="input_timewindow",
             value="M",
-            options=[
-                {"label": "Month ", "value": "M"},
-                {"label": "Year ", "value": "Y"}
-            ],
+            options=[{"label": "Month ", "value": "M"}, {"label": "Year ", "value": "Y"}],
         ),
     ),
     c.dash.INPUT_CATEGORIES: (
         "Categories:",
         dcc.Dropdown(
-            id="input_categories",
-            multi=True,
-            options=get_options(DF[c.cols.CATEGORY].unique())
-        )
-    )
+            id="input_categories", multi=True, options=get_options(DF[c.cols.CATEGORY].unique())
+        ),
+    ),
 }
 
 
@@ -73,19 +63,13 @@ def get_layout():
             dbc.DropdownMenu(
                 label="Pages",
                 children=[
-                    dbc.DropdownMenuItem(
-                        x[1:], href=x, id="section_{}".format(x[1:]),
-                    ) for x in c.dash.LINKS_ALL
+                    dbc.DropdownMenuItem(x[1:], href=x, id="section_{}".format(x[1:]))
+                    for x in c.dash.LINKS_ALL
                 ],
                 direction="left",
                 className="mr-1",
             ),
-            dbc.Button(
-                "Filters",
-                id="filters-button",
-                className="mr-1",
-                color="danger",
-            ),
+            dbc.Button("Filters", id="filters-button", className="mr-1", color="danger"),
         ],
         no_gutters=True,
         className="ml-auto",
@@ -102,24 +86,22 @@ def get_layout():
                 align="center",
                 no_gutters=True,
             ),
-            navbar_right
+            navbar_right,
         ],
         sticky="top",
-        className="w3-light-grey w3-card"
+        className="w3-light-grey w3-card",
     )
 
     filters = dbc.Collapse(
-        dbc.CardDeck(id="filters"), id="filters-container", style=padding(2*DEFAULT_PADDING)
+        dbc.CardDeck(id="filters"), id="filters-container", style=padding(2 * DEFAULT_PADDING)
     )
 
     content = [
         # Body
         html.Div(id="body", style=padding()),
-
         # Others
         html.Div(id="sync_count", style={"display": "none"}),
-        dcc.Location(id='url', refresh=False),
-
+        dcc.Location(id="url", refresh=False),
         # Hidden div with data
         html.Div(df_to_b64(DF), id="global_df", style=c.styles.STYLE_HIDDEN),
     ]
@@ -135,13 +117,9 @@ def two_columns(elements):
     """
 
     return html.Div(
-        [
-            html.Div(
-                x, className="w3-col l6 m12 s12"
-            ) for x in elements
-        ],
-        className="w3-row"
+        [html.Div(x, className="w3-col l6 m12 s12") for x in elements], className="w3-row"
     )
+
 
 class AppPage(ABC):
     """
@@ -151,23 +129,19 @@ class AppPage(ABC):
     def __init__(self, mlist=[]):
         self.filters = [FILTERS[x] for x in mlist]
 
-
     def get_filters(self):
         """ Retrives the html body """
 
         return [
             dbc.Card(
-                [
-                    dbc.CardHeader(title),
-                    html.Div(element, className="w3-padding")
-                ],
+                [dbc.CardHeader(title), html.Div(element, className="w3-padding")],
                 color="secondary",
                 outline=True,
-            ) for title, element in self.filters
+            )
+            for title, element in self.filters
         ]
 
-
-    #pylint: disable=R0201
+    # pylint: disable=R0201
     @abstractmethod
     def get_body(self):
         """
@@ -176,23 +150,17 @@ class AppPage(ABC):
         """
         return []
 
-
     def get_body_html(self):
         """ Retrives the html body """
 
-        return [
-            html.Div(data) for data in self.get_body()
-        ]
+        return [html.Div(data) for data in self.get_body()]
 
 
 def card(data, **kwa):
     """ Create one card """
 
-    return html.Div(
-        dbc.Card(data, style=padding(), **kwa),
-        className="w3-center",
-        style=padding(),
-    )
+    return html.Div(dbc.Card(data, style=padding(), **kwa), className="w3-center", style=padding())
+
 
 def get_dummy_div(name, value="Dummy"):
     """

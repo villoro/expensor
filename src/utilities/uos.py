@@ -25,7 +25,7 @@ def check_if_uri_exist(uris):
     for uri in uris:
         # Check that it is not a file without path
         if len(uri.split("/")) > 1:
-            uri = uri.rsplit('/', 1)[0]
+            uri = uri.rsplit("/", 1)[0]
 
             # If the directory doesn't exist, it will be created.
             if not os.path.isdir(uri):
@@ -68,7 +68,7 @@ def parse_dataframe_uploaded(contents, filename):
     if (not contents) or (contents is None):
         return None
 
-    _, content_string = contents.split(',')
+    _, content_string = contents.split(",")
 
     # Decode from base64 and get from bytes
     data = io.BytesIO(base64.b64decode(content_string))
@@ -80,7 +80,7 @@ def parse_dataframe_uploaded(contents, filename):
         try:
             return pd.read_excel(data)
 
-        except Exception: #pylint: disable=W0703
+        except Exception:  # pylint: disable=W0703
             return c.io.ERROR_UNPARSABLE
 
     # For unkown file extension throw an error message
