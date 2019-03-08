@@ -7,6 +7,7 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table as dt
+from dash import callback_context
 from dash.dependencies import Input, Output, State
 
 import constants as c
@@ -59,11 +60,16 @@ class Page(lay.AppPage):
             [
                 Output("upload_colapse_error_message", "is_open"),
                 Output("upload_colapse_preview", "is_open"),
+                Output("upload_colapse_success_message", "is_open"),
             ],
-            [Input("upload_container", "contents"), Input("upload_container", "filename")],
+            [
+                Input("upload_container", "contents"),
+                Input("upload_container", "filename"),
+                Input("upload_button", "n_clicks"),
+            ],
         )
         # pylint: disable=unused-variable
-        def show_collapsibles(contents, filename):
+        def show_collapsibles(contents, filename, n_clicks):
             """
                 Shows/hide the collapsibles
 
@@ -74,12 +80,18 @@ class Page(lay.AppPage):
             df = u.uos.parse_dataframe_uploaded(contents, filename)
 
             if df is None:
-                return False, False
+                return False, False, False
 
             elif isinstance(df, str):
-                return True, False
+                return True, False, False
 
-            return False, True
+            context = callback_context
+
+            # If sync button pressed, sync the app
+            if context.triggered and context.triggered[0]["prop_id"] == "upload_button.n_clicks":
+                return False, True, True
+
+            return False, True, False
 
         @app.callback(
             Output("upload_error_message", "children"),
@@ -100,20 +112,6 @@ class Page(lay.AppPage):
                 return out
 
             return False
-
-        # @app.callback(
-        #     Output("upload_colapse_success_message", "is_open"),
-        #     [],
-        #     [],
-        #     [Event("upload_button", "click")],
-        # )
-        # # pylint: disable=unused-variable
-        # def show_success_message():
-        #     """
-        #         Shows/hide the success message
-        #     """
-
-        #     return True
 
         # @app.callback(
         #     Output("global_df", "children"),
