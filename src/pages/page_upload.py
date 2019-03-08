@@ -56,6 +56,32 @@ class Page(lay.AppPage):
             )
 
         @app.callback(
+            [
+                Output("upload_colapse_error_message", "is_open"),
+                Output("upload_colapse_preview", "is_open"),
+            ],
+            [Input("upload_container", "contents"), Input("upload_container", "filename")],
+        )
+        # pylint: disable=unused-variable
+        def show_collapsibles(contents, filename):
+            """
+                Shows/hide the collapsibles
+
+                Args:
+                    error_text: text of error message
+            """
+
+            df = u.uos.parse_dataframe_uploaded(contents, filename)
+
+            if df is None:
+                return False, False
+
+            elif isinstance(df, str):
+                return True, False
+
+            return False, True
+
+        @app.callback(
             Output("upload_error_message", "children"),
             [Input("upload_container", "contents"), Input("upload_container", "filename")],
         )
@@ -74,32 +100,6 @@ class Page(lay.AppPage):
                 return out
 
             return False
-
-        @app.callback(
-            [
-                Output("upload_colapse_error_message", "is_open"),
-                Output("upload_colapse_preview", "is_open"),
-            ],
-            [Input("upload_container", "contents"), Input("upload_container", "filename")],
-        )
-        # pylint: disable=unused-variable
-        def show_collapsibles(contents, filename):
-            """
-                Shows/hide the collapsibles
-
-                Args:
-                    error_text: text of error message
-            """
-
-            out = u.uos.parse_dataframe_uploaded(contents, filename)
-
-            if out is None:
-                return False, False
-
-            elif isinstance(out, str):
-                return True, False
-
-            return False, True
 
         # @app.callback(
         #     Output("upload_colapse_success_message", "is_open"),
