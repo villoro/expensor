@@ -73,7 +73,7 @@ class Page(lay.AppPage):
         # pylint: disable=unused-variable
         def show_collapsibles(contents, filename, n_clicks, df_old):
             """
-                Shows/hide the collapsibles
+                Shows/hide the collapsibles and updates the global df if needed
 
                 Args:
                     error_text: text of error message
@@ -82,10 +82,10 @@ class Page(lay.AppPage):
             df = u.uos.parse_dataframe_uploaded(contents, filename)
 
             if df is None:
-                return False, False, False, None
+                return False, False, False, df_old
 
             elif isinstance(df, str):
-                return True, False, False, None
+                return True, False, False, df_old
 
             context = callback_context
 
