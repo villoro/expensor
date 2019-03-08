@@ -76,22 +76,30 @@ class Page(lay.AppPage):
             return False
 
         @app.callback(
-            Output("upload_colapse_error_message", "is_open"),
+            [
+                Output("upload_colapse_error_message", "is_open"),
+                Output("upload_colapse_preview", "is_open"),
+            ],
             [Input("upload_container", "contents"), Input("upload_container", "filename")],
         )
         # pylint: disable=unused-variable
-        def show_error_message(contents, filename):
+        def show_collapsibles(contents, filename):
             """
-                Shows/hide the error message
+                Shows/hide the collapsibles
 
                 Args:
                     error_text: text of error message
             """
 
-            if isinstance(u.uos.parse_dataframe_uploaded(contents, filename), str):
-                return True
+            out = u.uos.parse_dataframe_uploaded(contents, filename)
 
-            return False
+            if out is None:
+                return False, False
+
+            elif isinstance(out, str):
+                return True, False
+
+            return False, True
 
         # @app.callback(
         #     Output("upload_colapse_success_message", "is_open"),
@@ -106,27 +114,6 @@ class Page(lay.AppPage):
         #     """
 
         #     return True
-
-        @app.callback(
-            Output("upload_colapse_preview", "is_open"),
-            [Input("upload_container", "contents"), Input("upload_container", "filename")],
-        )
-        # pylint: disable=unused-variable
-        def show_preview(contents, filename):
-            """
-                Shows/hide the preview of the dataframe loaded
-
-                Args:
-                    contents:   file uploaded
-                    filename:   name of the file uploaded
-            """
-
-            out = u.uos.parse_dataframe_uploaded(contents, filename)
-
-            if isinstance(out, str) or out is None:
-                return False
-
-            return True
 
         # @app.callback(
         #     Output("global_df", "children"),
