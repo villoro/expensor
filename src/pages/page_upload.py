@@ -7,7 +7,8 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table as dt
-from dash.dependencies import Input, Output, State, Event
+from dash import callback_context
+from dash.dependencies import Input, Output, State
 
 import constants as c
 import utilities as u
@@ -32,13 +33,13 @@ class Page(lay.AppPage):
         super().__init__([])
 
         @app.callback(
-            Output("upload_table_previw", "columns"),
+            [Output("upload_table_preview", "columns"), Output("upload_table_preview", "data")],
             [Input("upload_container", "contents"), Input("upload_container", "filename")],
         )
         # pylint: disable=unused-variable
-        def update_table_columns(contents, filename):
+        def update_table(contents, filename):
             """
-                Update preview columns
+                Update the preview table
 
                 Args:
                     contents:   file uploaded
@@ -48,30 +49,52 @@ class Page(lay.AppPage):
             df = u.uos.parse_dataframe_uploaded(contents, filename)
 
             if isinstance(df, str):
-                return []
+                return [], {}
 
-            return [{"name": i, "id": i} for i in df.columns]
+            return (
+                [{"name": i, "id": i} for i in df.columns],
+                df.head(self.rows_preview).to_dict("rows"),
+            )
 
         @app.callback(
-            Output("upload_table_previw", "data"),
-            [Input("upload_container", "contents"), Input("upload_container", "filename")],
+            [
+                Output("upload_colapse_error_message", "is_open"),
+                Output("upload_colapse_preview", "is_open"),
+                Output("upload_colapse_success_message", "is_open"),
+                Output("global_df", "children"),
+            ],
+            [
+                Input("upload_container", "contents"),
+                Input("upload_container", "filename"),
+                Input("upload_button", "n_clicks"),
+            ],
+            [State("global_df", "children")],
         )
         # pylint: disable=unused-variable
-        def update_table_content(contents, filename):
+        def show_collapsibles(contents, filename, n_clicks, df_old):
             """
-                Update preview columns
+                Shows/hide the collapsibles and updates the global df if needed
 
                 Args:
-                    contents:   file uploaded
-                    filename:   name of the file uploaded
+                    error_text: text of error message
             """
 
             df = u.uos.parse_dataframe_uploaded(contents, filename)
 
-            if isinstance(df, str):
-                return {}
+            if df is None:
+                return False, False, False, df_old
 
-            return df.head(self.rows_preview).to_dict("rows")
+            elif isinstance(df, str):
+                return True, False, False, df_old
+
+            context = callback_context
+
+            # If sync button pressed, sync the app
+            if context.triggered and context.triggered[0]["prop_id"] == "upload_button.n_clicks":
+                return False, True, True, u.uos.df_to_b64(u.dfs.fix_df_trans(df))
+
+            # If button not pressed return old data
+            return False, True, False, df_old
 
         @app.callback(
             Output("upload_error_message", "children"),
@@ -92,87 +115,6 @@ class Page(lay.AppPage):
                 return out
 
             return False
-
-        @app.callback(
-            Output("upload_colapse_error_message", "is_open"),
-            [Input("upload_container", "contents"), Input("upload_container", "filename")],
-        )
-        # pylint: disable=unused-variable
-        def show_error_message(contents, filename):
-            """
-                Shows/hide the error message
-
-                Args:
-                    error_text: text of error message
-            """
-
-            if isinstance(u.uos.parse_dataframe_uploaded(contents, filename), str):
-                return True
-
-            return False
-
-        @app.callback(
-            Output("upload_colapse_success_message", "is_open"),
-            [],
-            [],
-            [Event("upload_button", "click")],
-        )
-        # pylint: disable=unused-variable
-        def show_success_message():
-            """
-                Shows/hide the success message
-            """
-
-            return True
-
-        @app.callback(
-            Output("upload_colapse_preview", "is_open"),
-            [Input("upload_container", "contents"), Input("upload_container", "filename")],
-        )
-        # pylint: disable=unused-variable
-        def show_preview(contents, filename):
-            """
-                Shows/hide the preview of the dataframe loaded
-
-                Args:
-                    contents:   file uploaded
-                    filename:   name of the file uploaded
-            """
-
-            out = u.uos.parse_dataframe_uploaded(contents, filename)
-
-            if isinstance(out, str) or out is None:
-                return False
-
-            return True
-
-        @app.callback(
-            Output("global_df", "children"),
-            [],
-            [
-                State("upload_container", "contents"),
-                State("upload_container", "filename"),
-                State("upload_colapse_preview", "is_open"),
-            ],
-            [Event("upload_button", "click")],
-        )
-        # pylint: disable=unused-variable
-        def update_df_trans(contents, filename, file_ok):
-            """
-                Updates the transaction dataframe
-
-                Args:
-                    contents:   file uploaded
-                    filename:   name of the file uploaded
-                    file_ok:    bool checking if file is uploadable
-            """
-
-            if not file_ok:
-                return None
-
-            df = u.uos.parse_dataframe_uploaded(contents, filename)
-
-            return u.uos.df_to_b64(u.dfs.fix_df_trans(df))
 
     def get_body(self):
         return [
@@ -209,7 +151,7 @@ class Page(lay.AppPage):
                                     ]
                                 ),
                                 html.Div(
-                                    dt.DataTable(id="upload_table_previw", **self.style_table),
+                                    dt.DataTable(id="upload_table_preview", **self.style_table),
                                     style=c.styles.STYLE_INSTRUCTIONS,
                                 ),
                             ]

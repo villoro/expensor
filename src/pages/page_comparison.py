@@ -22,43 +22,18 @@ class Page(lay.AppPage):
         super().__init__([c.dash.INPUT_CATEGORIES, c.dash.INPUT_SMOOTHING])
 
         @app.callback(
-            Output("plot_comp_1", "figure"),
+            [Output(f"plot_comp_{x}", "figure") for x in list("12")],
             [
                 Input("global_df", "children"),
                 Input("input_categories", "value"),
                 Input("input_smoothing", "value"),
                 Input("radio_comp_1", "value"),
-                Input("comp_aux", "children"),
-            ],
-        )
-        # pylint: disable=unused-variable,unused-argument
-        def update_ts_grad_1(df_in, categories, avg_month, type_trans, aux):
-            """
-                Updates the timeserie gradient plot
-
-                Args:
-                    df_in:      transactions dataframe
-                    categories: categories to use
-                    avg_month:  month to use in rolling average
-            """
-
-            df = u.uos.b64_to_df(df_in)
-            df = u.dfs.filter_data(df, categories)
-
-            return plots.ts_gradient(df, type_trans, avg_month)
-
-        @app.callback(
-            Output("plot_comp_2", "figure"),
-            [
-                Input("global_df", "children"),
-                Input("input_categories", "value"),
-                Input("input_smoothing", "value"),
                 Input("radio_comp_2", "value"),
                 Input("comp_aux", "children"),
             ],
         )
         # pylint: disable=unused-variable,unused-argument
-        def update_ts_grad_2(df_in, categories, avg_month, type_trans, aux):
+        def update_ts_grad_1(df_in, categories, avg_month, type_trans_1, type_trans_2, aux):
             """
                 Updates the timeserie gradient plot
 
@@ -66,12 +41,17 @@ class Page(lay.AppPage):
                     df_in:      transactions dataframe
                     categories: categories to use
                     avg_month:  month to use in rolling average
+                    type_trans_1: expenses/incomes/ebit plot 1
+                    type_trans_2: expenses/incomes/ebit plot 2
             """
 
             df = u.uos.b64_to_df(df_in)
             df = u.dfs.filter_data(df, categories)
 
-            return plots.ts_gradient(df, type_trans, avg_month)
+            return (
+                plots.ts_gradient(df, type_trans_1, avg_month),
+                plots.ts_gradient(df, type_trans_2, avg_month),
+            )
 
     def get_body(self):
         return [
