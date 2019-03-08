@@ -7,7 +7,7 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table as dt
-from dash.dependencies import Input, Output, State, Event
+from dash.dependencies import Input, Output, State
 
 import constants as c
 import utilities as u
@@ -111,19 +111,19 @@ class Page(lay.AppPage):
 
             return False
 
-        @app.callback(
-            Output("upload_colapse_success_message", "is_open"),
-            [],
-            [],
-            [Event("upload_button", "click")],
-        )
-        # pylint: disable=unused-variable
-        def show_success_message():
-            """
-                Shows/hide the success message
-            """
+        # @app.callback(
+        #     Output("upload_colapse_success_message", "is_open"),
+        #     [],
+        #     [],
+        #     [Event("upload_button", "click")],
+        # )
+        # # pylint: disable=unused-variable
+        # def show_success_message():
+        #     """
+        #         Shows/hide the success message
+        #     """
 
-            return True
+        #     return True
 
         @app.callback(
             Output("upload_colapse_preview", "is_open"),
@@ -146,33 +146,33 @@ class Page(lay.AppPage):
 
             return True
 
-        @app.callback(
-            Output("global_df", "children"),
-            [],
-            [
-                State("upload_container", "contents"),
-                State("upload_container", "filename"),
-                State("upload_colapse_preview", "is_open"),
-            ],
-            [Event("upload_button", "click")],
-        )
-        # pylint: disable=unused-variable
-        def update_df_trans(contents, filename, file_ok):
-            """
-                Updates the transaction dataframe
+        # @app.callback(
+        #     Output("global_df", "children"),
+        #     [],
+        #     [
+        #         State("upload_container", "contents"),
+        #         State("upload_container", "filename"),
+        #         State("upload_colapse_preview", "is_open"),
+        #     ],
+        #     [Event("upload_button", "click")],
+        # )
+        # # pylint: disable=unused-variable
+        # def update_df_trans(contents, filename, file_ok):
+        #     """
+        #         Updates the transaction dataframe
 
-                Args:
-                    contents:   file uploaded
-                    filename:   name of the file uploaded
-                    file_ok:    bool checking if file is uploadable
-            """
+        #         Args:
+        #             contents:   file uploaded
+        #             filename:   name of the file uploaded
+        #             file_ok:    bool checking if file is uploadable
+        #     """
 
-            if not file_ok:
-                return None
+        #     if not file_ok:
+        #         return None
 
-            df = u.uos.parse_dataframe_uploaded(contents, filename)
+        #     df = u.uos.parse_dataframe_uploaded(contents, filename)
 
-            return u.uos.df_to_b64(u.dfs.fix_df_trans(df))
+        #     return u.uos.df_to_b64(u.dfs.fix_df_trans(df))
 
     def get_body(self):
         return [
