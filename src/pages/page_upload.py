@@ -33,7 +33,7 @@ class Page(lay.AppPage):
         super().__init__([])
 
         @app.callback(
-            [Output("upload_table_previw", "columns"), Output("upload_table_previw", "data")],
+            [Output("upload_table_preview", "columns"), Output("upload_table_preview", "data")],
             [Input("upload_container", "contents"), Input("upload_container", "filename")],
         )
         # pylint: disable=unused-variable
@@ -151,7 +151,7 @@ class Page(lay.AppPage):
                                     ]
                                 ),
                                 html.Div(
-                                    dt.DataTable(id="upload_table_previw", **self.style_table),
+                                    dt.DataTable(id="upload_table_preview", **self.style_table),
                                     style=c.styles.STYLE_INSTRUCTIONS,
                                 ),
                             ]

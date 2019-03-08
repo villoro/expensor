@@ -5,6 +5,7 @@ from test.selenium_utils import open_dash, wait_until_loaded
 
 import src.constants as c
 
+
 class TestApp(unittest.TestCase):
     """ Tests the dash app works """
 
@@ -13,7 +14,6 @@ class TestApp(unittest.TestCase):
     def test_title(self):
         """ Test that the app is able to load """
         self.assertEqual(c.names.TITLE, self.driver.title)
-
 
     def test_pages(self):
         """ Test that is possible to open all pages """
@@ -25,7 +25,6 @@ class TestApp(unittest.TestCase):
             # Check that there is a body and filters divs
             self.driver.find_element_by_id("body")
             self.driver.find_element_by_id("filters")
-
 
     def _check_one_page(self, page_link, elements):
         """
@@ -43,12 +42,19 @@ class TestApp(unittest.TestCase):
         for elem in elements:
             self.driver.find_element_by_id(elem)
 
-
     def test_page_upload(self):
         """ Test the content of page upload """
 
-        self._check_one_page(c.dash.LINK_UPLOAD, ["upload_button", "upload_results"])
-
+        contents = [
+            "upload_container",
+            "upload_colapse_error_message",
+            "upload_colapse_success_message",
+            "upload_button",
+            "upload_table_preview",
+            "upload_colapse_preview",
+            "upload_results",
+        ]
+        self._check_one_page(c.dash.LINK_UPLOAD, contents)
 
     def test_page_evolution(self):
         """ Test the content of page evolution """
@@ -57,7 +63,6 @@ class TestApp(unittest.TestCase):
         filters = ["input_categories", "input_smoothing", "input_timewindow"]
         self._check_one_page(c.dash.LINK_EVOLUTION, contents + filters)
 
-
     def test_page_comparison(self):
         """ Test the content of page comparison """
 
@@ -65,14 +70,12 @@ class TestApp(unittest.TestCase):
         filters = ["input_categories", "input_smoothing"]
         self._check_one_page(c.dash.LINK_COMPARISON, contents + filters)
 
-
     def test_page_heatmaps(self):
         """ Test the content of page heatmaps """
 
         contents = ["plot_heat_i", "plot_heat_e", "plot_heat_distribution"]
         filters = ["input_categories"]
         self._check_one_page(c.dash.LINK_HEATMAPS, contents + filters)
-
 
     def test_page_pies(self):
         """ Test the content of page pies """
@@ -85,6 +88,5 @@ class TestApp(unittest.TestCase):
         self._check_one_page(c.dash.LINK_PIES, contents + filters)
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
