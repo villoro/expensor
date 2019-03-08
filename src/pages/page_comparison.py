@@ -28,7 +28,7 @@ class Page(lay.AppPage):
                 Input("input_categories", "value"),
                 Input("input_smoothing", "value"),
                 Input("radio_comp_1", "value"),
-                Input("radio_comp_1", "value"),
+                Input("radio_comp_2", "value"),
                 Input("comp_aux", "children"),
             ],
         )
