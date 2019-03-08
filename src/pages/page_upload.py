@@ -32,13 +32,13 @@ class Page(lay.AppPage):
         super().__init__([])
 
         @app.callback(
-            Output("upload_table_previw", "columns"),
+            [Output("upload_table_previw", "columns"), Output("upload_table_previw", "data")],
             [Input("upload_container", "contents"), Input("upload_container", "filename")],
         )
         # pylint: disable=unused-variable
-        def update_table_columns(contents, filename):
+        def update_table(contents, filename):
             """
-                Update preview columns
+                Update the preview table
 
                 Args:
                     contents:   file uploaded
@@ -48,30 +48,12 @@ class Page(lay.AppPage):
             df = u.uos.parse_dataframe_uploaded(contents, filename)
 
             if isinstance(df, str):
-                return []
+                return [], {}
 
-            return [{"name": i, "id": i} for i in df.columns]
-
-        @app.callback(
-            Output("upload_table_previw", "data"),
-            [Input("upload_container", "contents"), Input("upload_container", "filename")],
-        )
-        # pylint: disable=unused-variable
-        def update_table_content(contents, filename):
-            """
-                Update preview columns
-
-                Args:
-                    contents:   file uploaded
-                    filename:   name of the file uploaded
-            """
-
-            df = u.uos.parse_dataframe_uploaded(contents, filename)
-
-            if isinstance(df, str):
-                return {}
-
-            return df.head(self.rows_preview).to_dict("rows")
+            return (
+                [{"name": i, "id": i} for i in df.columns],
+                df.head(self.rows_preview).to_dict("rows"),
+            )
 
         @app.callback(
             Output("upload_error_message", "children"),
