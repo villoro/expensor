@@ -2,7 +2,7 @@
     Dash app
 """
 
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output
 
 from pages import get_pages
 from dash_app import create_dash_app
@@ -36,17 +36,12 @@ def display_filters(pathname):
     return "404"
 
 
-@APP.callback(
-    Output("filters-container", "is_open"),
-    [Input("filters-button", "n_clicks")],
-    [State("filters-container", "is_open")],
-)
-def toggle_filters(count, is_open):
+@APP.callback(Output("filters-container", "is_open"), [Input("filters-button", "n_clicks")])
+def toggle_filters(count):
     """ hides/opens the filter block """
 
-    if count:
-        return not is_open
-    return is_open
+    # Toggle between show and hide
+    return count % 2 == 1 if count is not None else False
 
 
 if __name__ == "__main__":
