@@ -61,15 +61,17 @@ class Page(lay.AppPage):
                 Output("upload_colapse_error_message", "is_open"),
                 Output("upload_colapse_preview", "is_open"),
                 Output("upload_colapse_success_message", "is_open"),
+                Output("global_df", "children"),
             ],
             [
                 Input("upload_container", "contents"),
                 Input("upload_container", "filename"),
                 Input("upload_button", "n_clicks"),
             ],
+            [State("global_df", "children")],
         )
         # pylint: disable=unused-variable
-        def show_collapsibles(contents, filename, n_clicks):
+        def show_collapsibles(contents, filename, n_clicks, df_old):
             """
                 Shows/hide the collapsibles
 
@@ -80,18 +82,19 @@ class Page(lay.AppPage):
             df = u.uos.parse_dataframe_uploaded(contents, filename)
 
             if df is None:
-                return False, False, False
+                return False, False, False, None
 
             elif isinstance(df, str):
-                return True, False, False
+                return True, False, False, None
 
             context = callback_context
 
             # If sync button pressed, sync the app
             if context.triggered and context.triggered[0]["prop_id"] == "upload_button.n_clicks":
-                return False, True, True
+                return False, True, True, u.uos.df_to_b64(u.dfs.fix_df_trans(df))
 
-            return False, True, False
+            # If button not pressed return old data
+            return False, True, False, df_old
 
         @app.callback(
             Output("upload_error_message", "children"),
@@ -112,34 +115,6 @@ class Page(lay.AppPage):
                 return out
 
             return False
-
-        # @app.callback(
-        #     Output("global_df", "children"),
-        #     [],
-        #     [
-        #         State("upload_container", "contents"),
-        #         State("upload_container", "filename"),
-        #         State("upload_colapse_preview", "is_open"),
-        #     ],
-        #     [Event("upload_button", "click")],
-        # )
-        # # pylint: disable=unused-variable
-        # def update_df_trans(contents, filename, file_ok):
-        #     """
-        #         Updates the transaction dataframe
-
-        #         Args:
-        #             contents:   file uploaded
-        #             filename:   name of the file uploaded
-        #             file_ok:    bool checking if file is uploadable
-        #     """
-
-        #     if not file_ok:
-        #         return None
-
-        #     df = u.uos.parse_dataframe_uploaded(contents, filename)
-
-        #     return u.uos.df_to_b64(u.dfs.fix_df_trans(df))
 
     def get_body(self):
         return [
