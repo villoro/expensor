@@ -4,9 +4,13 @@
 
 This is a [dash](https://plot.ly/products/dash/) app that allows users to visualitze their expenses and/or incomes.
 
-It is possible to see a live demo here: [expensor_heroku](https://expensorpy.herokuapp.com/)
+![Mockup](images/mockup.png)
+
+## Preview:
 
 ![Demo](images/demo.gif)
+
+It is possible to see a live demo here: [expensor_heroku](https://expensorpy.herokuapp.com/)
 
 ## Usage
 You can upload your data using an ```Excel file (.xlsx)``` which should at least have the following columns:
@@ -43,6 +47,14 @@ __* Note:__ The app is only tested in **python 3**. It might not work with pytho
 
 ## Authors
 * [Arnau Villoro](https://villoro.com)
+
+## Images
+Some screenshots (with personal data hidden):
+
+![Screenshoot1](images/screenshot_1.jpg)
+![Screenshoot2](images/screenshot_2.jpg)
+![Screenshoot3](images/screenshot_3.jpg)
+![Screenshoot3](images/screenshot_4.jpg)
 
 ## License
 The content of this repository is licensed under a [MIT](https://opensource.org/licenses/MIT).
